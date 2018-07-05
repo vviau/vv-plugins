@@ -4,7 +4,7 @@ arc.run(['$rootScope', function ($rootScope) {
     $rootScope.plugin("arcTemplate", "Template Title", "page", {
         menu: "tools",
         icon: "fa-paw",
-        description: "This plugin can be used to search any TM1 objects",
+        description: "This plugin can be used as a starting point for building new page plugins",
         author: "Cubewise",
         url: "https://github.com/cubewise-code/arc-plugins",
         version: "1.0.0"
@@ -19,7 +19,7 @@ arc.directive("arcTemplate", function () {
         scope: {
             instance: "=tm1Instance"
         },
-        templateUrl: "__/plugins/template/template.html",
+        templateUrl: "__/plugins/template-page/template.html",
         link: function ($scope, element, attrs) {
 
         },

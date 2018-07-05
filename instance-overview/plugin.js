@@ -1,7 +1,7 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("cubewiseInstanceOverviewList", "Overview", "page", {
+    $rootScope.plugin("cubewiseInstanceOverviewList", "Instance Overview", "page", {
         menu: "tools",
         icon: "fa-eye",
         description: "Instance Overview",
@@ -19,7 +19,7 @@ arc.directive("cubewiseInstanceOverviewList", function () {
         scope: {
             instance: "=tm1Instance"
         },
-        templateUrl: "__/plugins/overview/template.html",
+        templateUrl: "__/plugins/instance-overview/template.html",
         link: function ($scope, element, attrs) {
 
         },
@@ -72,7 +72,15 @@ arc.directive("cubewiseInstanceOverviewList", function () {
             $scope.getUsersCount();
             // GET CUBE COUNT
             $scope.getCubesCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (value) {
+               var query = "";
+               var queryAll = "/Cubes/$count";
+               var queryWithoutControlObjects = "/Cubes/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (value) {
                     $scope.tm1Objects[1].value = value.data;
                 });
             };
@@ -80,7 +88,15 @@ arc.directive("cubewiseInstanceOverviewList", function () {
 
             // GET DIMENSIONS COUNT
             $scope.getDimensionsCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/Dimensions/$count").then(function (value) {
+               var query = "";
+               var queryAll = "/Dimensions/$count";
+               var queryWithoutControlObjects = "/Dimensions/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (value) {
                     $scope.tm1Objects[2].value = value.data;
                 });
             };
@@ -88,7 +104,15 @@ arc.directive("cubewiseInstanceOverviewList", function () {
 
             // GET PROCESSES COUNT
             $scope.getProcessesCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/Processes/$count").then(function (value) {
+               var query = "";
+               var queryAll = "/Processes/$count";
+               var queryWithoutControlObjects = "/Processes/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (value) {
                     $scope.tm1Objects[3].value = value.data;
                 });
             };
