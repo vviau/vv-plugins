@@ -69,23 +69,47 @@ arc.directive("overviewButton", function () {
             $scope.getUsersCount();
             // GET CUBE COUNT
             $scope.getCubesCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/ModelCubes()?$select=Name").then(function (cubesList) {
-                    $scope.tm1Objects[0].value = cubesList.data.value.length;
+               var query = "";
+               var queryAll = "/Cubes/$count";
+               var queryWithoutControlObjects = "/Cubes/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (cubesList) {
+                    $scope.tm1Objects[0].value = cubesList.data;
                 });
             };
             $scope.getCubesCount();
 
             // GET DIMENSIONS COUNT
             $scope.getDimensionsCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/ModelDimensions()?$select=Name").then(function (dimensionsList) {
-                    $scope.tm1Objects[1].value = dimensionsList.data.value.length;
+               var query = "";
+               var queryAll = "/Dimensions/$count";
+               var queryWithoutControlObjects = "/Dimensions/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (dimensionsList) {
+                    $scope.tm1Objects[1].value = dimensionsList.data;
                 });
             };
             $scope.getDimensionsCount();
 
             // GET PROCESSES COUNT
             $scope.getProcessesCount = function () {
-                $http.get(encodeURIComponent($scope.instance) + "/Processes/$count").then(function (value) {
+               var query = "";
+               var queryAll = "/Processes/$count";
+               var queryWithoutControlObjects = "/Processes/$count?$filter=indexof(Name,'}') eq -1";
+               if ($rootScope.uiPrefs.controlObjects) {
+                  query = queryAll;
+               } else {
+                  query = queryWithoutControlObjects;
+               }
+                $http.get(encodeURIComponent($scope.instance) + query).then(function (value) {
                     $scope.tm1Objects[2].value = value.data;
                 });
             };
