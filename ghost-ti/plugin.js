@@ -19,7 +19,7 @@ arc.directive("arcTemplate2", function () {
       scope: {
          instance: "=tm1Instance"
       },
-      templateUrl: "__/plugins/ti-console/template.html",
+      templateUrl: "__/plugins/ghost-ti/template.html",
       link: function ($scope, element, attrs) {
 
       },
