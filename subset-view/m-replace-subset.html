@@ -9,11 +9,16 @@
    <div class="modal-body">
       <div class="row">
          <div class="col-md-12" ng-if="!replaceMultipleViews">
-            Replace subset <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in view <span style="font-weight:bold">{{targetCube}}:{{targetView}}</span> with...
+            Replace subset
+            <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in view
+            <span style="font-weight:bold">{{targetCube}}:{{targetView}}</span> with...
          </div>
          <div class="col-md-12" ng-if="replaceMultipleViews">
-               Replace subset <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in views <span style="font-weight:bold">{{targetViews}}</span> with...
-            </div>
+            Replace subset
+            <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in views
+            <span ng-repeat="view in targetViews" style="font-weight:bold">
+               <i class="fa fa-w view" style="margin-left:10px;margin-right:3px"></i> {{view}}</span>
+         </div>
       </div>
       <div class="row" style="margin-top:10px">
          <div class="col-md-12">
@@ -33,7 +38,7 @@
                         <option ng-repeat="item in dimensions" class="ng-binding ng-scope" value="{{item.Name}}">{{item.Name}}</option>
                      </select>
                   </div>
-                  <div ng-if="selections.dimension && nbHierarchies>1">
+                  <div ng-if="selections.dimension && nbHierarchies>1" style="margin-top:10px">
                      <div class="card-text">
                         <i class="fa hierarchy" style="margin-right:5px"></i> Hierarchy:
                      </div>
@@ -46,12 +51,12 @@
                         </select>
                      </div>
                   </div>
-                  <div ng-if="selections.hierarchy">
+                  <div ng-if="selections.hierarchy" style="margin-top:10px">
                      <div class="card-text">
                         <i class="fa subset" style="margin-right:5px"></i> Subset:
                      </div>
                      <div>
-                        <select class="form-control ng-pristine ng-valid ng-empty ng-touched" ng-model="selections.subset" ng-change="findViewsFromSubset()"
+                        <select class="form-control ng-pristine ng-valid ng-empty ng-touched" ng-model="selections.subset" ng-change="resetSubsetReplaced()"
                            title="">
                            <option value="? undefined:undefined ?" selected="selected">
                            </option>
@@ -60,6 +65,13 @@
                      </div>
                   </div>
                </div>
+            </div>
+         </div>
+      </div>
+      <div class="row" style="margin-top:10px" ng-if="subsetReplaced == 'success'">
+         <div class="col-md-12">
+            <div class="alert alert-success" role="alert" style="padding: 5px 10px">
+               <i class="fa fa-w fa-check-square-o"></i> {{subsetToBeReplaced}} has been replaced with {{selections.subset}}
             </div>
          </div>
       </div>

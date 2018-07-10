@@ -286,6 +286,11 @@ arc.directive("cubewiseSubsetAndView", function () {
                   $scope.getDimensionsList();
                   $scope.getHierarchies();
                   $scope.getSubsets();
+                  $scope.subsetReplaced = 'ToBeReplaced';
+                  //Reset booloean
+                  $scope.resetSubsetReplaced = function (){
+                     $scope.subsetReplaced = 'ToBeReplaced';
+                  };
                   //REPLACE A SUBSET IN A VIEW
                   $scope.replaceSubset = function (cube, view) {
                      body = {
@@ -300,9 +305,9 @@ arc.directive("cubewiseSubsetAndView", function () {
                      };
                      $http(config).then(function (result) {
                         if (result.status == 200 || result.status == 201 || result.status == 204) {
-                           $scope.queryStatus = 'success';
+                           $scope.subsetReplaced = 'success';
                         } else {
-                           $scope.queryStatus = 'failed';
+                           $scope.subsetReplaced = 'failed';
                         }
                      });
                   };
