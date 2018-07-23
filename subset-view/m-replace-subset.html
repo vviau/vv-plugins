@@ -15,9 +15,11 @@
          </div>
          <div class="col-md-12" ng-if="replaceMultipleViews">
             Replace subset
-            <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in views
+            <span style="font-weight:bold">{{subsetToBeReplaced}}</span> in 
+            <span style="font-weight:bold" ng-if="targetViews.length>1">{{targetViews.length}} views:</span>
+            <span style="font-weight:bold" ng-if="targetViews.length==1"> view:</span>
             <span ng-repeat="view in targetViews" style="font-weight:bold">
-               <i class="fa fa-w view" style="margin-left:10px;margin-right:3px"></i> {{view}}</span>
+               {{$index+1}}. <span style="margin-right:5px"></i> {{view}}</span>
          </div>
       </div>
       <div class="row" style="margin-top:10px">
