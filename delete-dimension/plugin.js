@@ -28,6 +28,7 @@ arc.service('cubewiseDeleteChore', ['$rootScope', '$tm1', 'ngDialog', '$dialogs'
             console.log(result);
             if (result.status == 200 || result.status == 201 || result.status == 204) {
                resultQuery = result.data;
+               $rootScope.reloadInstance(instance);
             } else {
                resultQuery = result.data.error;
             }
