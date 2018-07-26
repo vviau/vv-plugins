@@ -67,6 +67,7 @@ arc.directive("cubewiseSubsetAndView", function () {
          $scope.refresh = function () {
             $scope.subsetsToDelete = [];
             $scope.subsetsViewsToDelete = [];
+            $scope.subsetsViewsToDeleteUnique = [];
             $scope.subsetsToDelete = [];
             $scope.viewsToDelete = [];
             $scope.viewsDeleted = [];
@@ -76,6 +77,7 @@ arc.directive("cubewiseSubsetAndView", function () {
          $scope.subsetsToDelete = [];
          $scope.subsetsViewsToDelete = [];
          $scope.toggleDeleteSubset = function (item) {
+            console.log(item);
             if (_.includes($scope.subsetsToDelete, item)) {
                //REMOVE SUBSET
                _.remove($scope.subsetsToDelete, function (i) {
@@ -83,9 +85,10 @@ arc.directive("cubewiseSubsetAndView", function () {
                });
                //REMOVE VIEWS
                for (var v in item.views) {
+                  var viewName = item.views[v];
                   viewObject = {
                      subset: item.name,
-                     view: item.views[v]
+                     view: viewName
                   }
                   if (_.some($scope.subsetsViewsToDelete, viewObject)) {
                      _.remove($scope.subsetsViewsToDelete, function (i) {
@@ -106,6 +109,15 @@ arc.directive("cubewiseSubsetAndView", function () {
                   }
                }
             }
+            //Create unique view list
+            //Reset the unique view each time
+            $scope.subsetsViewsToDeleteUnique = [];
+            for( v in $scope.subsetsViewsToDelete){
+               var viewName = $scope.subsetsViewsToDelete[v].view;
+               if (!_.includes($scope.subsetsViewsToDeleteUnique, viewName)) {
+                  $scope.subsetsViewsToDeleteUnique.push(viewName);
+               }
+            }
          };
          //OPEN MODAL WITH VIEWS TO BE DELETED
          $scope.openModalSubset = function () {
@@ -117,6 +129,7 @@ arc.directive("cubewiseSubsetAndView", function () {
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
                   $scope.subsets = $scope.ngDialogData.subsets;
                   $scope.views = $scope.ngDialogData.views;
+                  $scope.viewsToDelete = $scope.ngDialogData.viewsToDelete;
                   //Delete one view
                   $scope.deleteView = function (viewFullName) {
                      var semiColumn = viewFullName.indexOf(":");
@@ -179,7 +192,8 @@ arc.directive("cubewiseSubsetAndView", function () {
                data: {
                   subsets: $scope.subsetsToDelete,
                   subsetsDeleted: $scope.subsetsDeleted,
-                  views: $scope.subsetsViewsToDelete,
+                  views: $scope.subsetsViewsToDeleteUnique,
+                  viewsToDelete: $scope.subsetsViewsToDeleteUnique,
                   viewsDeleted: $scope.viewsDeleted
                }
             });
@@ -502,7 +516,8 @@ arc.directive("cubewiseSubsetAndView", function () {
             });
          };
 
-         $scope.getallViewsPerSubset();
+         //start the initialization
+         $scope.refresh();
 
          //Manage color:
          $scope.generateHSLColour = function (string) {
