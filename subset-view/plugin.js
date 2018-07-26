@@ -207,10 +207,8 @@ arc.directive("cubewiseSubsetAndView", function () {
                   $scope.viewsToDelete = $scope.ngDialogData.viewsToDelete;
                   //DELETE ALL VIEWS
                   $scope.viewsDeleted = [];
-                  $scope.deleteViews = function () {
+                  $scope.deleteView = function (viewFullName) {
                      console.log("Start Delete views", $scope.viewsToDelete);
-                     for (var view in $scope.viewsToDelete) {
-                        var viewFullName = $scope.viewsToDelete[view].name;
                         var semiColumn = viewFullName.indexOf(":");
                         var cubeName = viewFullName.substr(0, semiColumn);
                         var viewName = viewFullName.substr(semiColumn + 1, viewFullName.length - semiColumn + 1);
@@ -223,6 +221,12 @@ arc.directive("cubewiseSubsetAndView", function () {
                               $scope.selections.queryStatus = 'failed';
                            }
                         });
+                  };
+                  $scope.deleteViews = function () {
+                     console.log("Start Delete views", $scope.viewsToDelete);
+                     for (var view in $scope.viewsToDelete) {
+                        var viewFullName = $scope.viewsToDelete[view].name;
+                        $scope.deleteView(viewFullName);
                      }
                   };
                }],
