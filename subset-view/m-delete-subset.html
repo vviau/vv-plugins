@@ -11,7 +11,12 @@
          <div class="col-md-12">
             <div class="card">
                <div class="card-header" style="padding: 5px 10px;">
-                  <i class="fa fa-w view"></i> Views ({{views.length}})
+                  <div ng-if="views.length>0">
+                        <i class="fa fa-w view"></i> Views ({{views.length}})
+                  </div>
+                  <div ng-if="viewsDeleted.length>0">
+                        <i class="fa fa-w view"></i> Views Deleted ({{viewsDeleted.length}})
+                  </div>
                </div>
                <div class="card-body">
                   <div ng-if="views.length>0" ng-repeat="item in views track by $index">
@@ -35,7 +40,12 @@
          <div class="col-md-12">
             <div class="card">
                <div class="card-header" style="padding: 5px 10px;">
-                  <i class="fa fa-w subset"></i> Subsets ({{subsets.length}})
+                  <div ng-if="subsets.length>0">
+                        <i class="fa fa-w subset"></i> Subsets ({{subsets.length}})
+                  </div>
+                  <div ng-if="subsetsDeleted.length>0">
+                        <i class="fa fa-w subset"></i> Subsets Deleted ({{subsetsDeleted.length}})
+                  </div>
                </div>
                <div class="card-body">
                   <div ng-if="subsets.length>0" ng-repeat="subset in subsets track by $index">
