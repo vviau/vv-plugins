@@ -106,7 +106,6 @@ arc.directive("arcServicesGet", function () {
          };
 
          $scope.cellGet($scope.instance, "General Ledger", "Actual", "2016", "Year", "Local", "Total Europe", "Corporate", "Net Income", "Amount").then(function (data) {
-            console.log("outside", data);
             $scope.returnedValue = data;
          });
 
