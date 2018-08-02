@@ -36,32 +36,92 @@ arc.directive("arcConsole", function () {
          };
          $scope.queryStatus = '';
 
-         $scope.newTiFunctions = [""];
+         $scope.newTiFunctions = [{icon:'',function:''}];
 
-         $scope.tiFunctions = [{icon:"dimensions", function:"ATTRS", desc:"Update a string attribute value"}, 
-                              {icon:"dimensions",function:"ATTRN", desc:"Update a numeric attribute value"}];
-         $scope.indexTiFunctions = $scope.tiFunctions.length-1;
+         $scope.tiFunctionsDimensions = [{ icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
+         { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" }];
+
+         $scope.tiFunctionsCubes = [{ icon: "cubes", function: "CubeCreate", desc: "Create a cube" },
+         { icon: "cubes", function: "CubeDelete", desc: "Delete a cube" }];
+
+         $scope.tiFunctionsProcesses = [{ icon: "cubes", function: "ExecuteProcess('ProcessName')", desc: "Create a cube" },
+         { icon: "cubes", function: "ProcessDelete('ProcessName')", desc: "Delete a cube" }];
+
+         $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
 
          $scope.inputs = {};
 
          $scope.key = function ($event, funcIndex, func) {
             //console.log($event.keyCode);
             //Arrow up
-            console.log(funcIndex, $scope.newTiFunctions[funcIndex]);     
+            //console.log(funcIndex, $scope.newTiFunctions[funcIndex].function);
             if ($event.keyCode == 38) {
-               $scope.newTiFunctions[funcIndex] = $scope.tiFunctions[$scope.indexTiFunctions].function;
+               $scope.newTiFunctions[funcIndex].function = $scope.newTiFunctions[$scope.indexTiFunctions].function;
                $scope.updateindexTiFunctions("-1");
             }
             //Arrow down
             else if ($event.keyCode == 40) {
-               $scope.newTiFunctions[funcIndex] = $scope.tiFunctions[$scope.indexTiFunctions].function;
+               $scope.newTiFunctions[funcIndex].function = $scope.newTiFunctions[$scope.indexTiFunctions].function;
                $scope.updateindexTiFunctions("+1");
             }
             //Enter
-            else if ($event.keyCode == 13){
+            else if ($event.keyCode == 13) {
                $scope.Execute(func);
             }
          }
+
+         $scope.updateindexTiFunctions = function (string) {
+            if (string == "reset") {
+               $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
+            } else if (string == "+1") {
+               var newindex = $scope.indexTiFunctions + 1;
+               if (newindex > $scope.newTiFunctions.length - 1) {
+                  $scope.indexTiFunctions = 0;
+               } else {
+                  $scope.indexTiFunctions = newindex;
+               }
+            } else if (string == "-1") {
+               var newindex = $scope.indexTiFunctions - 1;
+               if (newindex < 0) {
+                  $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
+               } else {
+                  $scope.indexTiFunctions = newindex;
+               }
+            }
+         };
+
+         //Functions
+         $scope.Execute = function (value) {
+            //Add function to list
+            console.log(value);
+            $scope.updateindexTiFunctions("reset");
+            //Execute TI
+            $scope.queryStatus = 'executing';
+            body = {
+               Process: {
+                  PrologProcedure: value +";"
+               }
+            };
+            var config = {
+               method: "POST",
+               url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
+               data: body
+            };
+            $http(config).then(function (result) {
+               if (result.status == 200 || result.status == 201 || result.status == 204) {
+                  newFunction = {
+                     icon:'fa-check-circle',
+                     function:value
+                  }
+               } else {
+                  newFunction = {
+                     icon:'fa-warning',
+                     function:value
+                  }                  
+               }
+               $scope.newTiFunctions.splice(1, 0, newFunction);
+            });
+         };
 
          //Check TM1 Version
          $scope.checkTM1Version = function () {
@@ -76,56 +136,6 @@ arc.directive("arcConsole", function () {
          };
          // Execute checkTM1Version
          $scope.checkTM1Version();
-
-         $scope.updateindexTiFunctions = function (string){
-            if(string == "reset"){
-               $scope.indexTiFunctions = $scope.tiFunctions.length-1;
-            } else if (string == "+1") {
-               var newindex = $scope.indexTiFunctions +1;
-               if( newindex > $scope.tiFunctions.length-1){
-                  $scope.indexTiFunctions = 0 ;
-               }else{
-                  $scope.indexTiFunctions = newindex  ;
-               }
-            } else if (string == "-1") {
-               var newindex = $scope.indexTiFunctions - 1;
-               if( newindex < 0) {
-                  $scope.indexTiFunctions = $scope.tiFunctions.length-1 ;
-               }else{
-                  $scope.indexTiFunctions = newindex  ;
-               }
-            } 
-         };
-
-         //Functions
-         $scope.Execute = function (value) {
-            //Add function to list
-            var newfunction = {icon:"fa-warning", function:value}
-            console.log(value);
-            $scope.tiFunctions.splice(1,0,newfunction);
-            $scope.newTiFunctions.splice(1,0,value);
-            $scope.updateindexTiFunctions("reset");
-            //Execute TI
-            $scope.queryStatus = 'executing';
-            body = {
-               Process: {
-                  PrologProcedure: $scope.code.prolog,
-                  EpilogProcedure: $scope.code.epilog
-               }
-            };
-            var config = {
-               method: "POST",
-               url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
-               data: body
-            };
-            $http(config).then(function (result) {
-               if (result.status == 200 || result.status == 201 || result.status == 204) {
-                  $scope.queryStatus = 'success';
-               } else {
-                  $scope.queryStatus = 'failed';
-               }
-            });
-         };
 
 
          //Trigger an event after the login screen
