@@ -34,12 +34,17 @@ arc.directive("arcConsole", function () {
             prolog: '',
             epilog: ''
          };
-         $scope.queryStatus = '';
+
+         $scope.optionsFeature = 'Command Line';
 
          $scope.newTiFunctions = [{icon:'',function:''}];
 
-         $scope.tiFunctionsDimensions = [{ icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
-         { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" }];
+         $scope.tiFunctionsDimensions = [
+            { icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
+            { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" },
+            { icon: "dimensions", function: "DimensionElementInsert('DimName', 'InsertionPoint', 'ElName', 'ElType')", desc: "Update a numeric attribute value" }
+         ];
+         
 
          $scope.tiFunctionsCubes = [{ icon: "cubes", function: "CubeCreate", desc: "Create a cube" },
          { icon: "cubes", function: "CubeDelete", desc: "Delete a cube" }];
@@ -120,6 +125,29 @@ arc.directive("arcConsole", function () {
                   }                  
                }
                $scope.newTiFunctions.splice(1, 0, newFunction);
+            });
+         };
+
+         //Functions
+         $scope.ExecuteTI = function () {
+            $scope.queryStatus = 'executing';
+            body = {
+               Process: {
+                  PrologProcedure: $scope.code.prolog,
+                  EpilogProcedure: $scope.code.epilog
+               }
+            };
+            var config = {
+               method: "POST",
+               url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
+               data: body
+            };
+            $http(config).then(function (result) {
+               if (result.status == 200 || result.status == 201 || result.status == 204) {
+                  $scope.queryStatus = 'success';
+               } else {
+                  $scope.queryStatus = 'failed';
+               }
             });
          };
 
