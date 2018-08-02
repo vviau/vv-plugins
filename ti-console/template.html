@@ -4,50 +4,30 @@
          <h5> TI Console</h5>
       </div>
    </div>
-   {{tifunctions}}
    <div class="row">
       <div class="col-md-12">
          <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
             <div class="card-header" style="padding: 5px 10px;">
-               Body</div>
                <div class="input-group">
-                  <span style="margin-top:5px;margin-left:5px">{{instance}}></span>
                   <div class="input-group-append" uib-dropdown dropdown-append-to-body>
-                     <button uib-dropdown-toggle class="btn btn-info">
-                         <span class="caret"></span>
+                     <button uib-dropdown-toggle class="btn">
+                        <span class="fa dimensions"></span>
                      </button>
                      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                         <li role="menuitem" ng-repeat="item in tiFunctions">
-                             <div ng-click="inputs.line1 = item.function" style="margin-left:10px;cursor:pointer">
-                                 <i class="fa {{item.icon}}"> </i> {{item.function}} | {{item.desc}}</div>
-                         </li>
+                        <li role="menuitem" ng-repeat="item in tiFunctions">
+                           <div ng-click="newTiFunctions[0] = item.function" style="margin-left:10px;cursor:pointer">
+                              <i class="fa {{item.icon}}"> </i> {{item.function}} | {{item.desc}}</div>
+                        </li>
                      </ul>
-                 </div>
-                 <input style="border:none" type="text" ng-model="inputs.line1" placeholder="Start writing your TI function" 
-                  ng-keydown="key($event)" 
-                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                  style="display:inline">
-                  
+                  </div>
+                  Console
                </div>
-               <input type="text" ng-model="inputs.line2" placeholder="" 
-               ng-keypress="($event.charCode==13)? Execute(inputs.line2) : return" 
-               class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-               style="display:inline">
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-md-12">
-            <div ng-if="queryStatus=='success'" class="alert alert-success" role="alert">
-               <strong>
-                  <i class="fa fa-fw fa-check"></i> Success!</strong>
             </div>
-            <div ng-if="queryStatus=='failed'" class="alert alert-danger" role="alert">
-               <strong>
-                  <i class="fa fa-fw fa-warning"></i> Failed!</strong>
-            </div>
-            <div ng-if="queryStatus=='executing'" class="alert alert-warning" role="alert">
-               <strong>
-                  <i class="fa fa-fw fa-spin fa-gear"></i> Executing</strong>
+            <div class="input-group" ng-repeat="func in newTiFunctions track by $index">
+               <span style="margin-top:5px;margin-left:5px"> </span>
+               <input ng-disabled="$index>0" style="border:none" type="text" ng-model="func" placeholder="Start writing your TI function"
+                  ng-keydown="key($event,$index,func)" class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline">
+
             </div>
          </div>
       </div>

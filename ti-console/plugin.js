@@ -36,7 +36,7 @@ arc.directive("arcConsole", function () {
          };
          $scope.queryStatus = '';
 
-         $scope.newTiFunctions = [];
+         $scope.newTiFunctions = [""];
 
          $scope.tiFunctions = [{icon:"dimensions", function:"ATTRS", desc:"Update a string attribute value"}, 
                               {icon:"dimensions",function:"ATTRN", desc:"Update a numeric attribute value"}];
@@ -44,21 +44,22 @@ arc.directive("arcConsole", function () {
 
          $scope.inputs = {};
 
-         $scope.key = function ($event) {
+         $scope.key = function ($event, funcIndex, func) {
             //console.log($event.keyCode);
             //Arrow up
+            console.log(funcIndex, $scope.newTiFunctions[funcIndex]);     
             if ($event.keyCode == 38) {
-               $scope.inputs.line1 = $scope.tiFunctions[$scope.indexTiFunctions].function;
+               $scope.newTiFunctions[funcIndex] = $scope.tiFunctions[$scope.indexTiFunctions].function;
                $scope.updateindexTiFunctions("-1");
             }
             //Arrow down
             else if ($event.keyCode == 40) {
-               $scope.inputs.line1 = $scope.tiFunctions[$scope.indexTiFunctions].function;
+               $scope.newTiFunctions[funcIndex] = $scope.tiFunctions[$scope.indexTiFunctions].function;
                $scope.updateindexTiFunctions("+1");
             }
             //Enter
             else if ($event.keyCode == 13){
-               $scope.Execute($scope.inputs.line1);
+               $scope.Execute(func);
             }
          }
 
@@ -101,7 +102,8 @@ arc.directive("arcConsole", function () {
             //Add function to list
             var newfunction = {icon:"fa-warning", function:value}
             console.log(value);
-            $scope.tiFunctions.push(newfunction);
+            $scope.tiFunctions.splice(1,0,newfunction);
+            $scope.newTiFunctions.splice(1,0,value);
             $scope.updateindexTiFunctions("reset");
             //Execute TI
             $scope.queryStatus = 'executing';
