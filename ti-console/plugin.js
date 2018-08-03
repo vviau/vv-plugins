@@ -39,18 +39,23 @@ arc.directive("arcConsole", function () {
 
          $scope.newTiFunctions = [{icon:'',function:''}];
 
-         $scope.tiFunctionsDimensions = [
-            { icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
-            { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" },
-            { icon: "dimensions", function: "DimensionElementInsert('DimName', 'InsertionPoint', 'ElName', 'ElType')", desc: "Update a numeric attribute value" }
-         ];
-         
-
-         $scope.tiFunctionsCubes = [{ icon: "cubes", function: "CubeCreate", desc: "Create a cube" },
-         { icon: "cubes", function: "CubeDelete", desc: "Delete a cube" }];
-
-         $scope.tiFunctionsProcesses = [{ icon: "cubes", function: "ExecuteProcess('ProcessName')", desc: "Create a cube" },
-         { icon: "cubes", function: "ProcessDelete('ProcessName')", desc: "Delete a cube" }];
+         $scope.tiFunctions = {
+            types: [{name:'dimensions',icon:'dimensions'},
+                  {name:'cubes',icon:'cubes'},
+                  {name:'processes',icon:'processes'},
+                  {name:'administration',icon:'fa-server'}],
+            dimensions : [
+               { icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
+               { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" },
+               { icon: "dimensions", function: "DimensionElementInsert('DimName', 'InsertionPoint', 'ElName', 'ElType')", desc: "Update a numeric attribute value" }
+            ],
+            cubes : [{ icon: "cubes", function: "CubeCreate", desc: "Create a cube" },
+            { icon: "cubes", function: "CubeDelete", desc: "Delete a cube" }],
+            processes : [{ icon: "processes", function: "ExecuteProcess('ProcessName')", desc: "Create a cube" },
+            { icon: "processes", function: "ProcessDelete('ProcessName')", desc: "Delete a cube" }],
+            administration : [{ icon: "administration", function: "SaveDataAll", desc: "Save data for all cubes" },
+            { icon: "cubes", function: "RefreshMDX", desc: "Refresh MDX default member and levels" }]
+         };
 
          $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
 
