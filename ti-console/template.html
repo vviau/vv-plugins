@@ -10,7 +10,7 @@
                      </a>
                      <span> Script</span>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" style="padding-top:5px">
                      <div ng-if="!showScript">
                         <div class="row" style="margin-top:10px">
                            <div class="col-md-12" style="margin-top:2px;margin-bottom:2px" ng-repeat="func in newTiFunctions track by $index" ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle','bg-dark text-white':func.icon == ''}">
@@ -58,8 +58,10 @@
                                  <input ng-if="$index==0" class="bg-dark text-white form-control ng-pristine ng-untouched ng-valid ng-empty"
                                      style="border:none;border-radius:0;display:inline" type="text" ng-model="func.function"
                                     placeholder="_" ng-keydown="key($event,$index,func.function,func.instance)" 
+                                    uib-typeahead="function.value for function in lists.allFunctions | filter:$viewValue | limitTo:20"
+                                    typeahead-append-to-body="true"
                                     >
-                                 <input ng-if="$index>0" ng-click="newTiFunctions[0].function = func.function"
+                                 <input ng-if="$index>0" ng-click="newTiFunctions[0].function = func.function;newTiFunctions[0].instance = func.instance"
                                        ng-desable="$index>0" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                                        ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle'}"
                                        style="border:none;border-radius:0;cursor:pointer;display:inline"
