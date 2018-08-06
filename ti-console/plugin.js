@@ -35,9 +35,11 @@ arc.directive("arcConsole", function () {
             epilog: ''
          };
 
+         $scope.lists.allFunctions = $rootScope.process_functions;
+
          $scope.showScript = false;
 
-         $scope.newTiFunctions = [{icon:'',function:''}];
+         $scope.newTiFunctions = [{instance:$scope.instance, icon:'',function:''}];
 
          $scope.tiFunctions = {
             types: [{name:'dimensions',icon:'dimensions'},
@@ -61,7 +63,17 @@ arc.directive("arcConsole", function () {
 
          $scope.inputs = {};
 
-         $scope.key = function ($event, funcIndex, func) {
+         $scope.instanceSelected = $scope.instance;
+
+         $scope.getInstances = function () {
+            $tm1.instances().then(function (data) {
+                $scope.lists.instances = data;
+            });
+        };
+
+        $scope.getInstances();
+
+         $scope.key = function ($event, funcIndex, func, instance) {
             //console.log($event.keyCode);
             //Arrow up
             //console.log(funcIndex, $scope.newTiFunctions[funcIndex].function);
@@ -76,7 +88,7 @@ arc.directive("arcConsole", function () {
             }
             //Enter
             else if ($event.keyCode == 13) {
-               $scope.Execute(func);
+               $scope.Execute(func, instance);
             }
          }
 
@@ -101,9 +113,8 @@ arc.directive("arcConsole", function () {
          };
 
          //Functions
-         $scope.Execute = function (value) {
+         $scope.Execute = function (value, instance) {
             //Add function to list
-            console.log(value);
             $scope.updateindexTiFunctions("reset");
             //Execute TI
             $scope.queryStatus = 'executing';
@@ -114,19 +125,26 @@ arc.directive("arcConsole", function () {
             };
             var config = {
                method: "POST",
-               url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
+               url: encodeURIComponent(instance) + "/ExecuteProcess",
                data: body
             };
             $http(config).then(function (result) {
+               console.log(result);
                if (result.status == 200 || result.status == 201 || result.status == 204) {
                   newFunction = {
+                     instance: instance,
                      icon:'fa-check-circle',
-                     function:value
+                     function:value,
+                     message:"",
+                     showMessage:false
                   }
                } else {
                   newFunction = {
+                     instance: instance,
                      icon:'fa-warning',
-                     function:value
+                     function:value,
+                     message:result.data.error.message,
+                     showMessage:false
                   }                  
                }
                $scope.newTiFunctions.splice(1, 0, newFunction);

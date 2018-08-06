@@ -1,117 +1,132 @@
 <div>
    <div class="row">
       <div class="col-md-12">
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="card" ng-class="{'text-white bg-dark':!showScript}">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <a href>
-                              <i class="fa" ng-class="{'fa-toggle-on':showScript,'fa-toggle-off':!showScript}" ng-click="showScript=!showScript"></i>
-                           </a>
-                           <span> Script</span>
+         <div class="row">
+            <div class="col-md-12">
+               <div class="card" ng-class="{'text-white bg-dark':!showScript}">
+                  <div class="card-header" style="padding: 5px 10px;">
+                     <a href>
+                        <i class="fa" ng-class="{'fa-toggle-on':showScript,'fa-toggle-off':!showScript}" ng-click="showScript=!showScript"></i>
+                     </a>
+                     <span> Script</span>
+                  </div>
+                  <div class="card-body">
+                     <div ng-if="!showScript">
+                        <div class="row" style="margin-top:10px">
+                           <div class="col-md-12" style="margin-top:2px;margin-bottom:2px" ng-repeat="func in newTiFunctions track by $index" ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle','bg-dark text-white':func.icon == ''}">
+                              <div class="input-group">
+                                 <div ng-if="newTiFunctions.length>1 && $index==0" uib-dropdown dropdown-append-to-body>
+                                    <button uib-dropdown-toggle class="btn btn-primary">
+                                       <span class="fa fa-pencil-square-o"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                       <li role="menuitem" ng-repeat="item in newTiFunctions" ng-if="$index>0">
+                                          <div ng-click="newTiFunctions[0].function = item.function" style="margin-left:10px;cursor:pointer">
+                                             <i class="fa {{item.icon}}" ng-class="{'text-danger':item.icon=='fa-warning','text-success':item.icon=='fa-check-circle'}">
+                                             </i> {{item.instance}}>{{item.function}}</div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <div ng-if="$index==0" uib-dropdown dropdown-append-to-body>
+                                    <button uib-dropdown-toggle class="btn btn-info">
+                                       f(x)
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                       <li role="menuitem" ng-repeat="item in lists.allFunctions">
+                                          <div ng-click="newTiFunctions[0].function = item.value" style="margin-left:10px;cursor:pointer">
+                                             {{item.value}} | {{item.snippet}}</div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <div ng-if="$index==0" uib-dropdown dropdown-append-to-body>
+                                    <button uib-dropdown-toggle class="btn btn-info">
+                                       {{func.instance}}
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                       <li role="menuitem" ng-repeat="instance in lists.instances">
+                                          <div ng-click="func.instance = instance.Name" style="margin-left:10px;cursor:pointer">
+                                             {{instance.Name}}</div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <i ng-if="func.message.length>0" class="fa fa-chevron-right" ng-class="{'fa-chevron-down':func.showMessage}" style="width:20px;margin-top:10px;cursor:pointer;font-size:0.8em"
+                                    ng-click="func.showMessage=!func.showMessage"></i>
+                                 <span class="text-right" style="margin-top:5px">
+
+                                    <div ng-if="$index>0">{{func.instance}}></div>
+                                 </span>
+                                 <input ng-if="$index==0" class="bg-dark text-white form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                     style="border:none;border-radius:0;display:inline" type="text" ng-model="func.function"
+                                    placeholder="_" ng-keydown="key($event,$index,func.function,func.instance)" 
+                                    >
+                                 <input ng-if="$index>0" ng-click="newTiFunctions[0].function = func.function"
+                                       ng-desable="$index>0" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                       ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle'}"
+                                       style="border:none;border-radius:0;cursor:pointer;display:inline"
+                                       ng-model="func.function">
+                              </div>
+                              <div ng-if="func.showMessage">{{func.message}}</div>
+                           </div>
                         </div>
-                        <div class="card-body">
-                           <div ng-if="!showScript">
-                              <div class="row">
-                                 <div class="col-md-12">
-                                    <div class="btn-group">
-                                       <div ng-repeat="type in tiFunctions.types" uib-dropdown dropdown-append-to-body>
-                                          <button uib-dropdown-toggle class="btn btn-info">
-                                             <span class="fa {{type.icon}}"></span>
-                                          </button>
-                                          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                             <li role="menuitem" ng-repeat="item in tiFunctions[type.name]">
-                                                <div ng-click="newTiFunctions[0].function = item.function" style="margin-left:10px;cursor:pointer">
-                                                   <i class="fa {{item.icon}}"> </i> {{item.function}} | {{item.desc}}</div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                       <!--   -->
-                                       <div class="input-group-append" ng-if="newTiFunctions.length>1" uib-dropdown dropdown-append-to-body>
-                                          <button uib-dropdown-toggle class="btn btn-primary">
-                                             <span class="fa fa-pencil-square-o"></span>
-                                          </button>
-                                          <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                             <li role="menuitem" ng-repeat="item in newTiFunctions" ng-if="$index>0">
-                                                <div ng-click="newTiFunctions[0].function = item.function" style="margin-left:10px;cursor:pointer">
-                                                   <i class="fa {{item.icon}}" ng-class="{'text-warning':item.icon=='fa-warning','text-success':item.icon=='fa-check-circle'}">
-                                                   </i> {{item.function}}</div>
-                                             </li>
-                                          </ul>
+                     </div>
+                     <div ng-if="showScript">
+                        <div class="row" ng-if="tm1VersionSupported">
+                           <div class="col-md-12">
+                              <uib-tabset active="active">
+                                 <uib-tab index="0" heading="Prolog">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
+                                             <div class="card-header" style="padding: 5px 10px;">
+                                                Body</div>
+                                             <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.prolog" style="height: 200px;"></pre>
+                                          </div>
                                        </div>
                                     </div>
-                                 </div>
-                              </div>
-                              <div class="row" style="margin-top:10px">
-                                 <div class="col-md-12 input-group" style="margin-top:2px;margin-bottom:2px" ng-repeat="func in newTiFunctions track by $index"
-                                    ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle','bg-dark text-white':func.icon == ''}">
-                                    <span class="ng-binding text-center" style="width:40px;margin-top:5px">{{newTiFunctions.length - $index}}. </span>
-                                    <span class="text-right" style="margin-top:5px">arc></span>
-                                    <input ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle','bg-dark text-white':func.icon == ''}"
-                                       ng-disabled="$index>0" style="border:none;border-radius:0" type="text" ng-model="func.function"
-                                       placeholder="_" ng-keydown="key($event,$index,func.function)" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                       style="display:inline">
-                                 </div>
-                              </div>
-                           </div>
-                           <div ng-if="showScript">
-                              <div class="row" ng-if="tm1VersionSupported">
-                                 <div class="col-md-12">
-                                    <uib-tabset active="active">
-                                       <uib-tab index="0" heading="Prolog">
-                                          <div class="row">
-                                             <div class="col-md-12">
-                                                <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
-                                                   <div class="card-header" style="padding: 5px 10px;">
-                                                      Body</div>
-                                                   <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.prolog" style="height: 200px;"></pre>
-                                                </div>
-                                             </div>
+                                 </uib-tab>
+                                 <uib-tab index="1" heading="Epilog">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
+                                             <div class="card-header" style="padding: 5px 10px;">
+                                                Body</div>
+                                             <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.epilog" style="height: 200px;"></pre>
                                           </div>
-                                       </uib-tab>
-                                       <uib-tab index="1" heading="Epilog">
-                                          <div class="row">
-                                             <div class="col-md-12">
-                                                <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
-                                                   <div class="card-header" style="padding: 5px 10px;">
-                                                      Body</div>
-                                                   <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.epilog" style="height: 200px;"></pre>
-                                                </div>
-                                             </div>
+                                       </div>
+                                    </div>
+                                 </uib-tab>
+                                 <uib-tab index="3">
+                                    <uib-tab-heading>
+                                       <button ng-disabled="code.prolog.length==0 && code.epilog.length==0" class="btn btn-warning btn-sm" title="{{'EXECUTE' | translate}}"
+                                          ng-click="ExecuteTI()">
+                                          <i class="fa fa-fw fa-bolt"></i>
+                                       </button>
+                                    </uib-tab-heading>
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div ng-if="queryStatus=='success'" class="alert alert-success" role="alert">
+                                             <strong>
+                                                <i class="fa fa-fw fa-check"></i> Success!</strong>
                                           </div>
-                                       </uib-tab>
-                                       <uib-tab index="3">
-                                          <uib-tab-heading>
-                                             <button ng-disabled="code.prolog.length==0 && code.epilog.length==0" class="btn btn-warning btn-sm" title="{{'EXECUTE' | translate}}"
-                                                ng-click="ExecuteTI()">
-                                                <i class="fa fa-fw fa-bolt"></i>
-                                             </button>
-                                          </uib-tab-heading>
-                                          <div class="row">
-                                             <div class="col-md-12">
-                                                <div ng-if="queryStatus=='success'" class="alert alert-success" role="alert">
-                                                   <strong>
-                                                      <i class="fa fa-fw fa-check"></i> Success!</strong>
-                                                </div>
-                                                <div ng-if="queryStatus=='failed'" class="alert alert-danger" role="alert">
-                                                   <strong>
-                                                      <i class="fa fa-fw fa-warning"></i> Failed!</strong>
-                                                </div>
-                                                <div ng-if="queryStatus=='executing'" class="alert alert-warning" role="alert">
-                                                   <strong>
-                                                      <i class="fa fa-fw fa-spin fa-gear"></i> Executing</strong>
-                                                </div>
-                                             </div>
+                                          <div ng-if="queryStatus=='failed'" class="alert alert-danger" role="alert">
+                                             <strong>
+                                                <i class="fa fa-fw fa-warning"></i> Failed!</strong>
                                           </div>
-                                       </uib-tab>
-                                    </uib-tabset>
-                                 </div>
-                              </div>
+                                          <div ng-if="queryStatus=='executing'" class="alert alert-warning" role="alert">
+                                             <strong>
+                                                <i class="fa fa-fw fa-spin fa-gear"></i> Executing</strong>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </uib-tab>
+                              </uib-tabset>
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
+            </div>
+         </div>
       </div>
    </div>
 
