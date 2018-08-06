@@ -35,7 +35,7 @@ arc.directive("arcConsole", function () {
             epilog: ''
          };
 
-         $scope.optionsFeature = 'Command Line';
+         $scope.showScript = false;
 
          $scope.newTiFunctions = [{icon:'',function:''}];
 
