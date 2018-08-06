@@ -58,7 +58,7 @@
                                  <input ng-if="$index==0" class="bg-dark text-white form-control ng-pristine ng-untouched ng-valid ng-empty"
                                      style="border:none;border-radius:0;display:inline" type="text" ng-model="func.function"
                                     placeholder="_" ng-keydown="key($event,$index,func.function,func.instance)" 
-                                    uib-typeahead="function.value for function in lists.allFunctions | filter:$viewValue | limitTo:20"
+                                    uib-typeahead="function.snippet for function in lists.allFunctions | filter:$viewValue | limitTo:20"
                                     typeahead-append-to-body="true"
                                     >
                                  <input ng-if="$index>0" ng-click="newTiFunctions[0].function = func.function;newTiFunctions[0].instance = func.instance"
