@@ -37,6 +37,28 @@ arc.directive("arcConsole", function () {
 
          $scope.lists.allFunctions = $rootScope.process_functions;
 
+         $scope.cleanAllFunctions = function(){
+            $scope.lists.allFunctionsCleaned = [];
+            for(f in $scope.lists.allFunctions){
+               var func = $scope.lists.allFunctions[f];
+               var newSnippet = func.snippet.replace(/\{/g, "");
+               var newSnippet = newSnippet.replace(/\}/g, "");
+               for(var i=0; i<10; i++){
+                  var stringToReplace = "$"+i+":";
+                  //console.log(stringToReplace);
+                  var newSnippet = newSnippet.replace(stringToReplace, "");
+               }
+               var newFunction = {
+                  value: func.value,
+                  snippet: newSnippet
+               }
+               $scope.lists.allFunctionsCleaned.push(newFunction);
+            }
+            //console.log($scope.lists.allFunctionsCleaned);
+         };
+
+         $scope.cleanAllFunctions();
+
          $scope.showScript = false;
 
          $scope.newTiFunctions = [{instance:$scope.instance, icon:'',function:''}];
