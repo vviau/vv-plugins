@@ -23,7 +23,7 @@ arc.directive("arcServicesGet", function () {
       link: function ($scope, element, attrs) {
 
       },
-      controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "ngDialog", "$q", function ($scope, $rootScope, $http, $tm1, $translate, $timeout, ngDialog, $q) {
+      controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "ngDialog", "$q", "$helper", function ($scope, $rootScope, $http, $tm1, $translate, $timeout, ngDialog, $q, $helper) {
 
          $scope.defaults = {
             systemCube: 'System info',
@@ -71,7 +71,7 @@ arc.directive("arcServicesGet", function () {
                   var item = tuple[i];
                   var dimension = dims[i];
                   var hierarchy = dims[i];
-                  var element = item;
+                  var element = $helper.escapeName(item);
                   var parts = item.split("::");
                   if (parts.length == 2) {
                      hierarchy = parts[0];
@@ -105,7 +105,7 @@ arc.directive("arcServicesGet", function () {
             return defer.promise;
          };
 
-         $scope.cellGet($scope.instance, "General Ledger", "Actual", "2016", "Year", "Local", "Total Europe", "Corporate", "Net Income", "Amount").then(function (data) {
+         $scope.cellGet($scope.instance, "General Ledger", "Budget", "2017", "Year", "Local", "Total Europe", "Corporate", "Net Income", "Amount").then(function (data) {
             $scope.returnedValue = data;
          });
 
