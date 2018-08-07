@@ -37,17 +37,24 @@ arc.directive("arcConsole", function () {
 
          $scope.lists.allFunctions = $rootScope.process_functions;
 
+         $scope.lists.allSnippets = $rootScope.process_snippets;
+
+         $scope.replaceAdditionalString = function(string){
+            var newString = string.replace(/\{/g, "");
+            var newString = newString.replace(/\}/g, "");
+            for(var i=0; i<10; i++){
+               var stringToReplace = "$"+i+":";
+               var newString = newString.replace(stringToReplace, "");
+               //console.log(stringToReplace,newString);
+            }
+            return newString;
+         };
+
          $scope.cleanAllFunctions = function(){
             $scope.lists.allFunctionsCleaned = [];
             for(f in $scope.lists.allFunctions){
                var func = $scope.lists.allFunctions[f];
-               var newSnippet = func.snippet.replace(/\{/g, "");
-               var newSnippet = newSnippet.replace(/\}/g, "");
-               for(var i=0; i<10; i++){
-                  var stringToReplace = "$"+i+":";
-                  //console.log(stringToReplace);
-                  var newSnippet = newSnippet.replace(stringToReplace, "");
-               }
+               var newSnippet = $scope.replaceAdditionalString(func.snippet);
                var newFunction = {
                   value: func.value,
                   snippet: newSnippet
@@ -59,27 +66,25 @@ arc.directive("arcConsole", function () {
 
          $scope.cleanAllFunctions();
 
+         $scope.cleanAllSnippets = function(){
+            $scope.lists.allSnippetsCleaned = [];
+            for(f in $scope.lists.allSnippets){
+               var func = $scope.lists.allSnippets[f];
+               var newSnippet = $scope.replaceAdditionalString(func.snippet);
+               var newSnippet = {
+                  value: func.value,
+                  snippet: newSnippet
+               }
+               $scope.lists.allSnippetsCleaned.push(newSnippet);
+            }
+            console.log($scope.lists.allSnippetsCleaned);
+         };
+
+         $scope.cleanAllSnippets();
+
          $scope.showScript = false;
 
          $scope.newTiFunctions = [{instance:$scope.instance, icon:'',function:''}];
-
-         $scope.tiFunctions = {
-            types: [{name:'dimensions',icon:'dimensions'},
-                  {name:'cubes',icon:'cubes'},
-                  {name:'processes',icon:'processes'},
-                  {name:'administration',icon:'fa-server'}],
-            dimensions : [
-               { icon: "dimensions", function: "ATTRS", desc: "Update a string attribute value" },
-               { icon: "dimensions", function: "ATTRN", desc: "Update a numeric attribute value" },
-               { icon: "dimensions", function: "DimensionElementInsert('DimName', 'InsertionPoint', 'ElName', 'ElType')", desc: "Update a numeric attribute value" }
-            ],
-            cubes : [{ icon: "cubes", function: "CubeCreate", desc: "Create a cube" },
-            { icon: "cubes", function: "CubeDelete", desc: "Delete a cube" }],
-            processes : [{ icon: "processes", function: "ExecuteProcess('ProcessName')", desc: "Create a cube" },
-            { icon: "processes", function: "ProcessDelete('ProcessName')", desc: "Delete a cube" }],
-            administration : [{ icon: "administration", function: "SaveDataAll", desc: "Save data for all cubes" },
-            { icon: "cubes", function: "RefreshMDX", desc: "Refresh MDX default member and levels" }]
-         };
 
          $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
 

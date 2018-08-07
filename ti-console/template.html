@@ -3,8 +3,8 @@
       <div class="col-md-12">
          <div class="row">
             <div class="col-md-12">
-               <div class="card" ng-class="{'text-white bg-dark':!showScript}">
-                  <div class="card-header" style="padding: 5px 10px;">
+               <div class="card border-dark" ng-class="{'text-white bg-dark':!showScript}">
+                  <div class="card-header bg-dark text-white" style="padding: 5px 10px;">
                      <a href>
                         <i class="fa" ng-class="{'fa-toggle-on':showScript,'fa-toggle-off':!showScript}" ng-click="showScript=!showScript"></i>
                      </a>
@@ -33,8 +33,8 @@
                                     </button>
                                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
                                        <li role="menuitem" ng-repeat="item in lists.allFunctionsCleaned">
-                                          <div ng-click="newTiFunctions[0].function = item.value" style="margin-left:10px;cursor:pointer">
-                                             {{item.value}} | {{item.snippet}}</div>
+                                          <div ng-click="newTiFunctions[0].function = item.snippet" style="margin-left:10px;cursor:pointer">
+                                             {{item.value}}</div>
                                        </li>
                                     </ul>
                                  </div>
@@ -55,17 +55,13 @@
 
                                     <div ng-if="$index>0">{{func.instance}}></div>
                                  </span>
-                                 <input ng-if="$index==0" class="bg-dark text-white form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                     style="border:none;border-radius:0;display:inline" type="text" ng-model="func.function"
-                                    placeholder="_" ng-keydown="key($event,$index,func.function,func.instance)" 
+                                 <input ng-if="$index==0" class="bg-dark text-white form-control ng-pristine ng-untouched ng-valid ng-empty" style="border:none;border-radius:0;display:inline"
+                                    type="text" ng-model="func.function" placeholder="_" ng-keydown="key($event,$index,func.function,func.instance)"
                                     uib-typeahead="function.snippet for function in lists.allFunctionsCleaned | filter:$viewValue | limitTo:20"
-                                    typeahead-append-to-body="true"
-                                    >
+                                    typeahead-append-to-body="true">
                                  <input ng-if="$index>0" ng-click="newTiFunctions[0].function = func.function;newTiFunctions[0].instance = func.instance"
-                                       ng-desable="$index>0" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                       ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle'}"
-                                       style="border:none;border-radius:0;cursor:pointer;display:inline"
-                                       ng-model="func.function">
+                                    ng-desable="$index>0" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-class="{'bg-dark text-danger':func.icon == 'fa-warning','bg-dark text-success':func.icon == 'fa-check-circle'}"
+                                    style="border:none;border-radius:0;cursor:pointer;display:inline" ng-model="func.function">
                               </div>
                               <div ng-if="func.showMessage">{{func.message}}</div>
                            </div>
@@ -78,7 +74,19 @@
                                  <uib-tab index="0" heading="Prolog">
                                     <div class="row">
                                        <div class="col-md-12">
+                                          <div uib-dropdown dropdown-append-to-body>
+                                             <button uib-dropdown-toggle class="btn btn-info">
+                                                snippets
+                                             </button>
+                                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                                <li role="menuitem" ng-repeat="item in lists.allSnippetsCleaned">
+                                                   <div ng-click="code.prolog = item.snippet" style="margin-left:10px;cursor:pointer">
+                                                      {{item.value}}</div>
+                                                </li>
+                                             </ul>
+                                          </div>
                                           <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
+
                                              <div class="card-header" style="padding: 5px 10px;">
                                                 Body</div>
                                              <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.prolog" style="height: 200px;"></pre>
@@ -89,6 +97,17 @@
                                  <uib-tab index="1" heading="Epilog">
                                     <div class="row">
                                        <div class="col-md-12">
+                                          <div uib-dropdown dropdown-append-to-body>
+                                             <button uib-dropdown-toggle class="btn btn-info">
+                                                snippets
+                                             </button>
+                                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                                <li role="menuitem" ng-repeat="item in lists.allSnippetsCleaned">
+                                                   <div ng-click="code.epilog = item.snippet" style="margin-left:10px;cursor:pointer">
+                                                      {{item.value}}</div>
+                                                </li>
+                                             </ul>
+                                          </div>
                                           <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
                                              <div class="card-header" style="padding: 5px 10px;">
                                                 Body</div>
