@@ -3,6 +3,8 @@ This plugin can be used to randomise data
 
 <img src="https://s3-ap-southeast-2.amazonaws.com/downloads.cubewise.com/web_assets/arc-pulgins/randomisator.gif" />
 
+Using the **DebugUtility** Turbo Integrator function to randomise the data.
+
 ## Add this plugin to your application
 1. Download the **template** folder
 2. Paste the folder insite your plugins folder (Arc\plugins)

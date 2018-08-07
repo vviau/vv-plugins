@@ -104,7 +104,7 @@ arc.directive("arcRandomiseData", function () {
          //OPEN MODAL WITH VIEWS TO BE DELETED
          $scope.openModalRandomise = function () {
             var dialog = ngDialog.open({
-               className: "ngdialog-theme-default large",
+               className: "ngdialog-theme-default medium",
                template: "__/plugins/randomise-data/m-randomise.html",
                name: "Instances",
                scope: $scope,
@@ -121,7 +121,7 @@ arc.directive("arcRandomiseData", function () {
                      }
                   };
                   $scope.randomiseOneCube = function (cube) {
-                     var prolog = " DebugUtility( 114, 0, 0, '" + cube + "', '" + $scope.selections.targetFolder + "', '') ;";
+                     var prolog = "DebugUtility( 114, 0, 0, '" + cube + "', '" + $scope.selections.targetFolder + "', '') ;";
                      body = {
                         Process: {
                            PrologProcedure: prolog
