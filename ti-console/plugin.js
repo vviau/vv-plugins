@@ -147,7 +147,7 @@ arc.directive("arcConsole", function () {
             $scope.queryStatus = 'executing';
             body = {
                Process: {
-                  PrologProcedure: value +";"
+                  PrologProcedure: value
                }
             };
             var config = {
