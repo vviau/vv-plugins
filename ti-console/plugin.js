@@ -155,6 +155,8 @@ arc.directive("arcConsole", function () {
                url: encodeURIComponent(instance) + "/ExecuteProcess",
                data: body
             };
+            //	TM1 version < PAL 2.0.5: /ExecuteProcess
+            //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
             $http(config).then(function (result) {
                console.log(result);
                if (result.status == 200 || result.status == 201 || result.status == 204) {
