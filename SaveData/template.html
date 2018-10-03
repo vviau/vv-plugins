@@ -1,0 +1,49 @@
+<div>
+   <style>
+      .card-button:hover {
+         background-color:#FFF3CD;
+    color:#856404;
+    border-color:#FFEEBA
+}
+   </style>
+   <div class="toolbar">
+      <label>
+         <h2>
+            <i class="fa fa-cubes" style="padding-right:5px" aria-hidden="true" ng-if="selections.optionsShow=='buttons'"></i>
+            <span class="input-group-append" ng-if="selections.optionsShow!='buttons'">
+                  <button class="btn btn-primary" ng-click="selections.optionsShow='buttons'">
+                        <i class="fa fa-step-backward" aria-hidden="true"></i>
+                  </button>
+               </span>
+             Save Data</h2>
+      </label>
+      <div class="btn-toolbar pull-right" ng-if="selections.optionsShow=='SaveData'">
+         <span class="input-group-prepend">
+            <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline; width: 200px;" type="text"
+               ng-model="selection.cube" placeholder="Search for cubes" ng-keydown="key($event,selection.cube)" uib-typeahead="cube.Name for cube in lists.cubes | filter:$viewValue | limitTo:20"
+               typeahead-append-to-body="true">
+         </span>
+         <span class="input-group-append">
+            <button ng-disabled="lists.cubesTarget.length==0" class="btn btn-warning" ng-click="openModalRandomise()">
+               <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            </button>
+         </span>
+      </div>
+   </div>
+   <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='buttons'">
+      <div class="col-md-6" ng-repeat="option in lists.optionsSaveData">
+            <div class="card card-button {{option.align}}" style="width: 18rem;cursor:pointer"
+            ng-click="selections.optionsShow=option.name">
+            <div class="card-body text-center">
+              <h5 class="card-title" style="font-size:1.5em">{{option.name}}</h5>
+              <p class="card-text"><i class="fa fa-{{option.icon}}" aria-hidden="true" style="font-size:5em"></i></p>
+            </div>
+          </div>
+      </div>
+   </div>
+   <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='SaveData'">
+      <div class="col-md-12">
+         Cube List
+      </div>
+   </div>
+</div>
