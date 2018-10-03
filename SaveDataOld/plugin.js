@@ -3,8 +3,8 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-   $rootScope.plugin("arcSaveData", "Save Data", "page", {
-      menu: "administration",
+   $rootScope.plugin("arcSaveDataOld", "Save Data Old", "page", {
+      menu: "tools",
       icon: "fa-cubes",
       description: "This plugin can be used to randomize data for any cubes",
       author: "Cubewise",
@@ -14,14 +14,14 @@ arc.run(['$rootScope', function ($rootScope) {
 
 }]);
 
-arc.directive("arcSaveData", function () {
+arc.directive("arcSaveDataOld", function () {
    return {
       restrict: "EA",
       replace: true,
       scope: {
          instance: "=tm1Instance"
       },
-      templateUrl: "__/plugins/SaveData/template.html",
+      templateUrl: "__/plugins/SaveDataOld/template.html",
       link: function ($scope, element, attrs) {
 
       },
@@ -183,7 +183,7 @@ arc.directive("arcSaveData", function () {
          //Close the tab
          $scope.$on("close-tab", function (event, args) {
             // Event to capture when a user has clicked close on the tab
-            if (args.page == "arcSaveData" && args.instance == $scope.instance && args.name == null) {
+            if (args.page == "arcSaveDataOld" && args.instance == $scope.instance && args.name == null) {
                // The page matches this one so close it
                $rootScope.close(args.page, { instance: $scope.instance });
             }
