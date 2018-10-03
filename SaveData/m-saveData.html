@@ -1,0 +1,25 @@
+<div>
+   <div class="modal-header text-white bg-warning">
+      <span>
+         <i class="fa fa-cubes"></i>
+         <span>SaveData
+         </span>
+      </span>
+   </div>
+   <div class="modal-body">
+      <div class="row">
+         <div class="col-md-12">
+            <span>
+                  Save Data for the following cubes:
+            </span>
+            <ul class="list-group">
+               <li class="list-group-item" ng-repeat="cube in cubesToSave">{{cube.Name}}</li>
+            </ul>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <button type="button" class="btn btn-warning action ng-scope" ng-click="saveDataPerCubes()">SaveData</button>
+      <button type="button" class="btn btn-default action ng-scope" ng-click="closeThisDialog(0)">Cancel</button>
+   </div>
+</div>

@@ -60,8 +60,8 @@ arc.directive("arcSaveData", function () {
          //Functions
          $scope.getCubes = function () {
             var query = "";
-            var queryAll = "/Cubes?$select=Name";
-            var queryWithoutControlObjects = "/Cubes?$select=Name&$filter=indexof(Name,'}') eq -1";
+            var queryAll = "/Cubes?$select=Name,LastDataUpdate,LastSchemaUpdate";
+            var queryWithoutControlObjects = "/Cubes?$select=Name,LastDataUpdate,LastSchemaUpdate&$filter=indexof(Name,'}') eq -1";
             if ($rootScope.uiPrefs.controlObjects) {
                query = queryAll;
             } else {
@@ -100,15 +100,6 @@ arc.directive("arcSaveData", function () {
             }            
          };
 
-         $scope.openModal = function(type){
-            $scope.selections.optionsShow=type;
-            if(type == 'SaveDataAll'){
-               $scope.openModalSaveDataAll();
-            }else{
-               $scope.selections.title=type;
-            }
-         };
-
          //OPEN MODAL WITH SAVEDATALL
          $scope.openModalSaveDataAll = function () {
             var dialog = ngDialog.open({
@@ -141,9 +132,44 @@ arc.directive("arcSaveData", function () {
                   }
                }],
                data: {
-                  cubesTarget: $scope.lists.cubesTarget,
-                  cubesRandomized: $scope.lists.cubesRandomized,
-                  targetFolder: $scope.selections.targetFolder
+                  cubesToSave: $scope.cubesToSave
+               }
+            });
+         };
+
+         //OPEN MODAL WITH SAVEDATALL
+         $scope.openModalSaveData = function () {
+            var dialog = ngDialog.open({
+               className: "ngdialog-theme-default small",
+               template: "__/plugins/SaveData/m-saveData.html",
+               name: "Instances",
+               scope: $scope,
+               controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+                  $scope.cubesToSave = $scope.ngDialogData.cubesToSave;
+
+                  $scope.saveDataAll = function () {
+                     console.log("SaveData executed")
+                     var prolog = "SaveDataAll;";
+                     body = {
+                        Process: {
+                           PrologProcedure: prolog
+                        }
+                     };
+                     var config = {
+                        method: "POST",
+                        url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
+                        data: body
+                     };
+                     $http(config).then(function (result) {
+                        if (result.status == 200 || result.status == 201 || result.status == 204) {
+                           $scope.saveDataStatus=true;
+                        } else {
+                        }
+                     });
+                  }
+               }],
+               data: {
+                  cubesToSave: $scope.cubesToSave
                }
             });
          };

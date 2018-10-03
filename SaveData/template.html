@@ -9,105 +9,73 @@
    <div class="toolbar">
       <label>
          <h2>
-            <i class="fa fa-cubes" style="padding-right:5px" aria-hidden="true" ng-if="selections.optionsShow=='SaveDataAll'"></i>
-            <i ng-click="selections.optionsShow='SaveDataAll';selections.title=defaults.title" ng-if="selections.optionsShow!='SaveDataAll'" class="fa fa-chevron-circle-left"
-               aria-hidden="true" style="cursor:pointer"></i>
-            {{selections.title}}</h2>
+            <i class="fa fa-cubes" style="padding-right:5px" aria-hidden="true"></i>
+            Save data into disk</h2>
       </label>
    </div>
-   <div class="row text-center" ng-if="selections.showAlert">
-         <div class="mx-auto alert alert-warning" role="alert">
-               <i ng-click="selections.showAlert=false" class="fa fa-close"
-               aria-hidden="true" style="cursor:pointer"></i>
-               Running a save data might take few minutes, use it with care in production!
-             </div>
-   </div>
-   <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='SaveDataAll'">
-      <div class="col-md-6" ng-repeat="option in lists.optionsSaveData">
-         <div class="card card-button {{option.align}}" style="width: 18rem;cursor:pointer" ng-click="openModal(option.name)">
-            <div class="card-body text-center">
-               <h5 class="card-title" style="font-size:1.5em">{{option.name}}</h5>
-               <p class="card-text">
-                  <i class="fa fa-{{option.icon}}" aria-hidden="true" style="font-size:5em"></i>
-               </p>
-            </div>
-         </div>
+   <div class="row text-center" ng-if="selections.showAlert" style="margin-top:10px">
+      <div class="mx-auto alert alert-warning" role="alert">
+         <i ng-click="selections.showAlert=false" class="fa fa-close" aria-hidden="true" style="cursor:pointer"></i>
+         Running a save data might take few minutes, use it with care in production!
       </div>
    </div>
-   <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='CubeSaveData'">
-      <div class="col-md-6">
-         <div class="card border-warning">
-            <div class="card-header bg-warning" style="padding: 5px 10px;">
-               <i class="fa fa-fw cubes"></i> 1.Pick cubes to save </div>
-            <div class="card-body">
-
-               <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline;" type="text" ng-model="selections.cubeFilter"
-                  placeholder="Search for cubes" >
-
-               <table class="table table-hover table-sm ng-scope">
-
-                  <thead>
-                     <tr>
-                        <th style="width: 30px;" class="text-center">
-                           <input ng-if="selections.cubeFilter.length==0" style="margin-top:5px" type="checkbox" ng-model="defaults.selectAllCubes" ng-change="toggleAllCubeToSave(  )" class="ng-pristine ng-untouched ng-valid ng-empty"
-                              uib-popover="Select All" popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-default"> </th>
-                        <th class="text-center"> Name </th>
-                     </tr>
-                  </thead>
-
-                  <tbody>
-                     <tr ng-repeat="cube in lists.cubes |filter:selections.cubeFilter">
-                        <td class="text-center">
-                           <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"
-                              > </td>
-                        <td> {{cube.Name}} </td>
-                     </tr>
-                  </tbody>
-
-               </table>
-            </div>
+   <div class="row" style="margin-top:10px">
+      <div class="col-md-12">
+         <div class="input-group pull-right">
+            <span class="input-group-prepend">
+               <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline;width:300px" type="text" ng-model="selections.cubeFilter"
+                  placeholder="Search for cubes">
+            </span>
+            <span class="input-group-append">
+                  <button class="btn btn-primary" ng-click="getCubes()" uib-popover="Refresh"
+                     popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
+                     <i class="fa fa-refresh" aria-hidden="true"></i>
+                  </button>
+               </span>
+            <span class="input-group-append">
+               <button ng-disabled="cubesToSave.length==0" class="btn btn-warning" ng-click="openModalSaveData()" uib-popover="Save Data"
+                  popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
+               </button>
+            </span>
+            <span class="input-group-append">
+                  <button class="btn btn-warning" ng-click="openModalSaveDataAll()" uib-popover="Save Data All"
+                     popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
+                     <i class="fa fa-cubes" aria-hidden="true"></i>
+                  </button>
+               </span>
          </div>
-      </div>
-      <div class="col-md-6">
-         
-            <div class="card border-warning">
-                  <div class="card-header bg-warning" style="padding: 5px 10px;">
-               <i class="fa fa-fw cubes"></i> 2. Click Save Data </div>
-            <div class="card-body">
-               <div class="btn-toolbar pull-right">
-                  <span class="input-group-prepend">
-                     <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline; width: 400px;" type="text"
-                        ng-model="selections.cubeSelectedFilter" placeholder="Search for cubes" >
-                  </span>
-                  <span class="input-group-append">
-                     <button ng-disabled="cubesToSave.length==0" class="btn btn-warning" ng-click="saveDataPerCubes()"
-                     uib-popover="Save Data" popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
-                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                     </button>
-                  </span>
-               </div>
-               <table class="table table-hover table-sm ng-scope">
-
-                  <thead>
-                     <tr>
-                        <th style="width: 30px;" class="text-center">
-                        </th>
+         <table class="table table-hover table-sm ng-scope">
+            <thead>
+               <tr>
+                  <th style="width: 30px;" class="text-center">
+                     <input ng-if="selections.cubeFilter.length==0" style="margin-top:5px" type="checkbox" ng-model="defaults.selectAllCubes"
+                        ng-change="toggleAllCubeToSave(  )" class="ng-pristine ng-untouched ng-valid ng-empty" uib-popover="Select All"
+                        popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-default"> </th>
+                        <th class="text-center"></th>
                         <th class="text-center"> Name </th>
-                     </tr>
-                  </thead>
+                  <th class="text-center"> Last Data Update </th>
+                  <th class="text-center"> Last Schema Update </th>
+               </tr>
+            </thead>
 
-                  <tbody>
-                     <tr ng-repeat="cube in cubesToSave |filter:selections.cubeSelectedFilter">
-                        <td class="text-center">
-                           <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"
-                           > </td>
-                        <td> {{cube.Name}} </td>
-                     </tr>
-                  </tbody>
+            <tbody>
+               <tr ng-repeat="cube in lists.cubes |filter:selections.cubeFilter">
+                  <td class="text-center">
+                     <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"> </td>
+                  <td class="text-center">
+                     <i class="fa fa-floppy-o alert-warning" aria-hidden="true" uib-popover="Save Data"
+                     popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-default"
+                     style="cursor:pointer"
+                     ng-click="saveDataForOneCube(cube)"></i>
+                  </td>
+                  <td> {{cube.Name}} </td>
+                  <td> {{cube.LastDataUpdate}}</td>
+                  <td> {{cube.LastSchemaUpdate}}</td>
+               </tr>
+            </tbody>
 
-               </table>
-            </div>
-         </div>
+         </table>
       </div>
    </div>
 </div>
