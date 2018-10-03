@@ -70,9 +70,29 @@ arc.directive("arcSaveData", function () {
             }
             $http.get(encodeURIComponent($scope.instance) + query).then(function (result) {
                $scope.lists.cubes = result.data.value;
+               $scope.reformatCubeDates();
             });
          };
          $scope.getCubes();
+
+         $scope.reformatCubeDates = function(){
+            for(var c in $scope.lists.cubes){
+               $scope.lists.cubes[c].LastDataUpdateNewFormat = $scope.reformatDate($scope.lists.cubes[c].LastDataUpdate);
+               $scope.lists.cubes[c].LastSchemaUpdateNewFormat = $scope.reformatDate($scope.lists.cubes[c].LastSchemaUpdate);
+            }
+         };
+
+         $scope.reformatDate = function(dateISO){
+            var sLastDataUpdate = new Date(dateISO);
+            var months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+            var sDate = sLastDataUpdate.getDate();
+            var sMonth = months[sLastDataUpdate.getMonth()];
+            var sYear = sLastDataUpdate.getFullYear();
+            var sHours = sLastDataUpdate.getHours();
+            var sMinutes = sLastDataUpdate.getMinutes();
+            var sSeconds = sLastDataUpdate.getSeconds();
+            return sDate + '/'+ sMonth +'/'+sYear+' '+sHours+'h'+sMinutes+'m'+sSeconds+'s';
+         };
 
          // TOGGLE DELETE VIEWS
          $scope.cubesToSave = [];
