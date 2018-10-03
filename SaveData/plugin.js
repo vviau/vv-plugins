@@ -29,7 +29,8 @@ arc.directive("arcSaveData", function () {
 
          //Define variables
          $scope.defaults = {
-            optionsShow : 'buttons'
+            optionsShow : 'buttons',
+            selectAllCubes : false
          };
          $scope.selections = {
             optionsShow : $scope.defaults.optionsShow,
@@ -66,6 +67,33 @@ arc.directive("arcSaveData", function () {
             });
          };
          $scope.getCubes();
+
+         // TOGGLE DELETE VIEWS
+         $scope.cubesToSave = [];
+         $scope.toggleCubeToSave = function (item) {
+            //console.log(item);
+            if (_.includes($scope.cubesToSave, item)) {
+               _.remove($scope.cubesToSave, function (i) {
+                  return i.Name === item.Name;
+               });
+            } else {
+               $scope.cubesToSave.push(item);
+            }
+         };
+         $scope.toggleAllCubeToSave = function () {
+            if(!$scope.defaults.selectAllCubes){
+               $scope.cubesToSave = [];
+               for(var c in $scope.lists.cubes){
+                  $scope.lists.cubes[c].saveData=false;
+               }
+            }else{
+               $scope.cubesToSave = [];
+               for(var c in $scope.lists.cubes){
+                  $scope.lists.cubes[c].saveData=true;
+                  $scope.cubesToSave.push($scope.lists.cubes[c]);
+               }
+            }            
+         };
 
          $scope.addAllModelCubes = function() {
             $scope.showCubeSelection = false;

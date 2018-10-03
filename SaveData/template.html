@@ -1,21 +1,18 @@
 <div>
    <style>
       .card-button:hover {
-         background-color:#FFF3CD;
-    color:#856404;
-    border-color:#FFEEBA
-}
+         background-color: #FFF3CD;
+         color: #856404;
+         border-color: #FFEEBA
+      }
    </style>
    <div class="toolbar">
       <label>
          <h2>
             <i class="fa fa-cubes" style="padding-right:5px" aria-hidden="true" ng-if="selections.optionsShow=='buttons'"></i>
-            <span class="input-group-append" ng-if="selections.optionsShow!='buttons'">
-                  <button class="btn btn-primary" ng-click="selections.optionsShow='buttons'">
-                        <i class="fa fa-step-backward" aria-hidden="true"></i>
-                  </button>
-               </span>
-             Save Data</h2>
+            <i ng-click="selections.optionsShow='buttons'" ng-if="selections.optionsShow!='buttons'" class="fa fa-chevron-circle-left text-primary"
+               aria-hidden="true" style="cursor:pointer"></i>
+            Save Data</h2>
       </label>
       <div class="btn-toolbar pull-right" ng-if="selections.optionsShow=='SaveData'">
          <span class="input-group-prepend">
@@ -32,18 +29,41 @@
    </div>
    <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='buttons'">
       <div class="col-md-6" ng-repeat="option in lists.optionsSaveData">
-            <div class="card card-button {{option.align}}" style="width: 18rem;cursor:pointer"
-            ng-click="selections.optionsShow=option.name">
+         <div class="card card-button {{option.align}}" style="width: 18rem;cursor:pointer" ng-click="selections.optionsShow=option.name">
             <div class="card-body text-center">
-              <h5 class="card-title" style="font-size:1.5em">{{option.name}}</h5>
-              <p class="card-text"><i class="fa fa-{{option.icon}}" aria-hidden="true" style="font-size:5em"></i></p>
+               <h5 class="card-title" style="font-size:1.5em">{{option.name}}</h5>
+               <p class="card-text">
+                  <i class="fa fa-{{option.icon}}" aria-hidden="true" style="font-size:5em"></i>
+               </p>
             </div>
-          </div>
+         </div>
       </div>
    </div>
    <div class="row" style="margin-top:10px" ng-if="selections.optionsShow=='SaveData'">
       <div class="col-md-12">
-         Cube List
+         <table class="table table-hover table-sm ng-scope">
+
+            <thead>
+               <tr>
+                  <th style="width: 30px;" class="text-center">
+                     <input style="margin-top:5px" type="checkbox" ng-model="defaults.selectAllCubes" ng-change="toggleAllCubeToSave(  )"
+                        class="ng-pristine ng-untouched ng-valid ng-empty" uib-popover="Select All" popover-append-to-body="true"
+                        popover-trigger="'mouseenter'" popover-class="popover-class-danger"> </th>
+                  <th class="text-center"> Cube </th>
+               </tr>
+            </thead>
+
+            <tbody>
+               <tr ng-repeat="cube in lists.cubes">
+                  <td class="text-center">
+                     <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"
+                        uib-popover="Select One" popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"> </td>
+                  <td> {{cube.Name}} </td>
+               </tr>
+            </tbody>
+
+         </table>
+
       </div>
    </div>
 </div>
