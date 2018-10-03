@@ -39,7 +39,8 @@ arc.directive("arcSaveData", function () {
             cubeFilter:'',
             cubeSelectedFilter:'',
             showAlert:true,
-            title: $scope.defaults.title
+            title: $scope.defaults.title,
+            responseTimeMs: 0
          };
          $scope.lists = {
             cubes: [],
@@ -102,6 +103,7 @@ arc.directive("arcSaveData", function () {
 
          //OPEN MODAL WITH SAVEDATALL
          $scope.openModalSaveDataAll = function () {
+            $scope.selections.responseTimeMs = 0;
             var dialog = ngDialog.open({
                className: "ngdialog-theme-default small",
                template: "__/plugins/SaveData/m-saveDataAll.html",
@@ -112,6 +114,7 @@ arc.directive("arcSaveData", function () {
 
                   $scope.saveDataAll = function () {
                      console.log("SaveData executed")
+                     var sendDate = (new Date()).getTime();
                      var prolog = "SaveDataAll;";
                      body = {
                         Process: {
@@ -128,6 +131,8 @@ arc.directive("arcSaveData", function () {
                            $scope.saveDataStatus=true;
                         } else {
                         }
+                        var receiveDate = (new Date()).getTime();
+                        $scope.selections.responseTimeMs = receiveDate - sendDate;
                      });
                   }
                }],
@@ -139,6 +144,7 @@ arc.directive("arcSaveData", function () {
 
          //OPEN MODAL WITH SAVEDATALL
          $scope.openModalSaveData = function () {
+            $scope.selections.responseTimeMs = 0;
             var dialog = ngDialog.open({
                className: "ngdialog-theme-default small",
                template: "__/plugins/SaveData/m-saveData.html",
@@ -146,27 +152,6 @@ arc.directive("arcSaveData", function () {
                scope: $scope,
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
                   $scope.cubesToSave = $scope.ngDialogData.cubesToSave;
-
-                  $scope.saveDataAll = function () {
-                     console.log("SaveData executed")
-                     var prolog = "SaveDataAll;";
-                     body = {
-                        Process: {
-                           PrologProcedure: prolog
-                        }
-                     };
-                     var config = {
-                        method: "POST",
-                        url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
-                        data: body
-                     };
-                     $http(config).then(function (result) {
-                        if (result.status == 200 || result.status == 201 || result.status == 204) {
-                           $scope.saveDataStatus=true;
-                        } else {
-                        }
-                     });
-                  }
                }],
                data: {
                   cubesToSave: $scope.cubesToSave
@@ -175,6 +160,7 @@ arc.directive("arcSaveData", function () {
          };
 
          $scope.saveDataPerCubes = function () {
+            $scope.selections.responseTimeMs = 0;
             for(var c in $scope.cubesToSave){
                $scope.saveDataForOneCube($scope.cubesToSave[c]);
             }
@@ -182,6 +168,7 @@ arc.directive("arcSaveData", function () {
 
          $scope.saveDataForOneCube = function(cube){
             console.log(cube.Name+" saved to disk");
+            cube.sendDate = (new Date()).getTime();
             var prolog = "CubeSaveData('"+cube.Name+"');";
             body = {
                Process: {
@@ -198,6 +185,9 @@ arc.directive("arcSaveData", function () {
                   $scope.saveDataStatus=true;
                } else {
                }
+               cube.receiveDate = (new Date()).getTime();
+               cube.responseTimeMs = cube.receiveDate - cube.sendDate;
+               $scope.selections.responseTimeMs = $scope.selections.responseTimeMs + cube.responseTimeMs;
             });
          }
 
