@@ -64,7 +64,7 @@
             </thead>
 
             <tbody>
-               <tr ng-repeat="cube in lists.cubes |filter:selections.cubeFilter">
+               <tr ng-repeat="cube in lists.cubes |filter:selections.cubeFilter track by cube.Name">
                   <td class="text-center">
                      <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"> </td>
                   <td class="text-center">

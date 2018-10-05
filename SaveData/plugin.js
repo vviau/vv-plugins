@@ -107,11 +107,13 @@ arc.directive("arcSaveData", function () {
             }
          };
          $scope.toggleAllCubeToSave = function () {
+            //Untick ALL
             if(!$scope.defaults.selectAllCubes){
                $scope.cubesToSave = [];
                for(var c in $scope.lists.cubes){
                   $scope.lists.cubes[c].saveData=false;
                }
+            //Tick ALL
             }else{
                $scope.cubesToSave = [];
                for(var c in $scope.lists.cubes){
