@@ -105,22 +105,15 @@ arc.directive("arcSaveData", function () {
             } else {
                $scope.cubesToSave.push(item);
             }
+            console.log($scope.cubesToSave);
          };
          $scope.toggleAllCubeToSave = function () {
-            //Untick ALL
-            if(!$scope.defaults.selectAllCubes){
-               $scope.cubesToSave = [];
-               for(var c in $scope.lists.cubes){
-                  $scope.lists.cubes[c].saveData=false;
+            _.each($scope.lists.cubes, function(item){
+               if(item.Name.toLowerCase().includes($scope.selections.cubeFilter.toLowerCase())){
+                     item.saveData = $scope.defaults.selectAllCubes;
+                     $scope.toggleCubeToSave(item);
                }
-            //Tick ALL
-            }else{
-               $scope.cubesToSave = [];
-               for(var c in $scope.lists.cubes){
-                  $scope.lists.cubes[c].saveData=true;
-                  $scope.cubesToSave.push($scope.lists.cubes[c]);
-               }
-            }            
+            });            
          };
 
          //OPEN MODAL WITH SAVEDATALL
