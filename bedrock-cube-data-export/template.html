@@ -54,15 +54,6 @@
             <span translate="SKIPCONS"></span>
          </div>
       </div>
-      <div>
-         <button class="btn btn-primary" ng-init="selections.show=false" ng-click="selections.show=!selections.show" style="cursor:pointer">
-            <i class="fa" ng-class="{'fa-caret-square-o-down':selections.show==true,'fa-caret-square-o-right':selections.show==false}"
-               aria-hidden="true"></i> Open
-         </button>
-      </div>
-      <div ng-if="selections.show">
-         SHOW MORE CONTENT
-      </div>
    </div>
    <div class="modal-footer">
       <button type="button" class="btn btn-secondary action" ng-disabled="!ngDialogData.fileName.length" ng-click="ngDialogData.action(ngDialogData)"
