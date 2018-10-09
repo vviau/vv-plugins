@@ -66,6 +66,18 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
       var query = "/Cubes('" + name + "')/Dimensions?$select=Name";
       $http.get(encodeURIComponent(instance) + query).then(function (result) {
          var dimensions = result.data.value;
+         //Create hierarchy property required for Subset Editor
+         _.each(dimensions, function(dim){
+            dim.hierarchy = {
+               name: dim.Name,
+               dimension: dim.Name,
+               subset:"",
+               expression:"",
+               expressions:"",
+               alias:dim.Name
+            }
+         });
+         console.log(dimensions);
          // Use ngDialog (https://github.com/likeastore/ngDialog) for custom dialog boxes
          // Pass a template URL to use an external file, path should start with __/plugins/{{your-plugin-name}}
          // Use the data option to pass through data (or functions to the template), the data is then used in
@@ -75,7 +87,31 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
          dialog = ngDialog.open({
             className: "ngdialog-theme-default small",
             template: "__/plugins/bedrock-cube-data-export/template.html",
-            controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+            controller: ['$rootScope', '$scope', '$subsetDialogs', function ($rootScope, $scope, $subsetDialogs) {
+               //Open Subset Editor
+               $scope.editSubset = function (dimension) {
+
+                  var hierarchy = dimension.hierarchy;
+
+                  var handler = function(subset, elements){
+                
+                     // subset.selected has what element was clicked
+                     dimension.filter = subset.selected.alias;
+                     
+                  };
+                  
+                  // Probably don't need the expression or expressions (not tested)
+                  var subset = {
+                     name: hierarchy.subset,
+                     expression: hierarchy.expression,
+                     expressions: hierarchy.expressions,
+                     alias: hierarchy.alias,
+                     isSelector: true
+                  };
+   
+                  $subsetDialogs.open(instance, hierarchy.dimension, hierarchy.name, subset, handler);
+                  
+                };
 
             }],
             data: {
