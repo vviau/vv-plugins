@@ -31,7 +31,8 @@ arc.directive("arcSaveData", function () {
          $scope.defaults = {
             optionsShow : 'SaveDataAll',
             selectAllCubes : false,
-            title:'SaveDataAll or CubeSaveData'
+            title:'SaveDataAll or CubeSaveData',
+            showBadgeTime : true
          };
          $scope.selections = {
             optionsShow : $scope.defaults.optionsShow,
@@ -174,7 +175,7 @@ arc.directive("arcSaveData", function () {
          }
 
          $scope.saveDataForOneCube = function(cube){
-            console.log(cube.Name+" saved to disk");
+            $scope.defaults.showBadgeTime = true;
             cube.sendDate = (new Date()).getTime();
             var prolog = "CubeSaveData('"+cube.Name+"');";
             body = {
@@ -196,6 +197,11 @@ arc.directive("arcSaveData", function () {
                cube.responseTimeMs = cube.receiveDate - cube.sendDate;
                $scope.selections.responseTimeMs = $scope.selections.responseTimeMs + cube.responseTimeMs;
             });
+            $timeout($scope.removeBadge, 60000);
+         }
+
+         $scope.removeBadge = function(){
+            $scope.defaults.showBadgeTime = false;
          }
 
          //Trigger an event after the login screen

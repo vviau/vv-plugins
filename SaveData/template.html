@@ -66,15 +66,20 @@
                      style="cursor:pointer"
                      ng-click="saveDataForOneCube(cube)"></i>
                   </td>
-                  <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
+                  <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0 && defaults.showBadgeTime" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
                         {{cube.responseTimeMs}} Ms
                   </span></td>
-                  <td> <i class="fa fa-clock-o"
-                     ng-if="cube.dataUpdateHoursDelta<48" 
-                     ng-class="{'text-danger':cube.dataUpdateHoursDelta<2,'text-warning':cube.dataUpdateHoursDelta>2}" aria-hidden="true"
+                  <td> <i class="fa fa-clock-o text-danger"
+                     ng-if="cube.dataUpdateHoursDelta<1" 
+                    aria-hidden="true"
+                           uib-popover="Data updated in the last hour"
+                           popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"></i> 
+                     <i class="fa fa-clock-o text-warning"
+                     ng-if="cube.dataUpdateHoursDelta>1 && cube.dataUpdateHoursDelta<25" 
+                     aria-hidden="true"
                            uib-popover="Data updated in the last {{cube.dataUpdateHoursDelta}} hours"
                            popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"></i> 
-                     {{cube.LastDataUpdate | date:'medium'}} - </td>
+                     {{cube.LastDataUpdate | date:'medium'}}</td>
                </tr>
             </tbody>
 
