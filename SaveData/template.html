@@ -10,7 +10,7 @@
       <label>
          <h2>
             <i class="fa fa-cubes" style="padding-right:5px" aria-hidden="true"></i>
-            Save data into disk</h2>
+            Save Data to Disk</h2>
       </label>
    </div>
    <div class="row" style="margin-top:10px">
@@ -40,12 +40,6 @@
                </span>
          </div>
       </div>
-      <div class="col-md-6">
-            <div  ng-if="selections.showAlert" class="mx-auto alert alert-danger" role="alert" style="margin-bottom:0px;padding:10px">
-                  <i ng-click="selections.showAlert=false" class="fa fa-close" aria-hidden="true" style="cursor:pointer"></i>
-                  Running a save data might take few minutes, use it with care in production!
-               </div>
-      </div>
    </div>
    <div class="row">
       <div class="col-md-12">         
@@ -59,7 +53,6 @@
                         <th class="text-center"></th>
                         <th class="text-center"> Name </th>
                   <th class="text-center"> Last Data Update </th>
-                  <th class="text-center"> Last Schema Update </th>
                </tr>
             </thead>
 
@@ -76,8 +69,12 @@
                   <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
                         {{cube.responseTimeMs}} Ms
                   </span></td>
-                  <td> {{cube.LastDataUpdateNewFormat}}</td>
-                  <td> {{cube.LastSchemaUpdateNewFormat}}</td>
+                  <td> <i class="fa fa-clock-o"
+                     ng-if="cube.dataUpdateHoursDelta<48" 
+                     ng-class="{'text-danger':cube.dataUpdateHoursDelta<2,'text-warning':cube.dataUpdateHoursDelta>2}" aria-hidden="true"
+                           uib-popover="Data updated in the last {{cube.dataUpdateHoursDelta}} hours"
+                           popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"></i> 
+                     {{cube.LastDataUpdate | date:'medium'}} - </td>
                </tr>
             </tbody>
 
