@@ -77,7 +77,7 @@ arc.directive("arcConsole", function () {
                }
                $scope.lists.allSnippetsCleaned.push(newSnippet);
             }
-            console.log($scope.lists.allSnippetsCleaned);
+            //console.log($scope.lists.allSnippetsCleaned);
          };
 
          $scope.cleanAllSnippets();
@@ -139,6 +139,20 @@ arc.directive("arcConsole", function () {
             }
          };
 
+         //Check TM1 Version
+         $scope.checkTM1Version = function () {
+            $scope.tm1VersionSupported = false;
+            $scope.instanceData = {};
+            $tm1.instance($scope.instance).then(function (data) {
+               $scope.instanceData = data;
+               if ($helper.versionCompare($scope.instanceData.ProductVersion, "11.1.0") >= 0) {
+                  $scope.tm1VersionSupported = true;
+               };
+            });
+         };
+         // Execute checkTM1Version
+         $scope.checkTM1Version();
+
          //Functions
          $scope.Execute = function (value, instance) {
             //Add function to list
@@ -147,19 +161,26 @@ arc.directive("arcConsole", function () {
             $scope.queryStatus = 'executing';
             body = {
                Process: {
+                  Name: "TIConsole",
                   PrologProcedure: value
                }
             };
-            var config = {
-               method: "POST",
-               url: encodeURIComponent(instance) + "/ExecuteProcess",
-               data: body
-            };
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
+            if($scope.tm1VersionSupported){
+               var executeQuery = "/ExecuteProcessWithReturn?$expand=ErrorLogFile";
+            } else {
+               var executeQuery = "/ExecuteProcess";
+            }
+            var config = {
+               method: "POST",
+               url: encodeURIComponent(instance) + executeQuery,
+               data: body
+            };
             $http(config).then(function (result) {
                console.log(result);
-               if (result.status == 200 || result.status == 201 || result.status == 204) {
+               var errorLogFile = result.data.ErrorLogFile;
+               if (errorLogFile == null) {
                   newFunction = {
                      instance: instance,
                      icon:'fa-check-circle',
@@ -172,7 +193,7 @@ arc.directive("arcConsole", function () {
                      instance: instance,
                      icon:'fa-warning',
                      function:value,
-                     message:result.data.error.message,
+                     message:errorLogFile.Filename,
                      showMessage:false
                   }                  
                }
