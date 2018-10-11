@@ -46,13 +46,13 @@
          <table class="table table-hover table-sm ng-scope">
             <thead>
                <tr>
-                  <th style="width: 30px;" class="text-center">
+                  <th style="width: 30px;">
                      <input style="margin-top:5px" type="checkbox" ng-model="defaults.selectAllCubes"
                         ng-change="toggleAllCubeToSave(  )" class="ng-pristine ng-untouched ng-valid ng-empty" uib-popover="Select All"
                         popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-default"> </th>
-                        <th class="text-center"></th>
-                        <th class="text-center"> Name </th>
-                  <th class="text-center"> Last Data Update </th>
+                        <th></th>
+                        <th> Name </th>
+                  <th> Last Data Update </th>
                </tr>
             </thead>
 
@@ -66,20 +66,18 @@
                      style="cursor:pointer"
                      ng-click="saveDataForOneCube(cube)"></i>
                   </td>
-                  <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0 && defaults.showBadgeTime" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
+                  <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0 && cube.showBadgeTime" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
                         {{cube.responseTimeMs}} Ms
-                  </span></td>
-                  <td> <i class="fa fa-clock-o text-danger"
+                  </span>
+               </td>
+                  <td> 
+                     {{cube.LastDataUpdate | date:'medium'}}
+                     <span class="text-warning"
                      ng-if="cube.dataUpdateHoursDelta<1" 
-                    aria-hidden="true"
-                           uib-popover="Data updated in the last hour"
-                           popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"></i> 
-                     <i class="fa fa-clock-o text-warning"
-                     ng-if="cube.dataUpdateHoursDelta>1 && cube.dataUpdateHoursDelta<25" 
-                     aria-hidden="true"
-                           uib-popover="Data updated in the last {{cube.dataUpdateHoursDelta}} hours"
-                           popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger"></i> 
-                     {{cube.LastDataUpdate | date:'medium'}}</td>
+                     > - Data updated in the last hour</span>
+                     <span class="text-info" ng-if="cube.dataUpdateHoursDelta>=1 && cube.dataUpdateHoursDelta<25" 
+                     > - Data updated in the last {{cube.dataUpdateHoursDelta+1}} hours</span> 
+                     </td>
                </tr>
             </tbody>
 

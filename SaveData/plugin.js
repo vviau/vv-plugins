@@ -36,7 +36,6 @@ arc.directive("arcSaveData", function () {
          };
          $scope.selections = {
             optionsShow : $scope.defaults.optionsShow,
-            targetFolder: "C:/Arc/plugins/randomise-data",
             cubeFilter:'',
             cubeSelectedFilter:'',
             showAlert:true,
@@ -175,7 +174,7 @@ arc.directive("arcSaveData", function () {
          }
 
          $scope.saveDataForOneCube = function(cube){
-            $scope.defaults.showBadgeTime = true;
+            cube.showBadgeTime=true;
             cube.sendDate = (new Date()).getTime();
             var prolog = "CubeSaveData('"+cube.Name+"');";
             body = {
@@ -194,16 +193,15 @@ arc.directive("arcSaveData", function () {
                   cube.receiveDate = (new Date()).getTime();
                   cube.responseTimeMs = cube.receiveDate - cube.sendDate;
                   $scope.selections.responseTimeMs = $scope.selections.responseTimeMs + cube.responseTimeMs;
-                  //response inside $timeout($scope.removeBadge, 20000);
+                  $timeout(function() { $scope.showBadgeTimeCube(cube); }, 20000);
                } else {
                   //error
                }
             });
-            $timeout($scope.removeBadge, 20000);
          }
 
-         $scope.removeBadge = function(){
-            $scope.defaults.showBadgeTime = false;
+         $scope.showBadgeTimeCube = function(cube){
+            cube.showBadgeTime = false;
          }
 
          //Trigger an event after the login screen
