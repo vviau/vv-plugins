@@ -3,7 +3,7 @@ arc.run(['$rootScope', function ($rootScope) {
 
    $rootScope.plugin("arcConsole", "TI Console", "page", {
       menu: "tools",
-      icon: "fa-square",
+      icon: "fa-terminal",
       description: "This plugin can be used as a starting point for building new page plugins",
       author: "Cubewise",
       url: "https://github.com/cubewise-code/arc-plugins",
@@ -45,7 +45,6 @@ arc.directive("arcConsole", function () {
             for(var i=0; i<10; i++){
                var stringToReplace = "$"+i+":";
                var newString = newString.replace(stringToReplace, "");
-               //console.log(stringToReplace,newString);
             }
             return newString;
          };
@@ -61,7 +60,6 @@ arc.directive("arcConsole", function () {
                }
                $scope.lists.allFunctionsCleaned.push(newFunction);
             }
-            //console.log($scope.lists.allFunctionsCleaned);
          };
 
          $scope.cleanAllFunctions();
@@ -77,7 +75,6 @@ arc.directive("arcConsole", function () {
                }
                $scope.lists.allSnippetsCleaned.push(newSnippet);
             }
-            //console.log($scope.lists.allSnippetsCleaned);
          };
 
          $scope.cleanAllSnippets();
@@ -101,9 +98,7 @@ arc.directive("arcConsole", function () {
         $scope.getInstances();
 
          $scope.key = function ($event, funcIndex, func, instance) {
-            //console.log($event.keyCode);
             //Arrow up
-            //console.log(funcIndex, $scope.newTiFunctions[funcIndex].function);
             if ($event.keyCode == 38) {
                $scope.newTiFunctions[funcIndex].function = $scope.newTiFunctions[$scope.indexTiFunctions].function;
                $scope.updateindexTiFunctions("-1");
@@ -154,17 +149,11 @@ arc.directive("arcConsole", function () {
          $scope.checkTM1Version();
 
          //Functions
-         $scope.Execute = function (value, instance) {
+         $scope.Execute = function (tiFunction, instance) {
             //Add function to list
             $scope.updateindexTiFunctions("reset");
             //Execute TI
             $scope.queryStatus = 'executing';
-            body = {
-               Process: {
-                  Name: "TIConsole",
-                  PrologProcedure: value
-               }
-            };
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
             if($scope.tm1VersionSupported){
@@ -172,32 +161,49 @@ arc.directive("arcConsole", function () {
             } else {
                var executeQuery = "/ExecuteProcess";
             }
+            body = {
+               Process: {
+                  Name: "TIConsole",
+                  PrologProcedure: tiFunction
+               }
+            };
             var config = {
                method: "POST",
                url: encodeURIComponent(instance) + executeQuery,
                data: body
             };
             $http(config).then(function (result) {
-               console.log(result);
+               var newFunction = {};
                var errorLogFile = result.data.ErrorLogFile;
+               //If ErrorLogFile does not exists => SUCCESS
                if (errorLogFile == null) {
                   newFunction = {
                      instance: instance,
                      icon:'fa-check-circle',
-                     function:value,
+                     function:tiFunction,
                      message:"",
                      showMessage:false
                   }
+                  $scope.newTiFunctions.splice(1, 0, newFunction);
                } else {
-                  newFunction = {
-                     instance: instance,
-                     icon:'fa-warning',
-                     function:value,
-                     message:errorLogFile.Filename,
-                     showMessage:false
-                  }                  
+                  //Get ErrorLogFileContent
+                  var errorLogFileName = errorLogFile.Filename;
+                  var configErrorQuery = {
+                     method: "GET",
+                     url: encodeURIComponent(instance) + "/ErrorLogFiles('"+errorLogFileName+"')/Content"
+                  };
+                  $http(configErrorQuery).then(function (result) {
+                     var errorLogFileContent = result.data;
+                     newFunction = {
+                        instance: instance,
+                        icon:'fa-warning',
+                        function:tiFunction,
+                        message:errorLogFileContent,
+                        showMessage:false
+                     } 
+                     $scope.newTiFunctions.splice(1, 0, newFunction);
+                  });                
                }
-               $scope.newTiFunctions.splice(1, 0, newFunction);
             });
          };
 
