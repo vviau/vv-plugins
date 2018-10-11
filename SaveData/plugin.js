@@ -189,15 +189,17 @@ arc.directive("arcSaveData", function () {
                data: body
             };
             $http(config).then(function (result) {
-               if (result.status == 200 || result.status == 201 || result.status == 204) {
+               if (result.status < 400) {
                   $scope.saveDataStatus=true;
+                  cube.receiveDate = (new Date()).getTime();
+                  cube.responseTimeMs = cube.receiveDate - cube.sendDate;
+                  $scope.selections.responseTimeMs = $scope.selections.responseTimeMs + cube.responseTimeMs;
+                  //response inside $timeout($scope.removeBadge, 20000);
                } else {
+                  //error
                }
-               cube.receiveDate = (new Date()).getTime();
-               cube.responseTimeMs = cube.receiveDate - cube.sendDate;
-               $scope.selections.responseTimeMs = $scope.selections.responseTimeMs + cube.responseTimeMs;
             });
-            $timeout($scope.removeBadge, 60000);
+            $timeout($scope.removeBadge, 20000);
          }
 
          $scope.removeBadge = function(){
