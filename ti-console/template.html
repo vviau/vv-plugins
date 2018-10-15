@@ -1,23 +1,16 @@
 <div>
    <div class="row">
       <div class="col-md-12">
-         <h2>
-            <i class="fa fa-terminal" style="padding-right:5px" aria-hidden="true"></i> Live Coding</h2>
-      </div>
-   </div>
-   <div class="row">
-      <div class="col-md-12">
          <div class="row">
             <div class="col-md-12">
                <div class="card border-dark">
                   <div class="card-header bg-dark text-white" style="padding: 5px 10px;">
-                     <a href>
-                        <i class="fa" ng-class="{'fa-toggle-on':showScript,'fa-toggle-off':!showScript}" ng-click="showScript=!showScript"></i>
-                     </a>
-                     <span> Script</span>
+                     
+                        <i class="fa fa-terminal" style="padding-right:5px" aria-hidden="true"></i>
+                     
+                     <span>  TI Console</span>
                   </div>
                   <div class="card-body" style="padding-top:5px">
-                     <div ng-if="!showScript">
                         <div class="row" style="margin-top:10px">
                            <div class="col-md-12" style="margin-top:2px;margin-bottom:2px" ng-repeat="func in newTiFunctions track by $index" ng-class="{'text-danger':func.icon == 'fa-warning','text-success':func.icon == 'fa-check-circle'}">
                               <div class="input-group">
@@ -73,84 +66,6 @@
                               <div ng-if="func.showMessage">{{func.message}}</div>
                            </div>
                         </div>
-                     </div>
-                     <div ng-if="showScript">
-                        <div class="row" ng-if="tm1VersionSupported">
-                           <div class="col-md-12">
-                              <uib-tabset active="active">
-                                 <uib-tab index="0" heading="Prolog">
-                                    <div class="row">
-                                       <div class="col-md-12">
-                                          <div uib-dropdown dropdown-append-to-body>
-                                             <button uib-dropdown-toggle class="btn btn-info">
-                                                snippets
-                                             </button>
-                                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                                <li role="menuitem" ng-repeat="item in lists.allSnippetsCleaned">
-                                                   <div ng-click="code.prolog = item.snippet" style="margin-left:10px;cursor:pointer">
-                                                      {{item.value}}</div>
-                                                </li>
-                                             </ul>
-                                          </div>
-                                          <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
-
-                                             <div class="card-header" style="padding: 5px 10px;">
-                                                Body</div>
-                                             <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.prolog" style="height: 200px;"></pre>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </uib-tab>
-                                 <uib-tab index="1" heading="Epilog">
-                                    <div class="row">
-                                       <div class="col-md-12">
-                                          <div uib-dropdown dropdown-append-to-body>
-                                             <button uib-dropdown-toggle class="btn btn-info">
-                                                snippets
-                                             </button>
-                                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                                <li role="menuitem" ng-repeat="item in lists.allSnippetsCleaned">
-                                                   <div ng-click="code.epilog = item.snippet" style="margin-left:10px;cursor:pointer">
-                                                      {{item.value}}</div>
-                                                </li>
-                                             </ul>
-                                          </div>
-                                          <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
-                                             <div class="card-header" style="padding: 5px 10px;">
-                                                Body</div>
-                                             <pre ui-ace="{ onLoad : editorLoaded }" ng-model="code.epilog" style="height: 200px;"></pre>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </uib-tab>
-                                 <uib-tab index="3">
-                                    <uib-tab-heading>
-                                       <button ng-disabled="code.prolog.length==0 && code.epilog.length==0" class="btn btn-warning btn-sm" title="{{'EXECUTE' | translate}}"
-                                          ng-click="ExecuteTI()">
-                                          <i class="fa fa-fw fa-bolt"></i>
-                                       </button>
-                                    </uib-tab-heading>
-                                    <div class="row">
-                                       <div class="col-md-12">
-                                          <div ng-if="queryStatus=='success'" class="alert alert-success" role="alert">
-                                             <strong>
-                                                <i class="fa fa-fw fa-check"></i> Success!</strong>
-                                          </div>
-                                          <div ng-if="queryStatus=='failed'" class="alert alert-danger" role="alert">
-                                             <strong>
-                                                <i class="fa fa-fw fa-warning"></i> Failed!</strong>
-                                          </div>
-                                          <div ng-if="queryStatus=='executing'" class="alert alert-warning" role="alert">
-                                             <strong>
-                                                <i class="fa fa-fw fa-spin fa-gear"></i> Executing</strong>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </uib-tab>
-                              </uib-tabset>
-                           </div>
-                        </div>
-                     </div>
                   </div>
                </div>
             </div>

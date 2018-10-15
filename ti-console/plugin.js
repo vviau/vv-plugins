@@ -199,7 +199,7 @@ arc.directive("arcConsole", function () {
                         icon:'fa-warning',
                         function:tiFunction,
                         message:errorLogFileContent,
-                        showMessage:false
+                        showMessage:true
                      } 
                      $scope.newTiFunctions.splice(1, 0, newFunction);
                   });                
