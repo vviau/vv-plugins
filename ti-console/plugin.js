@@ -79,8 +79,6 @@ arc.directive("arcConsole", function () {
 
          $scope.cleanAllSnippets();
 
-         $scope.showScript = false;
-
          $scope.newTiFunctions = [{instance:$scope.instance, icon:'',function:''}];
 
          $scope.indexTiFunctions = $scope.newTiFunctions.length - 1;
@@ -148,10 +146,32 @@ arc.directive("arcConsole", function () {
          // Execute checkTM1Version
          $scope.checkTM1Version();
 
+         $scope.extractErrorMessage = function(longMessage){
+            var syntaxIndex = longMessage.indexOf("Syntax error on or before:");
+            var shortMessage = "";
+            if (syntaxIndex==-1){
+               shortMessage = longMessage.substring(33,longMessage.length-1);
+            }else{
+               shortMessage = longMessage.substring(syntaxIndex+30,longMessage.length-4);
+            }
+            return shortMessage;
+         };
+
+         $scope.checkSemiColon = function(tifunction){
+            var tiFunctionChecked = tifunction;
+            var indexSemiColon = tiFunctionChecked.indexOf(";");
+            if(indexSemiColon == -1){
+               tiFunctionChecked = tiFunctionChecked + ";";
+            };
+            console.log(tiFunctionChecked);
+            return tiFunctionChecked;
+         };
+
          //Functions
          $scope.Execute = function (tiFunction, instance) {
             //Add function to list
             $scope.updateindexTiFunctions("reset");
+            var tiFunctionChecked = $scope.checkSemiColon(tiFunction);
             //Execute TI
             $scope.queryStatus = 'executing';
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
@@ -164,7 +184,7 @@ arc.directive("arcConsole", function () {
             body = {
                Process: {
                   Name: "TIConsole",
-                  PrologProcedure: tiFunction
+                  PrologProcedure: tiFunctionChecked
                }
             };
             var config = {
@@ -193,7 +213,7 @@ arc.directive("arcConsole", function () {
                      url: encodeURIComponent(instance) + "/ErrorLogFiles('"+errorLogFileName+"')/Content"
                   };
                   $http(configErrorQuery).then(function (result) {
-                     var errorLogFileContent = result.data;
+                     var errorLogFileContent = $scope.extractErrorMessage(result.data);
                      newFunction = {
                         instance: instance,
                         icon:'fa-warning',
@@ -203,29 +223,6 @@ arc.directive("arcConsole", function () {
                      } 
                      $scope.newTiFunctions.splice(1, 0, newFunction);
                   });                
-               }
-            });
-         };
-
-         //Functions
-         $scope.ExecuteTI = function () {
-            $scope.queryStatus = 'executing';
-            body = {
-               Process: {
-                  PrologProcedure: $scope.code.prolog,
-                  EpilogProcedure: $scope.code.epilog
-               }
-            };
-            var config = {
-               method: "POST",
-               url: encodeURIComponent($scope.instance) + "/ExecuteProcess",
-               data: body
-            };
-            $http(config).then(function (result) {
-               if (result.status == 200 || result.status == 201 || result.status == 204) {
-                  $scope.queryStatus = 'success';
-               } else {
-                  $scope.queryStatus = 'failed';
                }
             });
          };
