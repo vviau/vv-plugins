@@ -27,13 +27,13 @@
                   </button>
                </span>
             <span class="input-group-append">
-               <button ng-disabled="cubesToSave.length==0" class="btn btn-warning" ng-click="openModalSaveData()" uib-popover="Save data for selected cubes"
+               <button ng-disabled="cubesToSave.length==0" class="btn btn-primary" ng-click="openModalSaveData()" uib-popover="Save data for selected cubes"
                   popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
                   <i class="fa fa-floppy-o" aria-hidden="true"></i>
                </button>
             </span>
             <span class="input-group-append">
-                  <button class="btn btn-warning" ng-click="openModalSaveDataAll()" uib-popover="Save data for all cubes"
+                  <button class="btn btn-primary" ng-click="openModalSaveDataAll()" uib-popover="Save data for all cubes"
                      popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
                      <i class="fa fa-cubes" aria-hidden="true"></i>
                   </button>
@@ -61,10 +61,12 @@
                   <td class="text-center">
                      <input style="margin-top:5px" type="checkbox" ng-model="cube.saveData" ng-change="toggleCubeToSave(cube)" class="ng-pristine ng-untouched ng-valid ng-empty"> </td>
                   <td class="text-center">
-                     <i class="fa fa-floppy-o alert-warning" aria-hidden="true" uib-popover="Save Data"
+                     <button class="btn btn-primary btn-sm"  uib-popover="Save Data"
                      popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-default"
                      style="cursor:pointer"
-                     ng-click="saveDataForOneCube(cube)"></i>
+                     ng-click="saveDataForOneCube(cube)">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                     </button>
                   </td>
                   <td> {{cube.Name}} <span ng-if="cube.responseTimeMs>0 && cube.showBadgeTime" class="badge ml-1 badge-success" ng-style="generateHSLColour(cube.responseTimeMs)">
                         {{cube.responseTimeMs}} Ms
@@ -72,10 +74,10 @@
                </td>
                   <td> 
                      {{cube.LastDataUpdate | date:'medium'}}
-                     <span class="text-warning"
+                     <span
                      ng-if="cube.dataUpdateHoursDelta<1" 
                      > - Data updated in the last hour</span>
-                     <span class="text-info" ng-if="cube.dataUpdateHoursDelta>=1 && cube.dataUpdateHoursDelta<25" 
+                     <span ng-if="cube.dataUpdateHoursDelta>=1 && cube.dataUpdateHoursDelta<25" 
                      > - Data updated in the last {{cube.dataUpdateHoursDelta+1}} hours</span> 
                      </td>
                </tr>
