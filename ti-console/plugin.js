@@ -201,8 +201,9 @@ arc.directive("arcConsole", function () {
                      instance: instance,
                      icon:'fa-check-circle',
                      function:tiFunction,
-                     message:"",
-                     showMessage:false
+                     message:"Success",
+                     badge:"badge-success",
+                     showMessage:true
                   }
                   $scope.newTiFunctions.splice(1, 0, newFunction);
                } else {
@@ -219,6 +220,7 @@ arc.directive("arcConsole", function () {
                         icon:'fa-warning',
                         function:tiFunction,
                         message:errorLogFileContent,
+                        badge:"badge-warning",
                         showMessage:true
                      } 
                      $scope.newTiFunctions.splice(1, 0, newFunction);

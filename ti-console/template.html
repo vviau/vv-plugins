@@ -50,8 +50,8 @@
                                        style="cursor:pointer">
                                     {{func.function}}
                                  </span>
-                                 <span ng-if="func.showMessage" class="badge ml-1 badge-warning" style="font-size:0.9em">
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{func.message}}
+                                 <span ng-if="func.showMessage" class="badge ml-1 {{func.badge}}" style="font-size:0.9em">
+                                    <i class="fa {{func.icon}}" aria-hidden="true"></i> {{func.message}}
                                  </span>
                               </div>
                            </div>
