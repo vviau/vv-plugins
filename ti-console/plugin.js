@@ -163,15 +163,26 @@ arc.directive("arcConsole", function () {
             if(indexSemiColon == -1){
                tiFunctionChecked = tiFunctionChecked + ";";
             };
-            console.log(tiFunctionChecked);
             return tiFunctionChecked;
+         };
+
+         $scope.addLogOutPut = function(tifunction){
+            var tiFunctionChecked = tifunction;
+            var indexSemiColon = tiFunctionChecked.indexOf(";");
+            if(indexSemiColon > -1){
+               //remove ; if there
+               tiFunctionChecked = tiFunctionChecked.slice(0, -1);;
+            };
+            return "LogOutput('INFO', NumberToString("+tiFunctionChecked+"));";
          };
 
          //Functions
          $scope.Execute = function (tiFunction, instance) {
             //Add function to list
             $scope.updateindexTiFunctions("reset");
-            var tiFunctionChecked = $scope.checkSemiColon(tiFunction);
+            //var tiFunctionChecked = $scope.checkSemiColon(tiFunction);
+            var tiFunctionChecked = $scope.addLogOutPut(tiFunction);
+            console.log(tiFunctionChecked);
             //Execute TI
             $scope.queryStatus = 'executing';
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
@@ -193,6 +204,7 @@ arc.directive("arcConsole", function () {
                data: body
             };
             $http(config).then(function (result) {
+               console.log(result);
                var newFunction = {};
                var errorLogFile = result.data.ErrorLogFile;
                //If ErrorLogFile does not exists => SUCCESS
