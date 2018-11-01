@@ -101,7 +101,6 @@ arc.directive("cubewiseSubset", function () {
                             });
                         });
                     });
-                    console.log($scope.lists.allSubsets);
                 });
             };
             //$scope.getAllSubsets();
@@ -295,7 +294,6 @@ arc.directive("cubewiseSubset", function () {
                                 });
                             });
                         });
-                        console.log($scope.lists.allSubsets);
                     });
                 });
             };

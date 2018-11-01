@@ -37,7 +37,6 @@ arc.directive("arcRestApiNavigation", function () {
                 $http.get(encodeURIComponent($scope.instance) + "/$metadata").then(function (request) {
                     //metadata = result.data;
                     var xml = request.data.responseXML;
-                    console.log(xml);
                 });
             };
             $scope.getMetadata(); 

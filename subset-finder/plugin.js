@@ -93,9 +93,7 @@ arc.directive("cubewiseSubsetFinder", function () {
                         $scope.subsetFound = true;
                         
                     };
-                });
-                console.log($scope.lists.allViewsPerSubset);
-                console.log($scope.lists.viewsFiltered);        
+                });       
             };
 
             $scope.viewsToDelete = [];
@@ -120,7 +118,6 @@ arc.directive("cubewiseSubsetFinder", function () {
             $scope.deleteView = function (cube,view) {
                 $http.delete(encodeURIComponent($scope.instance) + "/Cubes('"+cube+"')/Views('"+view+"')").then(function (result) {
                     if (result.status == 204) {
-                        console.log(cube+":"+view+" has been deleted")
                         $scope.selections.queryStatus = 'success';
                     } else {
                         $scope.selections.queryStatus = 'failed';
@@ -143,7 +140,6 @@ arc.directive("cubewiseSubsetFinder", function () {
             $scope.getallViewsPerSubset = function () {
                 $scope.lists.allViewsPerSubset = [];
                 $http.get(encodeURIComponent($scope.instance) + "/Cubes?$select=Name&$expand=Views($select=Name;$expand=tm1.NativeView/Columns/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))),tm1.NativeView/Rows/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))),tm1.NativeView/Titles/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))))").then(function (viewsData) {
-                    //console.log(viewsData);
                     $scope.lists.viewsAndSubsetsUnstructured = viewsData.data.value;
                     //Loop through cubes
                     cubes = viewsData.data.value;
@@ -272,7 +268,6 @@ arc.directive("cubewiseSubsetFinder", function () {
                             views: value.views
                         });
                     });
-                    //console.log($scope.lists.allViewsPerSubset);
                 });
             };
 

@@ -88,7 +88,6 @@ arc.directive("arcSaveData", function () {
          // TOGGLE DELETE VIEWS
          $scope.cubesToSave = [];
          $scope.toggleCubeToSave = function (item) {
-            //console.log(item);
             if (_.includes($scope.cubesToSave, item)) {
                _.remove($scope.cubesToSave, function (i) {
                   return i.Name === item.Name;
@@ -96,7 +95,6 @@ arc.directive("arcSaveData", function () {
             } else {
                $scope.cubesToSave.push(item);
             }
-            console.log($scope.cubesToSave);
          };
          $scope.toggleAllCubeToSave = function () {
             _.each($scope.lists.cubes, function(item){
