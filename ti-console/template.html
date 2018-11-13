@@ -10,9 +10,9 @@
 
                      <span> TI Console</span>
                   </div>
-                  <div class="card-body" style="padding-top:5px">
-                     <auto-height>
-                        <div class="row" style="margin-top:10px">
+                  <div class="card-body" style="padding-top:5px" auto-height>
+                     <div class="row">
+
                            <div class="col-md-12" style="margin-top:2px;margin-bottom:2px" ng-repeat="func in newTiFunctions track by $index">
                               <div class="input-group" ng-if="$index==0">
                                  <div uib-dropdown dropdown-append-to-body>
@@ -46,8 +46,7 @@
                                  <span>
                                     {{func.instance}}>
                                  </span>
-                                 <span ng-click="newTiFunctions[0].function = func.function;newTiFunctions[0].instance = func.instance"
-                                       style="cursor:pointer">
+                                 <span ng-click="newTiFunctions[0].function = func.function;newTiFunctions[0].instance = func.instance" style="cursor:pointer">
                                     {{func.function}}
                                  </span>
                                  <span ng-if="func.showMessage" class="badge ml-1 {{func.badge}}" style="font-size:0.9em">
@@ -55,8 +54,7 @@
                                  </span>
                               </div>
                            </div>
-                        </div>
-                     </auto-height>
+                     </div>
                   </div>
                </div>
             </div>
