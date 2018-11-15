@@ -227,6 +227,18 @@
                      </span>
                   </div>
                </div>
+               <div class="row mt-3">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           Start Month of the fiscal year:
+                        </label>
+                        <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
+                           <option></option>
+                        </select>
+                     </span>
+                  </div>
+               </div>
                <div class="row mt-3" ng-repeat="separator in lists.separators">
                   <div class="col-md-3">
                      <span class="input-group">

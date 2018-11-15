@@ -37,7 +37,8 @@ arc.directive("arcTimeManagement", function () {
             datepickerOptions: { enableTime: false },
             useHierarchy: true,
             useAttributes: true,
-            startDayofWeek: 'Mon'
+            startDayofWeek: 'Mon',
+            fiscalYearStartMonth: 'Jul'
          };
          $scope.selections = {
             StartTime: $scope.defaults.StartTime,
@@ -48,9 +49,11 @@ arc.directive("arcTimeManagement", function () {
             dimensionType: 'Day',
             useHierarchy: $scope.defaults.useHierarchy,
             useAttributes: $scope.defaults.useAttributes,
-            startDayofWeek: $scope.defaults.startDayofWeek
+            startDayofWeek: $scope.defaults.startDayofWeek,
+            fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth
          };
          $scope.lists = {
+            months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
             weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             separators: {
                YearHalf: { type: 'Year-Half Year', value: '-H' },
