@@ -46,6 +46,11 @@
                      </span>
                   </div>
                </div>
+            </uib-tab>
+            <uib-tab>
+               <uib-tab-heading>
+                  Elements
+               </uib-tab-heading>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <span class="input-group" uib-dropdown is-open="startTime.isOpen">
@@ -81,27 +86,35 @@
                      </span>
                   </div>
                </div>
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  Elements
-               </uib-tab-heading>
-               <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionTypes">
+               <div class="row mt-3">
                   <div class="col-md-3">
                      <span class="input-group">
-                        <label class="mr-1">{{dimensionType}}:</label>
-                        <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
-                           ng-change="generateExamples()">
+                        <label class="mr-1">Leaf ({{lists.dimensionElementTypes[selections.dimensionType].leaf}}):</label>
+                        <select class="form-control input-group-append" ng-model="lists.dateFormats[lists.dimensionElementTypes[selections.dimensionType].leaf].format"
+                           ng-options="f for f in  lists.dateFormats[lists.dimensionElementTypes[selections.dimensionType].leaf].formats"
+                           ng-change="generateExamples();generateDimension()">
                            <option></option>
                         </select>
                      </span>
                   </div>
-                  {{examples[dimensionType]}}
+                  <label>{{examples[lists.dimensionElementTypes[selections.dimensionType].leaf]}}</label>
+               </div>
+               <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElementTypes[selections.dimensionType].rollUps">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">{{dimensionType}}:</label>
+                        <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
+                           ng-change="generateExamples();generateDimension()">
+                           <option></option>
+                        </select>
+                     </span>
+                  </div>
+                  <label>{{examples[dimensionType]}}</label>
                </div>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Hierarchy
+                  Hierarchies
                </uib-tab-heading>
                <table class="table table-hover table-sm">
                   <thead>
@@ -135,13 +148,13 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Attribute
+                  Attributes
                </uib-tab-heading>
                <auto-height>
                   <table class="table table-hover table-sm">
                      <thead>
                         <tr>
-                           <th class="text-left"> Hierarchy </th>
+                           <th class="text-left" style="width:200px"> Hierarchy </th>
                            <th class="text-left"> Attributes </th>
                         </tr>
                      </thead>
@@ -159,8 +172,8 @@
                                        <div ng-repeat="attributeType in lists.attributeTypes" ng-if="lists.attributes[rollUp.name][$index][attributeType].length>0">
                                           <label>{{attributeType}}:</label>
                                           <h4>
-                                             <span ng-repeat="attribute in lists.attributes[rollUp.name][$index][attributeType]" class="badge ml-1" ng-style="generateHSLColour(attribute.type)">
-                                                <input style="margin-top:5px" type="checkbox" ng-model="attribute.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> {{attribute.type}} ({{attribute.desc}})
+                                             <span ng-repeat="attribute in lists.attributes[rollUp.name][$index][attributeType]" class="badge ml-1" ng-style="generateHSLColour(attribute.name)">
+                                                <input style="margin-top:5px" type="checkbox" ng-model="attribute.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> {{attribute.name}} ({{attribute.example}})
                                              </span>
                                           </h4>
                                        </div>
@@ -177,11 +190,44 @@
                <uib-tab-heading>
                   Preview
                </uib-tab-heading>
+               <div ng-repeat="element in lists.elements">
+                  {{element}}
+               </div>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
                   Execute
                </uib-tab-heading>
+            </uib-tab>
+            <uib-tab>
+               <uib-tab-heading>
+                  Custom
+               </uib-tab-heading>
+               <div class="row mt-3">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           Start Day of the Week:
+                        </label>
+                        <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
+                           <option></option>
+                        </select>
+                     </span>
+                  </div>
+               </div>
+               <div class="row mt-3" ng-repeat="separator in lists.separators">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           {{separator.type}}:
+                        </label>
+                        <input type="text" class="form-control mr-1" ng-model="separator.value" />
+                        <label class="mr-1">
+                           2018{{separator.value}}1
+                        </label>
+                     </span>
+                  </div>
+               </div>
             </uib-tab>
          </uib-tabset>
       </div>
