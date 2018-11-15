@@ -40,9 +40,21 @@
                            <a href class="click" ng-click="selections.useHierarchy = !selections.useHierarchy">
                               <i class="fa fa-toggle-on" ng-if="selections.useHierarchy"></i>
                               <i class="fa fa-toggle-off" ng-if="!selections.useHierarchy"></i>
-
+                           </a>
                         </label>
-                        </a>
+                     </span>
+                  </div>
+               </div>
+               <div class="row mt-3">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           <span> Attributes:</span>
+                           <a href class="click" ng-click="selections.useAttributes = !selections.useAttributes">
+                              <i class="fa fa-toggle-on" ng-if="selections.useAttributes"></i>
+                              <i class="fa fa-toggle-off" ng-if="!selections.useAttributes"></i>
+                           </a>
+                        </label>
                      </span>
                   </div>
                </div>
@@ -162,24 +174,24 @@
                         <tr ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]" ng-if="hierarchy.included">
                            <td class="text-left"> {{hierarchy.name}} </td>
                            <td class="text-left">
-                              <div class="mt-1" ng-repeat="rollUp in hierarchy.rollUps">
-                                 <uib-accordion>
-                                    <div uib-accordion-group class="panel-default" is-open="status.open">
-                                       <uib-accordion-heading>
-                                          {{rollUp.level}} - {{rollUp.name}}
-                                          <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                                       </uib-accordion-heading>
-                                       <div ng-repeat="attributeType in lists.attributeTypes" ng-if="lists.attributes[rollUp.name][$index][attributeType].length>0">
-                                          <label>{{attributeType}}:</label>
-                                          <h4>
-                                             <span ng-repeat="attribute in lists.attributes[rollUp.name][$index][attributeType]" class="badge ml-1" ng-style="generateHSLColour(attribute.name)">
-                                                <input style="margin-top:5px" type="checkbox" ng-model="attribute.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> {{attribute.name}} ({{attribute.example}})
-                                             </span>
-                                          </h4>
-                                       </div>
+                              <uib-tabset active="hierarchy.activeTab">
+                                 <uib-tab ng-repeat="rollUp in hierarchy.rollUps">
+                                    <uib-tab-heading>
+                                       {{rollUp.level}} - {{rollUp.name}}
+                                    </uib-tab-heading>
+                                    <div ng-repeat="attributeTypes in rollUp.attributes[0]">
+                                       <label>{{attributeTypes.type}}:</label>
+                                       <h4>
+                                          <span ng-repeat="attribute in attributeTypes.attributes" class="badge mt-1 ml-1" ng-style="generateHSLColour(attribute.name)">
+                                             <input style="margin-top:5px" type="checkbox" 
+                                             ng-model="attribute.included" 
+                                             ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> 
+                                             {{attribute.name}} ({{attribute.example}})
+                                          </span>
+                                       </h4>
                                     </div>
-                                 </uib-accordion>
-                              </div>
+                                 </uib-tab>
+                              </uib-tabset>
                            </td>
                         </tr>
                      </tbody>

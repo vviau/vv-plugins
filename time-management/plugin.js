@@ -36,6 +36,7 @@ arc.directive("arcTimeManagement", function () {
             EndTime: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
             datepickerOptions: { enableTime: false },
             useHierarchy: true,
+            useAttributes: true,
             startDayofWeek: 'Mon'
          };
          $scope.selections = {
@@ -46,6 +47,7 @@ arc.directive("arcTimeManagement", function () {
             dimensionName: '',
             dimensionType: 'Day',
             useHierarchy: $scope.defaults.useHierarchy,
+            useAttributes: $scope.defaults.useAttributes,
             startDayofWeek: $scope.defaults.startDayofWeek
          };
          $scope.lists = {
@@ -69,20 +71,15 @@ arc.directive("arcTimeManagement", function () {
                Month: { format: 'YYYY-MM', formats: ['Custom', 'YYYY-MM', 'MM-YYYY', 'MM/YY', 'MM/YYYY', 'MM-YY', 'YY/MM', 'MM/YY'] },
                Year: { format: 'YYYY', formats: ['YYYY', 'YY'] }
             },
-            hierarchies: {
-               Day: [{ included: true, type: 'Year-Month-Day', name: 'Year-Month-Day', topConso: 'All Years Month Days', rollUps: [{ level: 'level 2', name: 'Year' }, { level: 'level 1', name: 'Month' }, { level: 'level 0', name: 'Day' }] },
-               { included: true, type: 'Year-Day', name: 'Year-Day', topConso: 'All Years Days', rollUps: [{ level: 'level 1', name: 'Year' }, { level: 'level 0', name: 'Day' }] }]
-            },
-            attributeTypes: ['Alias', 'String', 'Numeric'],
             attributes: {
                Day: [{
-                  Alias: [
+                  type:'Alias', attributes: [
                      { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM-DD') },
                      { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM/DD') }
                   ]
                },
                {
-                  String: [
+                  type:'String', attributes: [
                      { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
                      { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
                      { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
@@ -92,34 +89,75 @@ arc.directive("arcTimeManagement", function () {
                   ]
                },
                {
-                  Numeric: [
+                  type:'Numeric', attributes: [
                      { included: true, name: 'Num Day', desc: 'Num Day' },
                      { included: true, name: 'Month Number', desc: 'Month Number' }
                   ]
                }],
                Month: [{
-                  Alias: [
+                  type:'Alias', attributes: [
                      { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM') },
                      { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM') }
                   ]
                },
                {
-                  String: [
+                  type:'String', attributes: [
                      { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
                      { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
                      { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
                      { included: true, name: 'Month Long', example: $scope.selections.StartTimeMoment.format('MMMM') }
                   ]
                },
-               { Numeric: [{ included: true, name: 'Num Day', desc: 'Num Day' }, { included: true, name: 'Month Number', desc: 'Month Number' }] }],
-               Year: [{
-                  Alias: [{ included: true, name: 'YYYY', example: $scope.selections.StartTimeMoment.format('YYYY') },
-                  { included: true, name: 'YY', example: $scope.selections.StartTimeMoment.format('YY') }]
+               {
+                  type:'Numeric', attributes: [
+                     { included: true, name: 'Num Day', desc: 'Num Day' },
+                     { included: true, name: 'Month Number', desc: 'Month Number' }]
                }
+               ],
+               Year: [
+                  {
+                     type:'Alias', attributes: [{ included: true, name: 'YYYY', example: $scope.selections.StartTimeMoment.format('YYYY') },
+                     { included: true, name: 'YY', example: $scope.selections.StartTimeMoment.format('YY') }]
+                  }
                ]
-            }
+            },
+            hierarchies: {
+               Day: [
+                  {
+                     included: true, type: 'Year-Month-Day', name: 'All Months', topConso: 'All Years Month Days', rollUps: [
+                        { level: 'level 2', name: 'Year', attributes:[] },
+                        { level: 'level 1', name: 'Month', attributes:[] },
+                        { level: 'level 0', name: 'Day', attributes:[] }
+                     ]
+                  },
+                  {
+                     included: true, type: 'Year-Day', name: 'Year-Day', topConso: 'All Days',
+                     rollUps: [
+                        { level: 'level 1', name: 'Year', attributes:[] },
+                        { level: 'level 0', name: 'Day', attributes:[] }]
+                  }]
+            },
+            attributeTypes: ['Alias', 'String', 'Numeric'],
          };
          $scope.values = {};
+
+         $scope.attachAttributesToHierarchies = function(){
+            _.each($scope.lists.hierarchies, function (value, key) {
+               var hierarchies = value;
+               var type = key;
+               _.each(hierarchies, function (value, key) {
+                  var rollUps = value.rollUps;
+                  var hierarchy = key;
+                  _.each(rollUps, function (value, key) {
+                     var rollUp = value.name;
+                     var attributes = $scope.lists.attributes[rollUp];
+                     $scope.lists.hierarchies[type][hierarchy].rollUps[key].attributes.push(attributes);
+                   });
+                });
+             });
+         };
+
+         $scope.attachAttributesToHierarchies();
 
          $scope.getMonthFormat = function (dateMoment) {
             var formatYear = $scope.lists.dateFormats['Year'].format;
