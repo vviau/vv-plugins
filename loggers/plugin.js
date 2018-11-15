@@ -3,7 +3,7 @@ arc.run(['$rootScope', function($rootScope) {
 
     $rootScope.plugin("loggers", "LOGGERS", "page", {
         menu: "administration",
-        icon: "fa-bug",
+        icon: "fa-sliders",
         description: "This plugin displays loggers and allows the user to change the log level.",
         author: "Cubewise",
         url: "https://github.com/cubewise-code/arc-plugins",

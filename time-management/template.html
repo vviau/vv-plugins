@@ -13,74 +13,174 @@
                   Dimension
                </uib-tab-heading>
                <div class="row">
-                     <div class="col-md-3">
-                        <span class="input-group">
-                           <label class="mr-1">
-                              Dimension:
-                           </label>
-                           <input type="text" class="form-control" ng-model="selections.dimension" />
-                        </span>
-                     </div>
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           Name:
+                        </label>
+                        <input type="text" class="form-control" ng-model="selections.dimensionName" />
+                     </span>
                   </div>
+               </div>
+               <div class="row mt-3">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">Type:</label>
+                        <select class="form-control input-group-append" ng-model="selections.dimensionType" ng-options="t for t in lists.dimensionTypes">
+                           <option></option>
+                        </select>
+                     </span>
+                  </div>
+               </div>
+               <div class="row mt-3">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">
+                           <span> Hierarchy:</span>
+                           <a href class="click" ng-click="selections.useHierarchy = !selections.useHierarchy">
+                              <i class="fa fa-toggle-on" ng-if="selections.useHierarchy"></i>
+                              <i class="fa fa-toggle-off" ng-if="!selections.useHierarchy"></i>
+
+                        </label>
+                        </a>
+                     </span>
+                  </div>
+               </div>
+               <div class="row mt-3">
+                  <div class="col-md-6">
+                     <span class="input-group" uib-dropdown is-open="startTime.isOpen">
+                        <label class="mr-1">
+                           To:
+                        </label>
+                        <input type="text" class="form-control" ng-model="selections.StartTime" />
+                        <span class="input-group-append">
+                           <button id="dropdownStartTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                              <span class="fa fa-calendar"></span>
+                           </button>
+                           <span class="dropdown-menu" uib-dropdown-menu>
+                              <datetimepicker enable-time="false" data-ng-model="selections.StartTime" data-options="defaults.datepickerOptions" data-on-set-time="startTime.isOpen = !startTime.isOpen"
+                              />
+                           </span>
+                        </span>
+                     </span>
+                  </div>
+                  <div class="col-md-6">
+                     <span class="input-group" uib-dropdown is-open="endTime.isOpen">
+                        <label class="mr-1">
+                           From:
+                        </label>
+                        <input type="text" class="form-control" ng-model="selections.EndTime" />
+                        <span class="input-group-append">
+                           <button id="dropdownEndTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                              <span class="fa fa-calendar"></span>
+                           </button>
+                           <span class="dropdown-menu" uib-dropdown-menu>
+                              <datetimepicker data-ng-model="selections.EndTime" data-on-set-time="endTime.isOpen = !endTime.isOpen" />
+                           </span>
+                        </span>
+                     </span>
+                  </div>
+               </div>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Leaf
+                  Elements
                </uib-tab-heading>
-               <div class="row mt-3">
-                     <div class="col-md-3">
-                        <span class="input-group" uib-dropdown is-open="startTime.isOpen">
-                           <label class="mr-1">
-                              To:
-                           </label>
-                           <input type="text" class="form-control" ng-model="time.StartTime | date:selections.format" />
-                           <span class="input-group-append">
-                              <button id="dropdownStartTime" type="button" class="btn btn-light" uib-dropdown-toggle>
-                                 <span class="fa fa-calendar"></span>
-                              </button>
-                              <span class="dropdown-menu" uib-dropdown-menu>
-                                 <datetimepicker enable-time="false" data-ng-model="time.StartTime" data-options="defaults.datepickerOptions" data-on-set-time="startTime.isOpen = !startTime.isOpen"
-                                 />
-                              </span>
-                           </span>
-                        </span>
-                     </div>
-                     <div class="col-md-3">
-                        <span class="input-group" uib-dropdown is-open="endTime.isOpen">
-                           <label class="mr-1">
-                              From:
-                           </label>
-                           <input type="text" class="form-control" ng-model="time.EndTime | date:selections.format" />
-                           <span class="input-group-append">
-                              <button id="dropdownEndTime" type="button" class="btn btn-light" uib-dropdown-toggle>
-                                 <span class="fa fa-calendar"></span>
-                              </button>
-                              <span class="dropdown-menu" uib-dropdown-menu>
-                                 <datetimepicker data-ng-model="time.EndTime" data-on-set-time="endTime.isOpen = !endTime.isOpen" />
-                              </span>
-                           </span>
-                        </span>
-                     </div>
+               <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionTypes">
+                  <div class="col-md-3">
+                     <span class="input-group">
+                        <label class="mr-1">{{dimensionType}}:</label>
+                        <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
+                           ng-change="generateExamples()">
+                           <option></option>
+                        </select>
+                     </span>
                   </div>
-                  <div class="row mt-3">
-                        <div class="col-md-3">
-                           <span class="input-group">
-                              <label class="mr-1">Format:</label>
-                              <select class="form-control input-group-append" ng-model="selections.format" ng-options="f for f in lists.dateFormats">
-                                 <option></option>
-                              </select>
-                           </span>
-                        </div>
-                     </div>
+                  {{examples[dimensionType]}}
+               </div>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
                   Hierarchy
                </uib-tab-heading>
+               <table class="table table-hover table-sm">
+                  <thead>
+                     <tr>
+                        <th class="text-center"> # </th>
+                        <th class="text-left"> Type </th>
+                        <th class="text-left"> Name </th>
+                        <th class="text-left"> Top Consolidation </th>
+                        <th class="text-left"> Rollups </th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]">
+                        <td class="text-center">
+                           <input style="margin-top:5px" type="checkbox" ng-model="hierarchy.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"
+                              uib-popover="Include Hierarchy" popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
+                        </td>
+                        <td class="text-left"> {{hierarchy.type}} </td>
+                        <td class="text-left">
+                           <input type="text" class="form-control" ng-model="hierarchy.name" /> </td>
+                        <td class="text-left">
+                           <input type="text" class="form-control" ng-model="hierarchy.topConso" /> </td>
+                        <td class="text-left">
+                           <div ng-repeat="rollUp in hierarchy.rollUps">
+                              {{rollUp.level}} - {{rollUp.name}} - {{examples[rollUp.name]}}
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
                   Attribute
+               </uib-tab-heading>
+               <auto-height>
+                  <table class="table table-hover table-sm">
+                     <thead>
+                        <tr>
+                           <th class="text-left"> Hierarchy </th>
+                           <th class="text-left"> Attributes </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]" ng-if="hierarchy.included">
+                           <td class="text-left"> {{hierarchy.name}} </td>
+                           <td class="text-left">
+                              <div class="mt-1" ng-repeat="rollUp in hierarchy.rollUps">
+                                 <uib-accordion>
+                                    <div uib-accordion-group class="panel-default" is-open="status.open">
+                                       <uib-accordion-heading>
+                                          {{rollUp.level}} - {{rollUp.name}}
+                                          <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                                       </uib-accordion-heading>
+                                       <div ng-repeat="attributeType in lists.attributeTypes" ng-if="lists.attributes[rollUp.name][$index][attributeType].length>0">
+                                          <label>{{attributeType}}:</label>
+                                          <h4>
+                                             <span ng-repeat="attribute in lists.attributes[rollUp.name][$index][attributeType]" class="badge ml-1" ng-style="generateHSLColour(attribute.type)">
+                                                <input style="margin-top:5px" type="checkbox" ng-model="attribute.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> {{attribute.type}} ({{attribute.desc}})
+                                             </span>
+                                          </h4>
+                                       </div>
+                                    </div>
+                                 </uib-accordion>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </auto-height>
+            </uib-tab>
+            <uib-tab>
+               <uib-tab-heading>
+                  Preview
+               </uib-tab-heading>
+            </uib-tab>
+            <uib-tab>
+               <uib-tab-heading>
+                  Execute
                </uib-tab-heading>
             </uib-tab>
          </uib-tabset>
