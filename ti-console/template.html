@@ -37,6 +37,17 @@
                                        </li>
                                     </ul>
                                  </div>
+                                 <div uib-dropdown dropdown-append-to-body>
+                                    <button uib-dropdown-toggle class="btn btn-dark">
+                                       pipes
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                       <li role="menuitem" ng-repeat="item in lists.pipes">
+                                          <div ng-click="newTiFunctions[0].function = item" style="margin-left:10px;cursor:pointer">
+                                             {{item}}</div>
+                                       </li>
+                                    </ul>
+                                 </div>
                                  <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border:none;border-radius:0;display:inline"
                                     type="text" ng-model="func.function" placeholder=">_" ng-keydown="key($event,$index,func.function,func.instance)"
                                     uib-typeahead="function.snippet for function in lists.allFunctionsCleaned | filter:$viewValue | limitTo:20"

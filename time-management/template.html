@@ -75,8 +75,7 @@
                               <span class="fa fa-calendar"></span>
                            </button>
                            <span class="dropdown-menu" uib-dropdown-menu>
-                              <datetimepicker enable-time="false" data-ng-model="selections.StartTime" data-options="defaults.datepickerOptions" data-on-set-time="startTime.isOpen = !startTime.isOpen"
-                              />
+                              <datetimepicker ng-model="selections.StartTime" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="startTime.isOpen = !startTime.isOpen" />
                            </span>
                         </span>
                      </span>

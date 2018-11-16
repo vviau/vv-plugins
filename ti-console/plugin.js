@@ -35,6 +35,17 @@ arc.directive("arcConsole", function () {
             epilog: ''
          };
 
+         $scope.lists.pipes = [
+            'mkdim Dimension',
+            'rmdim Dimension',
+            'd Dimension + Element',
+            'd Dimension - Element',
+            'd Clone DimensionSource DimensionTarget',
+            'mkcub Cube',
+            'rmcub Cube',
+            'c Clone CubeSource CubeTarget',
+         ];
+
          $scope.lists.allFunctions = $rootScope.process_functions;
 
          $scope.lists.allSnippets = $rootScope.process_snippets;

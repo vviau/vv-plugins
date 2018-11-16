@@ -34,7 +34,6 @@ arc.directive("arcTimeManagement", function () {
          $scope.defaults = {
             StartTime: new Date(),
             EndTime: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-            datepickerOptions: { enableTime: false },
             useHierarchy: true,
             useAttributes: true,
             startDayofWeek: 'Mon',
@@ -45,7 +44,7 @@ arc.directive("arcTimeManagement", function () {
             EndTime: $scope.defaults.EndTime,
             StartTimeMoment: moment($scope.defaults.StartTime),
             format: 'YYYY-MM-DD',
-            dimensionName: '',
+            dimensionName: 'Day',
             dimensionType: 'Day',
             useHierarchy: $scope.defaults.useHierarchy,
             useAttributes: $scope.defaults.useAttributes,
@@ -53,7 +52,7 @@ arc.directive("arcTimeManagement", function () {
             fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth
          };
          $scope.lists = {
-            months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             separators: {
                YearHalf: { type: 'Year-Half Year', value: '-H' },
@@ -76,13 +75,13 @@ arc.directive("arcTimeManagement", function () {
             },
             attributes: {
                Day: [{
-                  type:'Alias', attributes: [
+                  type: 'Alias', attributes: [
                      { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM-DD') },
                      { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM/DD') }
                   ]
                },
                {
-                  type:'String', attributes: [
+                  type: 'String', attributes: [
                      { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
                      { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
                      { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
@@ -92,19 +91,19 @@ arc.directive("arcTimeManagement", function () {
                   ]
                },
                {
-                  type:'Numeric', attributes: [
+                  type: 'Numeric', attributes: [
                      { included: true, name: 'Num Day', desc: 'Num Day' },
                      { included: true, name: 'Month Number', desc: 'Month Number' }
                   ]
                }],
                Month: [{
-                  type:'Alias', attributes: [
+                  type: 'Alias', attributes: [
                      { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM') },
                      { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM') }
                   ]
                },
                {
-                  type:'String', attributes: [
+                  type: 'String', attributes: [
                      { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
                      { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
                      { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
@@ -112,14 +111,14 @@ arc.directive("arcTimeManagement", function () {
                   ]
                },
                {
-                  type:'Numeric', attributes: [
+                  type: 'Numeric', attributes: [
                      { included: true, name: 'Num Day', desc: 'Num Day' },
                      { included: true, name: 'Month Number', desc: 'Month Number' }]
                }
                ],
                Year: [
                   {
-                     type:'Alias', attributes: [{ included: true, name: 'YYYY', example: $scope.selections.StartTimeMoment.format('YYYY') },
+                     type: 'Alias', attributes: [{ included: true, name: 'YYYY', example: $scope.selections.StartTimeMoment.format('YYYY') },
                      { included: true, name: 'YY', example: $scope.selections.StartTimeMoment.format('YY') }]
                   }
                ]
@@ -128,23 +127,23 @@ arc.directive("arcTimeManagement", function () {
                Day: [
                   {
                      included: true, type: 'Year-Month-Day', name: 'All Months', topConso: 'All Years Month Days', rollUps: [
-                        { level: 'level 2', name: 'Year', attributes:[] },
-                        { level: 'level 1', name: 'Month', attributes:[] },
-                        { level: 'level 0', name: 'Day', attributes:[] }
+                        { level: 'level 2', name: 'Year', attributes: [] },
+                        { level: 'level 1', name: 'Month', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }
                      ]
                   },
                   {
                      included: true, type: 'Year-Day', name: 'Year-Day', topConso: 'All Days',
                      rollUps: [
-                        { level: 'level 1', name: 'Year', attributes:[] },
-                        { level: 'level 0', name: 'Day', attributes:[] }]
+                        { level: 'level 1', name: 'Year', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }]
                   }]
             },
             attributeTypes: ['Alias', 'String', 'Numeric'],
          };
          $scope.values = {};
 
-         $scope.attachAttributesToHierarchies = function(){
+         $scope.attachAttributesToHierarchies = function () {
             _.each($scope.lists.hierarchies, function (value, key) {
                var hierarchies = value;
                var type = key;
@@ -155,9 +154,9 @@ arc.directive("arcTimeManagement", function () {
                      var rollUp = value.name;
                      var attributes = $scope.lists.attributes[rollUp];
                      $scope.lists.hierarchies[type][hierarchy].rollUps[key].attributes.push(attributes);
-                   });
-                });
-             });
+                  });
+               });
+            });
          };
 
          $scope.attachAttributesToHierarchies();
@@ -233,6 +232,47 @@ arc.directive("arcTimeManagement", function () {
             styleObject["background-color"] = 'hsl(' + h + ', ' + saturation + '%, ' + lightness + '%)';
             return styleObject;
          };
+
+         // START END DATE
+         /* Bindable functions
+ -----------------------------------------------*/
+         $scope.endDateBeforeRender = endDateBeforeRender
+         $scope.endDateOnSetTime = endDateOnSetTime
+         $scope.startDateBeforeRender = startDateBeforeRender
+         $scope.startDateOnSetTime = startDateOnSetTime
+
+         function startDateOnSetTime() {
+            $scope.$broadcast('start-date-changed');
+         }
+
+         function endDateOnSetTime() {
+            $scope.$broadcast('end-date-changed');
+         }
+
+         function startDateBeforeRender($dates) {
+            if ($scope.dateRangeEnd) {
+               var activeDate = moment($scope.dateRangeEnd);
+
+               $dates.filter(function (date) {
+                  return date.localDateValue() >= activeDate.valueOf()
+               }).forEach(function (date) {
+                  date.selectable = false;
+               })
+            }
+         }
+
+         function endDateBeforeRender($view, $dates) {
+            if ($scope.dateRangeStart) {
+               var activeDate = moment($scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
+
+               $dates.filter(function (date) {
+                  return date.localDateValue() <= activeDate.valueOf()
+               }).forEach(function (date) {
+                  date.selectable = false;
+               })
+            }
+         }
+         // END START END DATE
 
 
          //Trigger an event after the login screen
