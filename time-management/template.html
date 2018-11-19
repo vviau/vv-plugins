@@ -252,29 +252,17 @@
                   <table class="table table-hover table-sm">
                      <thead>
                         <tr>
-                           <th class="text-left" style="width:200px"> Hierarchy </th>
-                           <th class="text-left"> Attributes </th>
+                              <th class="text-left" style="width:200px"> # </th>
+                           <th class="text-left" style="width:200px"> Attributes </th>
+                           <th class="text-left"> Description </th>
                         </tr>
                      </thead>
                      <tbody>
-                        <tr ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]" ng-if="hierarchy.included">
-                           <td class="text-left"> {{hierarchy.name}} </td>
+                        <tr ng-repeat="attribute in lists.attributes[selections.dimensionType]">
+                              <td class="text-left"> <input type="checkbox" ng-model="attribute.included" ng-change="" class="mt-2 mr-2"> </td>
+                           <td class="text-left"> {{attribute.name}} </td>
                            <td class="text-left">
-                              <uib-tabset active="hierarchy.activeTab">
-                                 <uib-tab ng-repeat="rollUp in hierarchy.rollUps">
-                                    <uib-tab-heading>
-                                       {{rollUp.level}} - {{rollUp.name}}
-                                    </uib-tab-heading>
-                                    <div ng-repeat="attributeTypes in rollUp.attributes[0]">
-                                       <label>{{attributeTypes.type}}:</label>
-                                       <h4>
-                                          <span ng-repeat="attribute in attributeTypes.attributes" class="badge mt-1 ml-1" ng-style="generateHSLColour(attribute.name)">
-                                             <input style="margin-top:5px" type="checkbox" ng-model="attribute.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"> {{attribute.name}} ({{attribute.example}})
-                                          </span>
-                                       </h4>
-                                    </div>
-                                 </uib-tab>
-                              </uib-tabset>
+                                 {{attribute.desc}}
                            </td>
                         </tr>
                      </tbody>

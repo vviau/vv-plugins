@@ -112,53 +112,22 @@ arc.directive("arcTimeManagement", function () {
                }
             },
             attributes: {
-               Day: [{
-                  type: 'Alias', attributes: [
-                     { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM-DD') },
-                     { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM/DD') }
-                  ]
-               },
-               {
-                  type: 'String', attributes: [
-                     { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
-                     { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
-                     { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
-                     { included: true, name: 'Month Long', example: $scope.selections.StartTimeMoment.format('MMMM') },
-                     { included: true, name: 'Week Day Short', example: $scope.selections.StartTimeMoment.format('ddd') },
-                     { included: true, name: 'Week Day Long', example: $scope.selections.StartTimeMoment.format('dddd') }
-                  ]
-               },
-               {
-                  type: 'Numeric', attributes: [
-                     { included: true, name: 'Num Day', desc: 'Num Day' },
-                     { included: true, name: 'Month Number', desc: 'Month Number' }
-                  ]
-               }],
-               Month: [{
-                  type: 'Alias', attributes: [
-                     { included: true, name: 'YYYY-MM-DD', example: $scope.selections.StartTimeMoment.format('YYYY-MM') },
-                     { included: true, name: 'YYYY/MM/DD', example: $scope.selections.StartTimeMoment.format('YYYY/MM') }
-                  ]
-               },
-               {
-                  type: 'String', attributes: [
-                     { included: true, name: 'Year Short', example: $scope.selections.StartTimeMoment.format('YY') },
-                     { included: true, name: 'Year Long', example: $scope.selections.StartTimeMoment.format('YYYY') },
-                     { included: true, name: 'Month Short', example: $scope.selections.StartTimeMoment.format('MMM') },
-                     { included: true, name: 'Month Long', example: $scope.selections.StartTimeMoment.format('MMMM') }
-                  ]
-               },
-               {
-                  type: 'Numeric', attributes: [
-                     { included: true, name: 'Num Day', desc: 'Num Day' },
-                     { included: true, name: 'Month Number', desc: 'Month Number' }]
-               }
+               Day: [
+                  { included: true, type: 'String', name: 'Year Short', format: 'YY' },
+                  { included: true, type: 'String', name: 'Year Long', format: 'YYYY' },
+                  { included: true, type: 'String', name: 'Month Short', format: 'MMM' },
+                  { included: true, type: 'String', name: 'Month Long', format: 'MMMM' },
+                  { included: true, type: 'String', name: 'Week Day Short', format: 'ddd' },
+                  { included: true, type: 'String', name: 'Week Day Long', format: 'dddd' },
+                  { included: true, type: 'Numeric', name: 'Num Day', desc: 'Num Day' },
+                  { included: true, type: 'Numeric', name: 'Month Number', desc: 'Month Number' }
                ],
-               Year: [
-                  {
-                     type: 'Alias', attributes: [{ included: true, name: 'YYYY', example: $scope.selections.StartTimeMoment.format('YYYY') },
-                     { included: true, name: 'YY', example: $scope.selections.StartTimeMoment.format('YY') }]
-                  }
+               Month: [
+                  { included: true, type: 'String', name: 'Year Short', format: 'YY' },
+                  { included: true, type: 'String', name: 'Year Long', format: 'YYYY' },
+                  { included: true, type: 'String', name: 'Month Short', format: 'MMM' },
+                  { included: true, type: 'String', name: 'Month Long', format: 'MMMM' },
+                  { included: true, type: 'Numeric', name: 'Month Number', desc: 'Month Number' }
                ]
             },
             hierarchies: {
@@ -193,26 +162,26 @@ arc.directive("arcTimeManagement", function () {
                      rollUps: [
                         { level: 'Top', name: 'All Weeks', attributes: [] },
                         { level: 'level 2', name: 'Year', attributes: [] },
-                        {level: 'level 1', name: 'Week', attributes: [] },
+                        { level: 'level 1', name: 'Week', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }]
                   }],
-                  Month: [
-                     {
-                        included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
-                           { level: 'Top', name: 'All Months', attributes: [] },
-                           { level: 'level 1', name: 'Year', attributes: [] },
-                           { level: 'level 0', name: 'Month', attributes: [] }
-                        ]
-                     },
-                     {
-                        included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
-                           { level: 'Top', name: 'All Period', attributes: [] },
-                           { level: 'level 4', name: 'Year', attributes: [] },
-                           { level: 'level 3', name: 'Half-Year', attributes: [] },
-                           { level: 'level 2', name: 'Quarter', attributes: [] },
-                           { level: 'level 1', name: 'Month', attributes: [] }
-                        ]
-                     }]
+               Month: [
+                  {
+                     included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
+                        { level: 'Top', name: 'All Months', attributes: [] },
+                        { level: 'level 1', name: 'Year', attributes: [] },
+                        { level: 'level 0', name: 'Month', attributes: [] }
+                     ]
+                  },
+                  {
+                     included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
+                        { level: 'Top', name: 'All Period', attributes: [] },
+                        { level: 'level 4', name: 'Year', attributes: [] },
+                        { level: 'level 3', name: 'Half-Year', attributes: [] },
+                        { level: 'level 2', name: 'Quarter', attributes: [] },
+                        { level: 'level 1', name: 'Month', attributes: [] }
+                     ]
+                  }]
             },
             attributeTypes: ['Alias', 'String', 'Numeric'],
          };
