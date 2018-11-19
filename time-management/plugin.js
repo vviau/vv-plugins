@@ -67,13 +67,18 @@ arc.directive("arcTimeManagement", function () {
             },
             elements: [],
             dimensionTypes: ['Day', 'Month', 'Year'],
+            dimensionElements: {
+               Day: ['Day', 'Month', 'Quarter', 'HalfYear', 'Year'],
+               Month: ['Month', 'Quarter', 'HalfYear', 'Year'],
+               Year: ['Year']
+            },
             dimensionElementTypes: {
                Day: { leaf: 'Day', rollUps: ['Month', 'Year'], groupConso: 'All Days' },
                Month: { leaf: 'Month', rollUps: ['Year'], groupConso: 'All Months' },
                Year: { leaf: 'Year', groupConso: 'All Years' }
             },
             dateFormats: {
-               Day: { format: 'YYYY-MM-DD', formats: ['YYYY-MM-DD', 'YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY', 'YY-MM-DD', 'YY/MM/DD', 'DD/MM/YY'] },
+               Day: { format: 'YYYY-MM-DD', formats: ['YYYY-MM-DD', 'YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD-MM-YY', 'DD/MM/YYYY', 'YY-MM-DD', 'YY/MM/DD', 'DD/MM/YY'] },
                Month: { format: 'YYYY-MM', formats: ['Custom', 'YYYY-MM', 'MM-YYYY', 'MM/YY', 'MM/YYYY', 'MM-YY', 'YY/MM', 'MM/YY'] },
                Year: { format: 'YYYY', formats: ['YYYY', 'YY'] }
             },
@@ -85,9 +90,9 @@ arc.directive("arcTimeManagement", function () {
             aliasesFomat:
             {
                alias1: {
-                  Day: {format: 'YYYY-MM-DD'}
+                  Day: { format: 'DD-MM-YYYY' }
                   ,
-                  Month: { format: 'YYYY-MM' }
+                  Month: { format: 'MM-YYYY' }
                   ,
                   Year: { format: 'YYYY' }
                },
@@ -167,7 +172,7 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   {
-                     included: true, show: true,type: 'YHQMD', name: 'All Period', rollUps: [
+                     included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
                         { level: 'Top', name: 'All Period', attributes: [] },
                         { level: 'level 4', name: 'Year', attributes: [] },
                         { level: 'level 3', name: 'Half-Year', attributes: [] },
