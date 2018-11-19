@@ -187,7 +187,32 @@ arc.directive("arcTimeManagement", function () {
                         { level: 'Top', name: 'All Days', attributes: [] },
                         { level: 'level 1', name: 'Year', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }]
-                  }]
+                  },
+                  {
+                     included: true, show: true, type: 'YWD', name: 'Year-Week-Day',
+                     rollUps: [
+                        { level: 'Top', name: 'All Weeks', attributes: [] },
+                        { level: 'level 2', name: 'Year', attributes: [] },
+                        {level: 'level 1', name: 'Week', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }]
+                  }],
+                  Month: [
+                     {
+                        included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
+                           { level: 'Top', name: 'All Months', attributes: [] },
+                           { level: 'level 1', name: 'Year', attributes: [] },
+                           { level: 'level 0', name: 'Month', attributes: [] }
+                        ]
+                     },
+                     {
+                        included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
+                           { level: 'Top', name: 'All Period', attributes: [] },
+                           { level: 'level 4', name: 'Year', attributes: [] },
+                           { level: 'level 3', name: 'Half-Year', attributes: [] },
+                           { level: 'level 2', name: 'Quarter', attributes: [] },
+                           { level: 'level 1', name: 'Month', attributes: [] }
+                        ]
+                     }]
             },
             attributeTypes: ['Alias', 'String', 'Numeric'],
          };
