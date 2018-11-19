@@ -31,18 +31,22 @@ arc.directive("arcTimeManagement", function () {
       controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", function ($scope, $rootScope, $http, $tm1, $translate, $timeout) {
 
          //Define variables
+         $scope.startDate = moment().startOf('year');
+         $scope.dateRangeStart = moment().startOf('year');
+         $scope.dateRangeEnd = moment().endOf('year');
+         $scope.startTimeIsOpen = false;
+         $scope.endTimeIsOpen = false;
+
          $scope.defaults = {
-            StartTime: new Date(),
-            EndTime: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
             useHierarchy: true,
             useAttributes: true,
             startDayofWeek: 'Mon',
             fiscalYearStartMonth: 'Jul'
          };
          $scope.selections = {
-            StartTime: $scope.defaults.StartTime,
-            EndTime: $scope.defaults.EndTime,
-            StartTimeMoment: moment($scope.defaults.StartTime),
+            startDate: $scope.defaults.startDate,
+            dateRangeEnd: $scope.defaults.dateRangeEnd,
+            StartTimeMoment: moment($scope.defaults.startDate),
             format: 'YYYY-MM-DD',
             dimensionName: 'Day',
             dimensionType: 'Day',
@@ -126,15 +130,27 @@ arc.directive("arcTimeManagement", function () {
             hierarchies: {
                Day: [
                   {
-                     included: true, type: 'Year-Month-Day', name: 'All Months', topConso: 'All Years Month Days', rollUps: [
+                     included: true, type: 'YMD', name: 'All Months', rollUps: [
+                        { level: 'Top', name: 'All Months', attributes: [] },
                         { level: 'level 2', name: 'Year', attributes: [] },
                         { level: 'level 1', name: 'Month', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }
                      ]
                   },
                   {
-                     included: true, type: 'Year-Day', name: 'Year-Day', topConso: 'All Days',
+                     included: true, type: 'YHQMD', name: 'All Months', rollUps: [
+                        { level: 'Top', name: 'All Period', attributes: [] },
+                        { level: 'level 4', name: 'Year', attributes: [] },
+                        { level: 'level 3', name: 'Half-Year', attributes: [] },
+                        { level: 'level 2', name: 'Quarter', attributes: [] },
+                        { level: 'level 1', name: 'Month', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }
+                     ]
+                  },
+                  {
+                     included: true, type: 'YD', name: 'Year-Day',
                      rollUps: [
+                        { level: 'Top', name: 'All Days', attributes: [] },
                         { level: 'level 1', name: 'Year', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }]
                   }]
@@ -180,7 +196,7 @@ arc.directive("arcTimeManagement", function () {
             var formatDay = $scope.lists.dateFormats['Day'].format;
             var formatYear = $scope.lists.dateFormats['Year'].format;
             // Get date
-            var dateMoment = moment($scope.selections.StartTime);
+            var dateMoment = $scope.startDate;
             // Define variables
             var year = dateMoment.format(formatYear);
             var day = dateMoment.format(formatDay);
@@ -195,10 +211,8 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.generateDimension = function () {
             $scope.lists.elements = [];
-            var startTime = $scope.selections.StartTime;
-            var startTimeMoment = moment(startTime);
-            var endTime = $scope.selections.EndTime;
-            var endTimeMoment = moment(endTime);
+            var startTimeMoment = $scope.startDate;
+            var endTimeMoment = $scope.dateRangeEnd;
             for (var m = moment(startTimeMoment); m.diff(endTimeMoment, 'days') <= 0; m.add(1, 'days')) {
                var day = m.format($scope.lists.dateFormats['Day'].format);
                var month = $scope.getMonthFormat(m);
