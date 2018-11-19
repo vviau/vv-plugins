@@ -51,7 +51,7 @@
                      <input type="number" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty input-group-append" ng-model="tab.maxRows"
                         placeholder="Max. Rows" style="width: 70px">
                      <span class="input-group-append">
-                        <button class="btn btn-warning" title="{{'EXECUTE' | translate}}" ng-click="execute()">
+                        <button class="btn btn-warning" title="{{'EXECUTE' | translate}}" ng-click="execute(tab)">
                            <i class="fa fa-fw fa-bolt"></i>
                         </button>
                      </span>
@@ -68,7 +68,7 @@
                <div class="card-header" style="padding: 5px 10px;">
                   <i class="fa fa-table"></i>
                   <span translate="RESULT"></span>
-                  - Run in {{responseTimeMs | number:0}} ms
+                  - Run in {{tab.responseTimeMs | number:0}} ms
                   <div class="pull-right">
                      <a href class="click" ng-click="tab.showJSON = !tab.showJSON">
                         <i class="fa fa-toggle-on" ng-if="tab.showJSON"></i>
@@ -85,15 +85,15 @@
                      <span style="padding-right:5px;padding-left:5px"> | </span>
                   </div>
                </div>
-               <div class="card-body" ng-if="message">
+               <div class="card-body" ng-if="tab.message">
                   <div>
                      <button class="btn btn-warning">
                         <span class="fa fa-warning" aria-hidden="true"></span>
-                        <span>{{message}}</span>
+                        <span>{{tab.message}}</span>
                      </button>
                   </div>
                </div>
-               <div class="card-body" style="padding: 5px 0px 0px 5px;" ng-if="!message">
+               <div class="card-body" style="padding: 5px 0px 0px 5px;" ng-if="!tab.message">
                   <auto-height>
                      <json-formatter ng-if="tab.showJSON" json="tab.result.json" open="1"></json-formatter>
                      <div ng-if="!tab.showJSON">
