@@ -77,6 +77,35 @@ arc.directive("arcTimeManagement", function () {
                Month: { format: 'YYYY-MM', formats: ['Custom', 'YYYY-MM', 'MM-YYYY', 'MM/YY', 'MM/YYYY', 'MM-YY', 'YY/MM', 'MM/YY'] },
                Year: { format: 'YYYY', formats: ['YYYY', 'YY'] }
             },
+            aliases: [
+               { included: true, id: 'alias1', name: 'Short Desc' },
+               { included: true, id: 'alias2', name: 'Long Desc' },
+               { included: true, id: 'alias3', name: 'Description Desc' }
+            ],
+            aliasesFomat:
+            {
+               alias1: {
+                  Day: {format: 'YYYY-MM-DD'}
+                  ,
+                  Month: { format: 'YYYY-MM' }
+                  ,
+                  Year: { format: 'YYYY' }
+               },
+               alias2: {
+                  Day: { format: 'YYYY/MM/DD' }
+                  ,
+                  Month: { format: 'YYYY/MM' }
+                  ,
+                  Year: { format: 'YYYY' }
+               },
+               alias3: {
+                  Day: { format: 'DD-MM-YY' }
+                  ,
+                  Month: { format: 'DD-YY' }
+                  ,
+                  Year: { format: 'YY' }
+               }
+            },
             attributes: {
                Day: [{
                   type: 'Alias', attributes: [
@@ -130,7 +159,7 @@ arc.directive("arcTimeManagement", function () {
             hierarchies: {
                Day: [
                   {
-                     included: true, type: 'YMD', name: 'All Months', rollUps: [
+                     included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
                         { level: 'Top', name: 'All Months', attributes: [] },
                         { level: 'level 2', name: 'Year', attributes: [] },
                         { level: 'level 1', name: 'Month', attributes: [] },
@@ -138,7 +167,7 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   {
-                     included: true, type: 'YHQMD', name: 'All Months', rollUps: [
+                     included: true, show: true,type: 'YHQMD', name: 'All Period', rollUps: [
                         { level: 'Top', name: 'All Period', attributes: [] },
                         { level: 'level 4', name: 'Year', attributes: [] },
                         { level: 'level 3', name: 'Half-Year', attributes: [] },
@@ -148,7 +177,7 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   {
-                     included: true, type: 'YD', name: 'Year-Day',
+                     included: true, show: true, type: 'YD', name: 'Year-Day',
                      rollUps: [
                         { level: 'Top', name: 'All Days', attributes: [] },
                         { level: 'level 1', name: 'Year', attributes: [] },

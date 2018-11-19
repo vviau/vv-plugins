@@ -137,38 +137,55 @@
                <uib-tab-heading>
                   Hierarchies
                </uib-tab-heading>
-               <table class="table table-hover table-sm">
-                  <thead>
-                     <tr>
-                        <th class="text-center"> # </th>
-                        <th class="text-left"> Name </th>
-                        <th class="text-left"> Rollups </th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]">
-                        <td class="text-center">
-                           <input style="margin-top:5px" type="checkbox" ng-model="hierarchy.included" ng-change="" class="ng-pristine ng-untouched ng-valid ng-empty"
+               <div class="auto-height">
+                  <div ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]" class="mb-1">
+                     <div>
+                        <span class="input-group">
+                           <input type="checkbox" ng-model="hierarchy.included" ng-change="" class="mt-2 ng-pristine ng-untouched ng-valid ng-empty"
                               uib-popover="Include Hierarchy" popover-append-to-body="true" popover-trigger="'mouseenter'" popover-class="popover-class-danger">
-                        </td>
-                        <td class="text-left">
+                           <span class="input-group-text">Hierarchy {{$index+1}}</span>
                            <input type="text" class="form-control" ng-model="hierarchy.name" />
-                        </td>
-                        <td>
-                           <ul class="list-group">
-                              <li class="list-group-item" ng-repeat="rollUp in hierarchy.rollUps">
-                                 <span ng-if="rollUp.level=='Top'">
-                                    <input type="text" class="form-control" ng-model="rollUp.name" />
-                                 </span>
-                                 <span style="padding-left:{{($index)*10}}px" ng-if="rollUp.level!='Top'">
-                                    {{rollUp.name}} ({{examples[rollUp.name]}})
-                                 </span>
-                              </li>
-                           </ul>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
+                           <span class="input-group-prepend">
+                              <a href class="click" ng-click="hierarchy.show = !hierarchy.show">
+                                 <i class="fa fa-toggle-on" ng-if="hierarchy.show"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!hierarchy.show"></i>
+                              </a>
+                           </span>
+                        </span>
+                     </div>
+                     <div ng-if="hierarchy.show">
+                        <table class="table table-hover table-sm">
+                           <thead>
+                              <tr>
+                                 <th class="text-left"> Rollups </th>
+                                 <th class="text-left" ng-repeat="alias in lists.aliases"> {{alias.id}}
+                                    <input type="text" class="form-control" ng-model="alias.name" /> </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr ng-repeat="rollUp in hierarchy.rollUps">
+                                 <td>
+                                    <span ng-if="rollUp.level=='Top'">
+                                       <input type="text" class="form-control" ng-model="rollUp.name" />
+                                    </span>
+                                    <span style="padding-left:{{($index)*10}}px" ng-if="rollUp.level!='Top'">
+                                       {{rollUp.name}} ({{examples[rollUp.name]}})
+                                    </span>
+                                 </td>
+                                 <td ng-repeat="alias in lists.aliases">
+                                    <span ng-if="rollUp.level!='Top'">
+                                       <select class="form-control input-group-append" ng-model="lists.aliasesFomat[alias.id][rollUp.name].format" ng-options="f for f in  lists.dateFormats[rollUp.name].formats"
+                                          ng-change="">
+                                          <option></option>
+                                       </select>
+                                    </span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
