@@ -41,35 +41,45 @@ arc.directive("arcTimeManagement", function () {
             useHierarchy: true,
             useAttributes: true,
             startDayofWeek: 'Mon',
-            fiscalYearStartMonth: 'Jul'
+            fiscalYearStartMonth: 'Jul',
+            allDimensionOptions: false
          };
          $scope.selections = {
             startDate: $scope.defaults.startDate,
             dateRangeEnd: $scope.defaults.dateRangeEnd,
             StartTimeMoment: moment($scope.defaults.startDate),
             format: 'YYYY-MM-DD',
-            dimensionName: 'Day',
+            dimensionName: 'Period Daily',
             dimensionType: 'Day',
             useHierarchy: $scope.defaults.useHierarchy,
             useAttributes: $scope.defaults.useAttributes,
             startDayofWeek: $scope.defaults.startDayofWeek,
-            fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth
+            fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth,
+            allDimensionOptions: $scope.defaults.allDimensionOptions
+         };
+         $scope.dimensionOptions = {
+            Hierarchies: {name:'Hierarchies', value:false},
+            Aliases: {name:'Aliases', value:false},
+            Attributes: {name:'Attributes', value:false},
+            Cumulatives: {name:'Cumulatives', value:false},
+            Relatives: {name:'Relatives', value:false}
          };
          $scope.lists = {
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             separators: {
-               YearHalf: { type: 'Year-Half Year', value: '-H' },
-               YearQuarter: { type: 'Year-Quarter', value: '-Q' },
-               YearWeek: { type: 'Year-Week', value: '-W' },
-               YearMonth: { type: 'Year-Month', value: '-M' },
-               YearForNight: { type: 'Year-Fortnight', value: '-F' }
+               YearHalf: { type: 'YearHalf', value: '-H' },
+               YearQuarter: { type: 'YearQuarter', value: '-Q' },
+               YearWeek: { type: 'YearWeek', value: '-W' },
+               YearMonth: { type: 'YearMonth', value: '-M' },
+               YearForNight: { type: 'YearFortnight', value: '-F' },
+               FiscalYear: { type: 'FiscalYear', value: 'FY' }
             },
             elements: [],
             dimensionTypes: ['Day', 'Month', 'Year'],
             dimensionElements: {
-               Day: ['Day', 'Month', 'Quarter', 'HalfYear', 'Year'],
-               Month: ['Month', 'Quarter', 'HalfYear', 'Year'],
+               Day: ['Day', 'Month', 'Year', 'Week','Quarter', 'HalfYear'],
+               Month: ['Month', 'Year', 'Quarter', 'HalfYear'],
                Year: ['Year']
             },
             dimensionElementTypes: {
@@ -79,8 +89,11 @@ arc.directive("arcTimeManagement", function () {
             },
             dateFormats: {
                Day: { format: 'YYYY-MM-DD', formats: ['YYYY-MM-DD', 'YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD-MM-YY', 'DD/MM/YYYY', 'YY-MM-DD', 'YY/MM/DD', 'DD/MM/YY'] },
-               Month: { format: 'YYYY-MM', formats: ['Custom', 'YYYY-MM', 'MM-YYYY', 'MM/YY', 'MM/YYYY', 'MM-YY', 'YY/MM', 'MM/YY'] },
-               Year: { format: 'YYYY', formats: ['YYYY', 'YY'] }
+               Month: { format: 'YYYY-MM', formats: ['Custom', 'YYYY-MM', 'MM-YYYY', 'MM/YY', 'MM/YYYY','YYYY/MM', 'MM-YY', 'YY/MM', 'MM/YY'] },
+               Year: { format: 'YYYY', formats: ['YYYY', 'YY'] },
+               Quarter: { format: 'Custom', formats: ['Custom'] },
+               HalfYear: { format: 'Custom', formats: ['Custom'] },
+               Week: { format: 'Custom', formats: ['Custom'] }
             },
             aliases: [
                { included: true, id: 'alias1', name: 'Short Desc' },
@@ -90,50 +103,129 @@ arc.directive("arcTimeManagement", function () {
             aliasesFomat:
             {
                alias1: {
-                  Day: { format: 'DD-MM-YYYY' }
-                  ,
-                  Month: { format: 'MM-YYYY' }
-                  ,
-                  Year: { format: 'YYYY' }
+                  Day: { format: 'DD-MM-YYYY' },
+                  Month: { format: 'MM-YYYY' },
+                  Year: { format: 'YYYY' },
+                  Week: { format: 'Custom' },
+                  Quater: { format: 'Custom' },
+                  HalfYear: { format: 'Custom' }
                },
                alias2: {
-                  Day: { format: 'YYYY/MM/DD' }
-                  ,
-                  Month: { format: 'YYYY/MM' }
-                  ,
-                  Year: { format: 'YYYY' }
+                  Day: { format: 'YYYY/MM/DD' },
+                  Month: { format: 'YYYY/MM' },
+                  Year: { format: 'YYYY' },
+                  Week: { format: 'Custom' },
+                  Quater: { format: 'Custom' },
+                  HalfYear: { format: 'Custom' }
                },
                alias3: {
-                  Day: { format: 'DD-MM-YY' }
-                  ,
-                  Month: { format: 'DD-YY' }
-                  ,
-                  Year: { format: 'YY' }
+                  Day: { format: 'DD-MM-YY' },
+                  Month: { format: 'MM-YY' },
+                  Year: { format: 'YY' },
+                  Week: { format: 'Custom' },
+                  Quater: { format: 'Custom' },
+                  HalfYear: { format: 'Custom' }
                }
             },
             attributes: {
                Day: [
-                  { included: true, type: 'String', name: 'Year Short', format: 'YY' },
-                  { included: true, type: 'String', name: 'Year Long', format: 'YYYY' },
-                  { included: true, type: 'String', name: 'Month Short', format: 'MMM' },
-                  { included: true, type: 'String', name: 'Month Long', format: 'MMMM' },
-                  { included: true, type: 'String', name: 'Week Day Short', format: 'ddd' },
-                  { included: true, type: 'String', name: 'Week Day Long', format: 'dddd' },
-                  { included: true, type: 'Numeric', name: 'Num Day', desc: 'Num Day' },
-                  { included: true, type: 'Numeric', name: 'Month Number', desc: 'Month Number' }
+                  { included: true, type: 'S', name: 'Year Short', format: 'YY' },
+                  { included: true, type: 'S', name: 'Year Long', format: 'YYYY' },
+                  { included: true, type: 'S', name: 'Month Short', format: 'MMM' },
+                  { included: true, type: 'S', name: 'Month Long', format: 'MMMM' },
+                  { included: true, type: 'S', name: 'Week Day Short', format: 'ddd' },
+                  { included: true, type: 'S', name: 'Week Day Long', format: 'dddd' },
+                  { included: true, type: 'N', name: 'Num Day', desc: 'Num Day' },
+                  { included: true, type: 'N', name: 'Month Number', desc: 'Month Number' }
                ],
                Month: [
-                  { included: true, type: 'String', name: 'Year Short', format: 'YY' },
-                  { included: true, type: 'String', name: 'Year Long', format: 'YYYY' },
-                  { included: true, type: 'String', name: 'Month Short', format: 'MMM' },
-                  { included: true, type: 'String', name: 'Month Long', format: 'MMMM' },
-                  { included: true, type: 'Numeric', name: 'Month Number', desc: 'Month Number' }
+                  { included: true, type: 'S', name: 'Year Short', format: 'YY' },
+                  { included: true, type: 'S', name: 'Year Long', format: 'YYYY' },
+                  { included: true, type: 'S', name: 'Month Short', format: 'MMM' },
+                  { included: true, type: 'S', name: 'Month Long', format: 'MMMM' },
+                  { included: true, type: 'N', name: 'Month Number', desc: 'Month Number' }
                ]
+            },
+            cumuls: {
+               Day: [
+                  { included: true, id: 'YTG'},
+                  { included: true, id: 'YTD'},
+                  { included: true, id: 'CYTD'},
+                  { included: true, id: 'MTG'},
+                  { included: true, id: 'MTD'},
+                  { included: true, id: 'DTG'},
+                  { included: true, id: 'DTD'}
+               ],
+               Month: [
+                  { included: true, id: 'YTG'},
+                  { included: true, id: 'YTD'},
+                  { included: true, id: 'CYTD'},
+                  { included: true, id: 'MTG'},
+                  { included: true, id: 'MTD'}
+               ],
+               Year: [
+                  { included: true, id: 'YTG'},
+                  { included: true, id: 'YTD'},
+                  { included: true, id: 'CYTD'}
+               ]
+            },
+            cumulsDesc: {
+               YTG: {name: 'Year To Go', desc:'SUM of Next Periods'},
+               YTD: {name: 'Year To Date', desc:'SUM of previous period from beginning of the year'},
+               CYTD:{name: 'Cumul Year To Date', desc:'SUM of all previsous period from beginning of time'},
+               MTG: {name: 'Month To Go', desc: 'For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31'},
+               MTD: {name: 'Month To Date', desc: 'For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25'},
+               DTG: {name: 'Day To Go', desc: 'All days until the end of the year'},
+               DTD: {name: 'Day To Date', desc:'All previous days from beginning of the year'}
+            },
+            relatives: {
+               Day: [
+                  { included: true, id: 'CurrentYear'},
+                  { included: true, id: 'PreviousYear'},
+                  { included: true, id: 'CurrentMonth'},
+                  { included: true, id: 'PreviousMonth'},
+                  { included: true, id: 'Next12Months'},
+                  { included: true, id: 'Last12Months'},
+                  { included: true, id: 'Next6Months'},
+                  { included: true, id: 'Last6Months'},
+                  { included: true, id: 'CurrentDay'},
+                  { included: true, id: 'PreviousDay'},
+                  { included: true, id: 'CurrentWeek'},
+                  { included: true, id: 'PreviousWeek'},
+               ],
+               Month: [
+                  { included: true, id: 'CurrentYear'},
+                  { included: true, id: 'PreviousYear'},
+                  { included: true, id: 'CurrentMonth'},
+                  { included: true, id: 'PreviousMonth'},
+                  { included: true, id: 'Next12Months'},
+                  { included: true, id: 'Last12Months'},
+                  { included: true, id: 'Next6Months'},
+                  { included: true, id: 'Last6Months'}
+               ],
+               Year: [
+                  { included: true, id: 'CurrentYear'},
+                  { included: true, id: 'PreviousYear'}
+               ]
+            },
+            relativesDesc: {
+               CurrentYear: {name: 'Current Year', desc:'Current Year'},
+               PreviousYear: {name: 'Previous Year', desc:'Previous Year'},
+               CurrentMonth:{name: 'Current Month', desc:'Current Month'},
+               PreviousMonth: {name: 'Previous Month', desc: 'Previous Month'},
+               CurrentDay:{name: 'Current Day', desc:'Current Day'},
+               PreviousDay: {name: 'Previous Day', desc: 'Previous Day'},
+               Next12Months: {name: 'Next 12 Months', desc: 'Next 12 Months'},
+               Last12Months: {name: 'Last 12 Months', desc: 'Last 12 Months'},
+               Next6Months: {name: 'Next 6 Months', desc: 'Next 12 Months'},
+               Last6Months: {name: 'Last 6 Months', desc: 'Last 12 Months'},
+               CurrentWeek:{name: 'Current Week', desc:'Current Week'},
+               PreviousWeek: {name: 'Previous Week', desc: 'Previous Week'}
             },
             hierarchies: {
                Day: [
                   {
-                     included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
+                     included: true, show: true, type: 'YMD', name: 'Months', rollUps: [
                         { level: 'Top', name: 'All Months', attributes: [] },
                         { level: 'level 2', name: 'Year', attributes: [] },
                         { level: 'level 1', name: 'Month', attributes: [] },
@@ -141,24 +233,24 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   {
-                     included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
+                     included: true, show: true, type: 'YHQMD', name: 'Calendar', rollUps: [
                         { level: 'Top', name: 'All Period', attributes: [] },
                         { level: 'level 4', name: 'Year', attributes: [] },
-                        { level: 'level 3', name: 'Half-Year', attributes: [] },
+                        { level: 'level 3', name: 'HalfYear', attributes: [] },
                         { level: 'level 2', name: 'Quarter', attributes: [] },
                         { level: 'level 1', name: 'Month', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }
                      ]
                   },
                   {
-                     included: true, show: true, type: 'YD', name: 'Year-Day',
+                     included: true, show: true, type: 'YD', name: 'Days',
                      rollUps: [
                         { level: 'Top', name: 'All Days', attributes: [] },
                         { level: 'level 1', name: 'Year', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }]
                   },
                   {
-                     included: true, show: true, type: 'YWD', name: 'Year-Week-Day',
+                     included: true, show: true, type: 'YWD', name: 'Weeks',
                      rollUps: [
                         { level: 'Top', name: 'All Weeks', attributes: [] },
                         { level: 'level 2', name: 'Year', attributes: [] },
@@ -167,14 +259,14 @@ arc.directive("arcTimeManagement", function () {
                   }],
                Month: [
                   {
-                     included: true, show: true, type: 'YMD', name: 'All Months', rollUps: [
+                     included: true, show: true, type: 'YMD', name: 'Months', rollUps: [
                         { level: 'Top', name: 'All Months', attributes: [] },
                         { level: 'level 1', name: 'Year', attributes: [] },
                         { level: 'level 0', name: 'Month', attributes: [] }
                      ]
                   },
                   {
-                     included: true, show: true, type: 'YHQMD', name: 'All Period', rollUps: [
+                     included: true, show: true, type: 'YHQMD', name: 'Calendar', rollUps: [
                         { level: 'Top', name: 'All Period', attributes: [] },
                         { level: 'level 4', name: 'Year', attributes: [] },
                         { level: 'level 3', name: 'Half-Year', attributes: [] },
@@ -186,6 +278,13 @@ arc.directive("arcTimeManagement", function () {
             attributeTypes: ['Alias', 'String', 'Numeric'],
          };
          $scope.values = {};
+
+         $scope.updateDimensionOptions = function(){
+            $scope.selections.allDimensionOptions = !$scope.selections.allDimensionOptions;
+            for(option in $scope.dimensionOptions){
+               $scope.dimensionOptions[option].value = $scope.selections.allDimensionOptions;
+            }
+         };
 
          $scope.attachAttributesToHierarchies = function () {
             _.each($scope.lists.hierarchies, function (value, key) {
@@ -219,7 +318,7 @@ arc.directive("arcTimeManagement", function () {
             return month;
          };
 
-         $scope.generateExamples = function () {
+         $scope.generateExample = function () {
             // Get format
             var formatDay = $scope.lists.dateFormats['Day'].format;
             var formatYear = $scope.lists.dateFormats['Year'].format;
@@ -231,11 +330,14 @@ arc.directive("arcTimeManagement", function () {
             $scope.examples = {
                Day: day,
                Month: $scope.getMonthFormat(dateMoment),
-               Year: year
+               Year: year,
+               Quarter: year + $scope.lists.separators['YearQuarter'].value +'1' ,
+               HalfYear: year + $scope.lists.separators['YearHalf'].value +'1',
+               Week: year + $scope.lists.separators['YearWeek'].value +'1'
             };
          };
 
-         $scope.generateExamples();
+         $scope.generateExample();
 
          $scope.generateDimension = function () {
             $scope.lists.elements = [];
