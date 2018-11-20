@@ -147,17 +147,17 @@
                                  </label>
                               </div>
                               <div class="col-md-8 text-center">
-                                    <select class="form-control input-group-append" ng-model="lists.dateFormats[selections.dimensionType].format" ng-options="f for f in  lists.dateFormats[selections.dimensionType].formats"
+                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[selections.dimensionType].format" ng-options="f for f in  lists.dateFormats[selections.dimensionType].formats"
                                     ng-change="generateExample();generateDimension()">
                                     <option></option>
                                  </select>
                               </div>
                            </div>
                            <div class="row">
-                                 <div class="col-md-4 text-right"></div>
-                                 <div class="col-md-8">
-                                       <label>{{examples[selections.dimensionType]}}</label>
-                                 </div>
+                              <div class="col-md-4 text-right"></div>
+                              <div class="col-md-8">
+                                 <label>{{examples[selections.dimensionType]}}</label>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -375,38 +375,60 @@
                   Custom
                </uib-tab-heading>
                <div class="row mt-3">
-                  <div class="col-md-3 text-right">
-                     <label>First Week Day:</label>
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>Calendar Settings:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>
+                                    First Week Day:
+                                 </label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
+                                    <option></option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>First Fiscal Year Month:</label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
+                                    <option></option>
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                  <div class="col-md-2">
-                     <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
-                        <option></option>
-                     </select>
-                  </div>
-               </div>
-               <div class="row mt-3">
-                  <div class="col-md-3 text-right">
-                     <label>First Fiscal Year Month:</label>
-                  </div>
-                  <div class="col-md-2">
-                     <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
-                        <option></option>
-                     </select>
-                  </div>
-               </div>
-               <div class="row mt-3" ng-repeat="separator in lists.separators">
-                  <div class="col-md-3 text-right">
-                     <label>
-                        {{separator.type}}:
-                     </label>
-                  </div>
-                  <div class="col-md-2">
-                     <input type="text" class="form-control mr-1" ng-model="separator.value" />
-                  </div>
-                  <div class="col-md-2 text-left">
-                     <label>
-                        2018{{separator.value}}1
-                     </label>
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>Custom Separators:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-3" ng-repeat="separator in lists.separators">
+                              <div class="col-md-4 text-right">
+                                 <label>
+                                    {{separator.type}}:
+                                 </label>
+                              </div>
+                              <div class="col-md-4">
+                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
+                              </div>
+                              <div class="col-md-4 text-left">
+                                 <label>
+                                    2018{{separator.value}}1
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                </div>
             </uib-tab>

@@ -268,10 +268,10 @@ arc.directive("arcTimeManagement", function () {
                   {
                      included: true, show: true, type: 'YHQMD', name: 'Calendar', rollUps: [
                         { level: 'Top', name: 'All Period', attributes: [] },
-                        { level: 'level 4', name: 'Year', attributes: [] },
-                        { level: 'level 3', name: 'Half-Year', attributes: [] },
-                        { level: 'level 2', name: 'Quarter', attributes: [] },
-                        { level: 'level 1', name: 'Month', attributes: [] }
+                        { level: 'level 3', name: 'Year', attributes: [] },
+                        { level: 'level 2', name: 'Half-Year', attributes: [] },
+                        { level: 'level 1', name: 'Quarter', attributes: [] },
+                        { level: 'level 0', name: 'Month', attributes: [] }
                      ]
                   }]
             },
