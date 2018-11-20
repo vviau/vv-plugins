@@ -10,14 +10,14 @@
          <uib-tabset active="selections.activeTab">
             <uib-tab>
                <uib-tab-heading>
-                  Dimension
+                  <i class="fa dimensions"></i> Dimension
                </uib-tab-heading>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
-                              Dimension:
+                                 <i class="fa dimensions"></i> Dimension:
                            </label>
                         </div>
                         <div class="card-body">
@@ -50,11 +50,12 @@
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
+                              <i class="fa fa-sliders"></i>
                               Options (
                               <a href class="click" ng-click="updateDimensionOptions()">
                                  <i class="fa fa-toggle-on text-success" ng-if="selections.allDimensionOptions"></i>
                                  <i class="fa fa-toggle-off" ng-if="!selections.allDimensionOptions"></i>
-                              </a>)
+                              </a>):
                            </label>
                         </div>
                         <div class="card-body">
@@ -79,7 +80,7 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Leafs
+                  <i class="fa subset"></i> Leafs
                </uib-tab-heading>
                <div class="row mt-3">
                   <div class="col-md-6">
@@ -136,7 +137,7 @@
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
-                              Leaf element id:
+                              Leaf Element ID:
                            </label>
                         </div>
                         <div class="card-body">
@@ -166,7 +167,7 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Consolidations
+                  <i class="fa subset"></i> Consolidations
                </uib-tab-heading>
                <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
                   <div class="col-md-2 text-right">
@@ -184,25 +185,23 @@
                </div>
             </uib-tab>
             <uib-tab ng-if="dimensionOptions['Hierarchies'].value">
-               <uib-tab-heading>
-                  Hierarchies
+               <uib-tab-heading class="text-info">
+                  <i class="fa fa-sliders"></i> Hierarchy
                </uib-tab-heading>
                <div class="row">
-                  <div class="col-md-4" ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]">
+                  <div class="col-lg-3 col-md-6" ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]">
                      <div class="card mb-1">
                         <div class="card-header">
                            <span class="input-group">
-                              <input type="checkbox" ng-model="hierarchy.included" ng-change="" class="mt-2 mr-2" uib-popover="Include Hierarchy" popover-append-to-body="true"
-                                 popover-trigger="'mouseenter'" popover-class="popover-class-danger">
                               <span class="input-group-text">Hierarchy {{$index+1}} (
-                                 <a href class="click" ng-click="hierarchy.show = !hierarchy.show">
-                                    <i class="fa fa-toggle-on" ng-if="hierarchy.show"></i>
-                                    <i class="fa fa-toggle-off" ng-if="!hierarchy.show"></i>
-                                 </a>) - Name :</span>
+                                 <a href class="click" ng-click="hierarchy.included = !hierarchy.included">
+                                    <i class="fa fa-toggle-on text-success" ng-if="hierarchy.included"></i>
+                                    <i class="fa fa-toggle-off" ng-if="!hierarchy.included"></i>
+                                 </a>)</span>
                               <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
                            </span>
                         </div>
-                        <div class="card-body p-2" ng-if="hierarchy.show">
+                        <div class="card-body p-2" ng-if="hierarchy.included">
 
                            <ul class="list-group list-group-flush">
                               <li class="list-group-item p-1" ng-repeat="rollUp in hierarchy.rollUps" ng-class="{'list-group-item-info':rollUp.level=='level 0'}">
@@ -222,66 +221,77 @@
                </div>
             </uib-tab>
             <uib-tab ng-if="dimensionOptions['Aliases'].value">
-               <uib-tab-heading>
-                  Aliases
+               <uib-tab-heading class="text-info">
+                  <i class="fa fa-sliders"></i> Alias
                </uib-tab-heading>
                <div class="auto-height">
-                  <div>
-                     <div>
-                        <table class="table table-hover table-sm">
-                           <thead>
-                              <tr>
-                                 <th> Rollups </th>
-                                 <th> Elements </th>
-                                 <th class="text-center" ng-repeat="alias in lists.aliases">
-                                    <span>
-                                       Alias {{$index+1}}:
-                                    </span>
-                                    <span class="input-group">
-                                       <span>
-                                          <input type="checkbox" ng-model="alias.included" ng-change="" class="mt-2 mr-2">
-                                       </span>
-                                       <span class="input-group-append">
-                                          <input type="text" class="form-control" ng-model="alias.name" />
-                                       </span>
-                                 </th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              <tr ng-repeat="element in lists.dimensionElements[selections.dimensionType]">
-                                 <td>
-                                    <span>
-                                       {{element}}
-                                    </span>
-                                 </td>
-                                 <td>
-                                    <span>
-                                       {{examples[element]}}
-                                    </span>
-                                 </td>
-                                 <td ng-repeat="alias in lists.aliases">
-                                    <span class="input-group">
-                                       <span class="col-md-7">
-                                          <select class="form-control input-group-append" ng-model="lists.aliasesFomat[alias.id][element].format" ng-options="f for f in  lists.dateFormats[element].formats"
-                                             ng-change="">
-                                             <option></option>
-                                          </select>
-                                       </span>
-                                       <span class="col-md-5">
-                                          {{examples[element] | amDateFormat:lists.aliasesFomat[alias.id][element].format}}
-                                       </span>
-                                    </span>
-                                 </td>
-                              </tr>
-                           </tbody>
-                        </table>
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>
+                           <span ng-repeat="alias in lists.aliases">
+                              Alias {{$index+1}} (
+                              <a href class="click" ng-click="alias.included = !alias.included">
+                                 <i class="fa fa-toggle-on text-success" ng-if="alias.included"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!alias.included"></i>
+                              </a>)
+                           </span>
+                        </label>
+                     </div>
+                     <div class="card-body">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <table class="table table-hover table-sm">
+                                 <thead>
+                                    <tr>
+                                       <th> Rollups </th>
+                                       <th> Elements </th>
+                                       <th class="text-center" ng-repeat="alias in lists.aliases" ng-if="alias.included">
+                                          <span>
+                                             Alias {{$index+1}}:
+                                          </span>
+                                          <span>
+                                             <input type="text" class="form-control" ng-model="alias.name" />
+                                          </span>
+                                       </th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr ng-repeat="element in lists.dimensionElements[selections.dimensionType]">
+                                       <td>
+                                          <span>
+                                             {{element}}
+                                          </span>
+                                       </td>
+                                       <td>
+                                          <span>
+                                             {{examples[element]}}
+                                          </span>
+                                       </td>
+                                       <td ng-repeat="alias in lists.aliases" ng-if="alias.included">
+                                          <span class="input-group">
+                                             <span class="col-md-7">
+                                                <select class="form-control input-group-append" ng-model="lists.aliasesFomat[alias.id][element].format" ng-options="f for f in  lists.dateFormats[element].formats"
+                                                   ng-change="">
+                                                   <option></option>
+                                                </select>
+                                             </span>
+                                             <span class="col-md-5">
+                                                {{examples[element] | amDateFormat:lists.aliasesFomat[alias.id][element].format}}
+                                             </span>
+                                          </span>
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
             </uib-tab>
             <uib-tab ng-if="dimensionOptions['Attributes'].value">
-               <uib-tab-heading>
-                  Attributes
+               <uib-tab-heading class="text-info">
+                  <i class="fa fa-sliders"></i> Attributes
                </uib-tab-heading>
                <auto-height>
                   <table class="table table-hover table-sm">
@@ -296,7 +306,11 @@
                      <tbody>
                         <tr ng-repeat="attribute in lists.attributes[selections.dimensionType]">
                            <td>
-                              <input type="checkbox" ng-model="attribute.included" ng-change="" class="mt-2 mr-2"> </td>
+                              <a href class="click" ng-click="attribute.included = !attribute.included">
+                                 <i class="fa fa-toggle-on text-success" ng-if="attribute.included"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!attribute.included"></i>
+                              </a>
+                           </td>
                            <td> {{attribute.name}} </td>
                            <td>
                               {{attribute.type}}
@@ -310,8 +324,8 @@
                </auto-height>
             </uib-tab>
             <uib-tab ng-if="dimensionOptions['Cumulatives'].value">
-               <uib-tab-heading>
-                  Cumulatives
+               <uib-tab-heading class="text-info">
+                  <i class="fa fa-sliders"></i> Cumulatives
                </uib-tab-heading>
                <auto-height>
                   <table class="table table-hover table-sm">
@@ -324,8 +338,12 @@
                      </thead>
                      <tbody>
                         <tr ng-repeat="cumul in lists.cumuls[selections.dimensionType]">
-                           <td>
-                              <input type="checkbox" ng-model="cumul.included" ng-change="" class="mt-2 mr-2"> </td>
+                           <td> 
+                              <a href class="click" ng-click="cumul.included = !cumul.included">
+                                    <i class="fa fa-toggle-on text-success" ng-if="cumul.included"></i>
+                                    <i class="fa fa-toggle-off" ng-if="!cumul.included"></i>
+                                 </a>
+                           </td>
                            <td> {{lists.cumulsDesc[cumul.id].name}} </td>
                            <td> {{lists.cumulsDesc[cumul.id].desc}} </td>
                         </tr>
@@ -334,8 +352,8 @@
                </auto-height>
             </uib-tab>
             <uib-tab ng-if="dimensionOptions['Relatives'].value">
-               <uib-tab-heading>
-                  Relatives
+               <uib-tab-heading class="text-info">
+                  <i class="fa fa-sliders"></i> Relatives
                </uib-tab-heading>
                <auto-height>
                   <table class="table table-hover table-sm">
@@ -349,7 +367,11 @@
                      <tbody>
                         <tr ng-repeat="relative in lists.relatives[selections.dimensionType]">
                            <td>
-                              <input type="checkbox" ng-model="relative.included" ng-change="" class="mt-2 mr-2"> </td>
+                              <a href class="click" ng-click="relative.included = !relative.included">
+                                    <i class="fa fa-toggle-on text-success" ng-if="relative.included"></i>
+                                    <i class="fa fa-toggle-off" ng-if="!relative.included"></i>
+                                 </a>
+                           </td>
                            <td> {{lists.relativesDesc[relative.id].name}} </td>
                            <td> {{lists.relativesDesc[relative.id].desc}} </td>
                         </tr>
@@ -359,7 +381,7 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Preview
+                  <i class="fa fa-eye"></i> Preview
                </uib-tab-heading>
                <div ng-repeat="element in lists.elements">
                   {{element}}
@@ -367,12 +389,12 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Execute
+                  <i class="fa fa-bolt"></i> Execute
                </uib-tab-heading>
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Custom
+                  <i class="fa fa-pencil-square-o"></i> Custom
                </uib-tab-heading>
                <div class="row mt-3">
                   <div class="col-md-6">
@@ -423,7 +445,7 @@
                               </div>
                               <div class="col-md-4 text-left">
                                  <label>
-                                    2018{{separator.value}}1
+                                    {{examples[separator.type]}}
                                  </label>
                               </div>
                            </div>

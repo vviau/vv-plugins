@@ -68,17 +68,17 @@ arc.directive("arcTimeManagement", function () {
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             separators: {
-               YearHalf: { type: 'YearHalf', value: '-H' },
-               YearQuarter: { type: 'YearQuarter', value: '-Q' },
-               YearWeek: { type: 'YearWeek', value: '-W' },
-               YearMonth: { type: 'YearMonth', value: '-M' },
-               YearForNight: { type: 'YearFortnight', value: '-F' },
+               HalfYear: { type: 'HalfYear', value: '-H' },
+               Quarter: { type: 'Quarter', value: '-Q' },
+               Week: { type: 'Week', value: '-W' },
+               Month: { type: 'Month', value: '-M' },
+               FortNight: { type: 'FortNight', value: '-F' },
                FiscalYear: { type: 'FiscalYear', value: 'FY' }
             },
             elements: [],
             dimensionTypes: ['Day', 'Month', 'Year'],
             dimensionElements: {
-               Day: ['Day', 'Month', 'Year', 'Week','Quarter', 'HalfYear'],
+               Day: ['Day', 'Month', 'Year', 'Week','Quarter', 'HalfYear','FiscalYear'],
                Month: ['Month', 'Year', 'Quarter', 'HalfYear'],
                Year: ['Year']
             },
@@ -93,7 +93,8 @@ arc.directive("arcTimeManagement", function () {
                Year: { format: 'YYYY', formats: ['YYYY', 'YY'] },
                Quarter: { format: 'Custom', formats: ['Custom'] },
                HalfYear: { format: 'Custom', formats: ['Custom'] },
-               Week: { format: 'Custom', formats: ['Custom'] }
+               Week: { format: 'Custom', formats: ['Custom'] },
+               FiscalYear: { format: 'Custom', formats: ['Custom'] }
             },
             aliases: [
                { included: true, id: 'alias1', name: 'Short Desc' },
@@ -256,7 +257,16 @@ arc.directive("arcTimeManagement", function () {
                         { level: 'level 2', name: 'Year', attributes: [] },
                         { level: 'level 1', name: 'Week', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }]
-                  }],
+                  },
+                  {
+                     included: true, show: true, type: 'YMD', name: 'Months FY', rollUps: [
+                        { level: 'Top', name: 'All Months FY', attributes: [] },
+                        { level: 'level 2', name: 'FiscalYear', attributes: [] },
+                        { level: 'level 1', name: 'Month', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }
+                     ]
+                  }
+               ],
                Month: [
                   {
                      included: true, show: true, type: 'YMD', name: 'Months', rollUps: [
@@ -309,7 +319,7 @@ arc.directive("arcTimeManagement", function () {
             var formatMonth = $scope.lists.dateFormats['Month'].format;
             var year = dateMoment.format(formatYear);
             if (formatMonth == 'Custom') {
-               var yearMonthSeparator = $scope.lists.separators['YearMonth'].value;
+               var yearMonthSeparator = $scope.lists.separators['Month'].value;
                var dateMonthNumber = dateMoment.format('M');
                var month = year + yearMonthSeparator + dateMonthNumber;
             } else {
@@ -331,9 +341,11 @@ arc.directive("arcTimeManagement", function () {
                Day: day,
                Month: $scope.getMonthFormat(dateMoment),
                Year: year,
-               Quarter: year + $scope.lists.separators['YearQuarter'].value +'1' ,
-               HalfYear: year + $scope.lists.separators['YearHalf'].value +'1',
-               Week: year + $scope.lists.separators['YearWeek'].value +'1'
+               Quarter: year + $scope.lists.separators['Quarter'].value +'1' ,
+               HalfYear: year + $scope.lists.separators['HalfYear'].value +'1',
+               Week: year + $scope.lists.separators['Week'].value +'1',
+               FortNight: year + $scope.lists.separators['FortNight'].value +'1',
+               FiscalYear: $scope.lists.separators['FiscalYear'].value +year
             };
          };
 
