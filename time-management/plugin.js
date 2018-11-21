@@ -68,17 +68,18 @@ arc.directive("arcTimeManagement", function () {
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             separators: {
+               Month: { type: 'Month', value: '-M' },
+               Year: { type: 'Year', value: 'Y' },
                HalfYear: { type: 'HalfYear', value: '-H' },
                Quarter: { type: 'Quarter', value: '-Q' },
                Week: { type: 'Week', value: '-W' },
-               Month: { type: 'Month', value: '-M' },
                FortNight: { type: 'FortNight', value: '-F' },
                FiscalYear: { type: 'FiscalYear', value: 'FY' }
             },
             elements: [],
             dimensionTypes: ['Day', 'Month', 'Year'],
             dimensionElements: {
-               Day: ['Day', 'Month', 'Year', 'Week','Quarter', 'HalfYear','FiscalYear'],
+               Day: ['Day', 'Month', 'Year', 'Week', 'FortNight', 'Quarter', 'HalfYear','FiscalYear'],
                Month: ['Month', 'Year', 'Quarter', 'HalfYear'],
                Year: ['Year']
             },
@@ -239,6 +240,15 @@ arc.directive("arcTimeManagement", function () {
                         { level: 'level 4', name: 'Year', attributes: [] },
                         { level: 'level 3', name: 'HalfYear', attributes: [] },
                         { level: 'level 2', name: 'Quarter', attributes: [] },
+                        { level: 'level 1', name: 'Month', attributes: [] },
+                        { level: 'level 0', name: 'Day', attributes: [] }
+                     ]
+                  },
+                  {
+                     included: true, show: true, type: 'YHQMD', name: 'Calendar 2', rollUps: [
+                        { level: 'Top', name: 'All Period', attributes: [] },
+                        { level: 'level 4', name: 'Year', attributes: [] },
+                        { level: 'level 3', name: 'HalfYear', attributes: [] },
                         { level: 'level 1', name: 'Month', attributes: [] },
                         { level: 'level 0', name: 'Day', attributes: [] }
                      ]

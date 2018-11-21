@@ -1,8 +1,8 @@
 <div>
    <div class="row">
       <div class="col-md-12">
-         <h2>
-            <i class="fa fa-calendar" style="padding-right:5px" aria-hidden="true"></i> Time Management</h2>
+         <span class="page-title">
+            <i class="fa fa-calendar" style="padding-right:5px"></i> Time Management</span>
       </div>
    </div>
    <div class="row">
@@ -17,7 +17,7 @@
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
-                                 <i class="fa dimensions"></i> Dimension:
+                              <i class="fa dimensions"></i> Dimension:
                            </label>
                         </div>
                         <div class="card-body">
@@ -39,6 +39,76 @@
                               </div>
                               <div class="col-md-8">
                                  <select class="form-control input-group-append" ng-model="selections.dimensionType" ng-options="t for t in lists.dimensionTypes">
+                                    <option></option>
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="card mt-3">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa fa-calendar"></i> Calendar:
+                           </label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>From:</label>
+                              </div>
+                              <div class="col-md-6">
+                                 <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
+                                    <input type="text" class="form-control" ng-model="dateRangeStart" />
+                                    <span class="input-group-append">
+                                       <button id="dropdownStartTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                                          <span class="fa fa-calendar"></span>
+                                       </button>
+                                       <span class="dropdown-menu" uib-dropdown-menu>
+                                          <datetimepicker ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="startDateOnSetTime();startTimeIsOpen=!startTimeIsOpen"
+                                             before-render="startDateBeforeRender($dates)" />
+                                       </span>
+                                    </span>
+                                 </span>
+                              </div>
+                           </div>
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>To:</label>
+                              </div>
+                              <div class="col-md-6">
+                                 <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
+                                    <input type="text" class="form-control" ng-model="dateRangeEnd" />
+                                    <span class="input-group-append">
+                                       <button id="dropdownEndTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                                          <span class="fa fa-calendar"></span>
+                                       </button>
+                                       <span class="dropdown-menu" uib-dropdown-menu>
+                                          <datetimepicker ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="endDateOnSetTime();endTimeIsOpen=!endTimeIsOpen"
+                                             before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"
+                                          />
+                                       </span>
+                                    </span>
+                                 </span>
+                              </div>
+                           </div>
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>
+                                    First Week Day:
+                                 </label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
+                                    <option></option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="row mt-1">
+                              <div class="col-md-6 text-right">
+                                 <label>First Fiscal Year Month:</label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
                                     <option></option>
                                  </select>
                               </div>
@@ -80,64 +150,14 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  <i class="fa subset"></i> Leafs
+                  <i class="fa subset"></i> Elements
                </uib-tab-heading>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
-                              Calendar:
-                           </label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-1">
-                              <div class="col-md-4 text-right">
-                                 <label>From:</label>
-                              </div>
-                              <div class="col-md-8">
-                                 <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeStart" />
-                                    <span class="input-group-append">
-                                       <button id="dropdownStartTime" type="button" class="btn btn-light" uib-dropdown-toggle>
-                                          <span class="fa fa-calendar"></span>
-                                       </button>
-                                       <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="startDateOnSetTime();startTimeIsOpen=!startTimeIsOpen"
-                                             before-render="startDateBeforeRender($dates)" />
-                                       </span>
-                                    </span>
-                                 </span>
-                              </div>
-                           </div>
-                           <div class="row mt-1">
-                              <div class="col-md-4 text-right">
-                                 <label>To:</label>
-                              </div>
-                              <div class="col-md-8">
-                                 <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeEnd" />
-                                    <span class="input-group-append">
-                                       <button id="dropdownEndTime" type="button" class="btn btn-light" uib-dropdown-toggle>
-                                          <span class="fa fa-calendar"></span>
-                                       </button>
-                                       <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="endDateOnSetTime();endTimeIsOpen=!endTimeIsOpen"
-                                             before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"
-                                          />
-                                       </span>
-                                    </span>
-                                 </span>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              Leaf Element ID:
+                              <i class="fa subset"></i> Leaf Element ID:
                            </label>
                         </div>
                         <div class="card-body">
@@ -164,23 +184,55 @@
                      </div>
                   </div>
                </div>
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa subset"></i> Consolidations
-               </uib-tab-heading>
-               <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
-                  <div class="col-md-2 text-right">
-                     <label>{{dimensionType}}:</label>
+               <div class="row">
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa subset"></i> Consolidations:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
+                              <div class="col-md-4 text-right">
+                                 <label>{{dimensionType}}:</label>
+                              </div>
+                              <div class="col-md-4">
+                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
+                                    ng-change="generateExample();generateDimension()">
+                                    <option></option>
+                                 </select>
+                              </div>
+                              <div class="col-md-4 text-left">
+                                 <label>{{examples[dimensionType]}}</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                  <div class="col-md-4">
-                     <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
-                        ng-change="generateExample();generateDimension()">
-                        <option></option>
-                     </select>
-                  </div>
-                  <div class="col-md-2 text-left">
-                     <label>{{examples[dimensionType]}}</label>
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa fa-pencil-square-o"></i> Custom Separators:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-3" ng-repeat="separator in lists.separators">
+                              <div class="col-md-4 text-right">
+                                 <label>
+                                    {{separator.type}}:
+                                 </label>
+                              </div>
+                              <div class="col-md-4">
+                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
+                              </div>
+                              <div class="col-md-4 text-left">
+                                 <label>
+                                    {{examples[separator.type]}}
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                </div>
             </uib-tab>
@@ -243,7 +295,7 @@
                               <table class="table table-hover table-sm">
                                  <thead>
                                     <tr>
-                                       <th> Rollups </th>
+                                       <th> Levels </th>
                                        <th> Elements </th>
                                        <th class="text-center" ng-repeat="alias in lists.aliases" ng-if="alias.included">
                                           <span>
@@ -338,11 +390,11 @@
                      </thead>
                      <tbody>
                         <tr ng-repeat="cumul in lists.cumuls[selections.dimensionType]">
-                           <td> 
+                           <td>
                               <a href class="click" ng-click="cumul.included = !cumul.included">
-                                    <i class="fa fa-toggle-on text-success" ng-if="cumul.included"></i>
-                                    <i class="fa fa-toggle-off" ng-if="!cumul.included"></i>
-                                 </a>
+                                 <i class="fa fa-toggle-on text-success" ng-if="cumul.included"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!cumul.included"></i>
+                              </a>
                            </td>
                            <td> {{lists.cumulsDesc[cumul.id].name}} </td>
                            <td> {{lists.cumulsDesc[cumul.id].desc}} </td>
@@ -368,9 +420,9 @@
                         <tr ng-repeat="relative in lists.relatives[selections.dimensionType]">
                            <td>
                               <a href class="click" ng-click="relative.included = !relative.included">
-                                    <i class="fa fa-toggle-on text-success" ng-if="relative.included"></i>
-                                    <i class="fa fa-toggle-off" ng-if="!relative.included"></i>
-                                 </a>
+                                 <i class="fa fa-toggle-on text-success" ng-if="relative.included"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!relative.included"></i>
+                              </a>
                            </td>
                            <td> {{lists.relativesDesc[relative.id].name}} </td>
                            <td> {{lists.relativesDesc[relative.id].desc}} </td>
@@ -391,68 +443,6 @@
                <uib-tab-heading>
                   <i class="fa fa-bolt"></i> Execute
                </uib-tab-heading>
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa fa-pencil-square-o"></i> Custom
-               </uib-tab-heading>
-               <div class="row mt-3">
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>Calendar Settings:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-1">
-                              <div class="col-md-6 text-right">
-                                 <label>
-                                    First Week Day:
-                                 </label>
-                              </div>
-                              <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
-                                    <option></option>
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="row mt-1">
-                              <div class="col-md-6 text-right">
-                                 <label>First Fiscal Year Month:</label>
-                              </div>
-                              <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
-                                    <option></option>
-                                 </select>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>Custom Separators:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-3" ng-repeat="separator in lists.separators">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{separator.type}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-4">
-                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
-                              </div>
-                              <div class="col-md-4 text-left">
-                                 <label>
-                                    {{examples[separator.type]}}
-                                 </label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
             </uib-tab>
          </uib-tabset>
       </div>
