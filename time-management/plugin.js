@@ -224,89 +224,21 @@ arc.directive("arcTimeManagement", function () {
                CurrentWeek: { name: 'Current Week', desc: 'Current Week' },
                PreviousWeek: { name: 'Previous Week', desc: 'Previous Week' }
             },
-            hierarchies: {
-               Day: [
-                  {
-                     included: true, show: true, type: 'YMD', name: 'Months', rollUps: [
-                        { level: 'Top', name: 'All Months', attributes: [] },
-                        { level: 'level 2', name: 'Year', attributes: [] },
-                        { level: 'level 1', name: 'Month', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }
-                     ]
-                  },
-                  {
-                     included: true, show: true, type: 'YHQMD', name: 'Calendar', rollUps: [
-                        { level: 'Top', name: 'All Period', attributes: [] },
-                        { level: 'level 4', name: 'Year', attributes: [] },
-                        { level: 'level 3', name: 'HalfYear', attributes: [] },
-                        { level: 'level 2', name: 'Quarter', attributes: [] },
-                        { level: 'level 1', name: 'Month', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }
-                     ]
-                  },
-                  {
-                     included: true, show: true, type: 'YHQMD', name: 'Calendar 2', rollUps: [
-                        { level: 'Top', name: 'All Period', attributes: [] },
-                        { level: 'level 4', name: 'Year', attributes: [] },
-                        { level: 'level 3', name: 'HalfYear', attributes: [] },
-                        { level: 'level 1', name: 'Month', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }
-                     ]
-                  },
-                  {
-                     included: true, show: true, type: 'YD', name: 'Days',
-                     rollUps: [
-                        { level: 'Top', name: 'All Days', attributes: [] },
-                        { level: 'level 1', name: 'Year', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }]
-                  },
-                  {
-                     included: true, show: true, type: 'YWD', name: 'Weeks',
-                     rollUps: [
-                        { level: 'Top', name: 'All Weeks', attributes: [] },
-                        { level: 'level 2', name: 'Year', attributes: [] },
-                        { level: 'level 1', name: 'Week', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }]
-                  },
-                  {
-                     included: true, show: true, type: 'YMD', name: 'Months FY', rollUps: [
-                        { level: 'Top', name: 'All Months FY', attributes: [] },
-                        { level: 'level 2', name: 'FiscalYear', attributes: [] },
-                        { level: 'level 1', name: 'Month', attributes: [] },
-                        { level: 'level 0', name: 'Day', attributes: [] }
-                     ]
-                  }
-               ],
-               Month: [
-                  {
-                     included: true, show: true, type: 'YMD', name: 'Months', rollUps: [
-                        { level: 'Top', name: 'All Months', attributes: [] },
-                        { level: 'level 1', name: 'Year', attributes: [] },
-                        { level: 'level 0', name: 'Month', attributes: [] }
-                     ]
-                  },
-                  {
-                     included: true, show: true, type: 'YHQMD', name: 'Calendar', rollUps: [
-                        { level: 'Top', name: 'All Period', attributes: [] },
-                        { level: 'level 3', name: 'Year', attributes: [] },
-                        { level: 'level 2', name: 'Half-Year', attributes: [] },
-                        { level: 'level 1', name: 'Quarter', attributes: [] },
-                        { level: 'level 0', name: 'Month', attributes: [] }
-                     ]
-                  }]
-            },
             hierarchyTypes: {
                Day: {
-                  Calendar: {name:'Calendar',levels:[
-                     { level: 'Top', name: 'All Months', included: true },
+                  CalendarMonth: {name:'CalendarMonth', topParent:'All Years',levels:[
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'HalfYear', name: 'HalfYear', included: true },
                      { level: 'Quarter', name: 'Quarter', included: true },
                      { level: 'Month', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ]},
-                  CalendarFY: {name:'CalendarFY',levels:[
-                     { level: 'Top', name: 'All Fiscal', included: true },
+                  CalendarWeek: {name:'CalendarWeek', topParent:'All Years',levels:[
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'Week', name: 'Week', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ]},
+                  CalendarFY: {name:'CalendarFY', topParent:'All Fiscal Years', levels:[
                      { level: 'YearFY', name: 'Year', included: true },
                      { level: 'HalfYearFY', name: 'HalfYear', included: true },
                      { level: 'QuarterFY', name: 'Quarter', included: true },
@@ -337,21 +269,21 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.addHierarchy = function (hierarchyType) {
             var dimensionType = $scope.selections.dimensionType;
-            var hierarchyLevels = $scope.lists.hierarchyTypes[dimensionType][hierarchyType].levels;
-            $scope.hierarchies.push({
-               name: hierarchyType,
-               levels: hierarchyLevels});
+            var hierarchy = $scope.lists.hierarchyTypes[dimensionType][hierarchyType];
+            $scope.hierarchies.push(hierarchy);
             $timeout(function () {
-               console.log($scope.hierarchies)
-                //$scope.selections.activeTab = $scope.tabs.length - 1;
+               console.log($scope.hierarchies);
             });
         };
 
         $scope.hierarchies=[];
-        $scope.addHierarchy('Calendar');
+        $scope.addHierarchy('CalendarMonth');
 
         $scope.removeHierarchy = function (hierarchyIndex) {
          $scope.hierarchies.splice(hierarchyIndex,1);
+         $timeout(function () {
+            console.log($scope.hierarchies);
+         });
      };
 
          $scope.updateDimensionOptions = function () {
@@ -363,7 +295,7 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.updateDimensionOptions();
 
-         $scope.attachAttributesToHierarchies = function () {
+         /*$scope.attachAttributesToHierarchies = function () {
             _.each($scope.lists.hierarchies, function (value, key) {
                var hierarchies = value;
                var type = key;
@@ -377,9 +309,9 @@ arc.directive("arcTimeManagement", function () {
                   });
                });
             });
-         };
+         };*/
 
-         $scope.attachAttributesToHierarchies();
+        // $scope.attachAttributesToHierarchies();
 
          $scope.getMonthFormat = function (dateMoment) {
             var formatYear = $scope.lists.dateFormats['Year'].format;

@@ -150,104 +150,19 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  <i class="fa subset"></i> Elements
-               </uib-tab-heading>
-               <div class="row mt-3">
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa subset"></i> Leaf Element ID:
-                           </label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-1">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{selections.dimensionType}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-8 text-center">
-                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[selections.dimensionType].format" ng-options="f for f in  lists.dateFormats[selections.dimensionType].formats"
-                                    ng-change="generateExample();generateDimension()">
-                                    <option></option>
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="row">
-                              <div class="col-md-4 text-right"></div>
-                              <div class="col-md-8">
-                                 <label>{{examples[selections.dimensionType]}}</label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa subset"></i> Consolidations:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
-                              <div class="col-md-4 text-right">
-                                 <label>{{dimensionType}}:</label>
-                              </div>
-                              <div class="col-md-4">
-                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
-                                    ng-change="generateExample();generateDimension()">
-                                    <option></option>
-                                 </select>
-                              </div>
-                              <div class="col-md-4 text-left">
-                                 <label>{{examples[dimensionType]}}</label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa fa-pencil-square-o"></i> Custom Separators:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-3" ng-repeat="separator in lists.separators">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{separator.type}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-4">
-                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
-                              </div>
-                              <div class="col-md-4 text-left">
-                                 <label>
-                                    {{examples[separator.type]}}
-                                 </label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </uib-tab>
-            <uib-tab ng-if="dimensionOptions['Hierarchies'].value">
-               <uib-tab-heading class="text-info">
-                  <i class="fa fa-sliders"></i> Hierarchy
+                  <i class="fa subset"></i> Hierarchy
                </uib-tab-heading>
                <div class="row">
-                  <div class="col-lg-4 col-md-6" ng-repeat="hierarchy in hierarchies">
-                     <div class="card mb-1">
+                  <div class="col-lg-6 col-md-6 mb-3" ng-repeat="hierarchy in hierarchies track by $index">
+                     <div class="card">
                         <div class="card-header">
                            <span class="input-group">
                               <span class="input-group-prepend input-group-text">Name:
                               </span>
                               <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
+                              <span class="input-group-append input-group-text">Parent:
+                              </span>
+                              <input type="text" class="form-control input-group-append" ng-model="hierarchy.topParent" />
                               <span class="input-group-append">
                                  <button ng-disabled="hierarchies.length==1" class="btn btn-danger" title="Delete" ng-click="removeHierarchy($index)" disabled="disabled">
                                     <i class="fa fa-fw fa-trash"></i>
@@ -268,23 +183,39 @@
                            </span>
                         </div>
                         <div class="card-body p-2">
-
-
-                           <ul class="list-group list-group-flush">
-                              <li class="list-group-item p-1" ng-repeat="element in hierarchy.levels" ng-class="{'list-group-item-info':element.level==$scope.selections.dimensionType}">
-                                 <span class="input-group" ng-if="element.level=='Top'">
-                                    <input type="text" class="form-control" ng-model="element.name" />
-                                 </span>
-                                 <span style="padding-left:{{($index)*10}}px" ng-if="element.level!='Top'">
-                                    <span ng-if="element.level!=selections.dimensionType">
-                                       <a href class="click" ng-click="element.included = !element.included">
+                           <table class="table table-hover table-sm">
+                              <thead>
+                                 <tr>
+                                    <th></th>
+                                    <th>Level</th>
+                                    <th>Format</th>
+                                    <th>Example</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr ng-repeat="element in hierarchy.levels">
+                                    <td>
+                                       <a href class="click" ng-click="element.included = !element.included" ng-if="element.level!=selections.dimensionType">
                                           <i class="fa fa-toggle-on text-success" ng-if="element.included"></i>
                                           <i class="fa fa-toggle-off" ng-if="!element.included"></i>
                                        </a>
-                                    </span>{{element.level}}:{{examples[element.name]}}
-                                 </span>
-                              </li>
-                           </ul>
+                                    </td>
+                                    <td>
+                                       {{element.level}}
+                                    </td>
+                                    <td>
+                                       <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
+                                          ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
+                                          uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
+                                          typeahead-append-to-body="true"
+                                          ng-change="generateExample();generateDimension()">
+                                    </td>
+                                    <td>
+                                       {{examples[element.name]}}
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
                         </div>
                      </div>
                   </div>
@@ -461,6 +392,94 @@
                <uib-tab-heading>
                   <i class="fa fa-bolt"></i> Execute
                </uib-tab-heading>
+            </uib-tab>
+            <uib-tab>
+               <uib-tab-heading>
+                  Custom
+               </uib-tab-heading>
+               <div class="row mt-3">
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa subset"></i> Leaf Element ID:
+                           </label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-1">
+                              <div class="col-md-4 text-right">
+                                 <label>
+                                    {{selections.dimensionType}}:
+                                 </label>
+                              </div>
+                              <div class="col-md-8 text-center">
+                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[selections.dimensionType].format" ng-options="f for f in  lists.dateFormats[selections.dimensionType].formats"
+                                    ng-change="generateExample();generateDimension()">
+                                    <option></option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-4 text-right"></div>
+                              <div class="col-md-8">
+                                 <label>{{examples[selections.dimensionType]}}</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa subset"></i> Consolidations:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
+                              <div class="col-md-4 text-right">
+                                 <label>{{dimensionType}}:</label>
+                              </div>
+                              <div class="col-md-4">
+                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
+                                    ng-change="generateExample();generateDimension()">
+                                    <option></option>
+                                 </select>
+                              </div>
+                              <div class="col-md-4 text-left">
+                                 <label>{{examples[dimensionType]}}</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="card">
+                        <div class="card-header" style="padding: 5px 10px;">
+                           <label>
+                              <i class="fa fa-pencil-square-o"></i> Custom Separators:</label>
+                        </div>
+                        <div class="card-body">
+                           <div class="row mt-3" ng-repeat="separator in lists.separators">
+                              <div class="col-md-4 text-right">
+                                 <label>
+                                    {{separator.type}}:
+                                 </label>
+                              </div>
+                              <div class="col-md-4">
+                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
+                              </div>
+                              <div class="col-md-4 text-left">
+                                 <label>
+                                    {{examples[separator.type]}}
+                                 </label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </uib-tab>
          </uib-tabset>
       </div>
