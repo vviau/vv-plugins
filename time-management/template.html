@@ -241,29 +241,47 @@
                   <i class="fa fa-sliders"></i> Hierarchy
                </uib-tab-heading>
                <div class="row">
-                  <div class="col-lg-3 col-md-6" ng-repeat="hierarchy in lists.hierarchies[selections.dimensionType]">
+                  <div class="col-lg-4 col-md-6" ng-repeat="hierarchy in hierarchies">
                      <div class="card mb-1">
                         <div class="card-header">
                            <span class="input-group">
-                              <span class="input-group-text">Hierarchy {{$index+1}} (
-                                 <a href class="click" ng-click="hierarchy.included = !hierarchy.included">
-                                    <i class="fa fa-toggle-on text-success" ng-if="hierarchy.included"></i>
-                                    <i class="fa fa-toggle-off" ng-if="!hierarchy.included"></i>
-                                 </a>)</span>
+                              <span class="input-group-prepend input-group-text">Name:
+                              </span>
                               <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
+                              <span class="input-group-append">
+                                 <button ng-disabled="hierarchies.length==1" class="btn btn-danger" title="Delete" ng-click="removeHierarchy($index)" disabled="disabled">
+                                    <i class="fa fa-fw fa-trash"></i>
+                                 </button>
+                              </span>
+                              <span class="input-group-prepend" uib-dropdown dropdown-append-to-body ng-if="$index+1==hierarchies.length">
+                                 <button class="btn btn-success" uib-dropdown-toggle>
+                                    <span class="fa fa-plus fa-fw"></span>
+                                 </button>
+                                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                                    <li role="menuitem" ng-repeat="item in lists.hierarchyTypes[selections.dimensionType]">
+                                       <div ng-click="addHierarchy(item.name)" style="cursor:pointer">
+                                          <span>{{item.name}} </span>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </span>
                            </span>
                         </div>
-                        <div class="card-body p-2" ng-if="hierarchy.included">
+                        <div class="card-body p-2">
+
 
                            <ul class="list-group list-group-flush">
-                              <li class="list-group-item p-1" ng-repeat="rollUp in hierarchy.rollUps" ng-class="{'list-group-item-info':rollUp.level=='level 0'}">
-                                 <span class="input-group" ng-if="rollUp.level=='Top'">
-                                    <input type="text" class="form-control" ng-model="rollUp.name" />
+                              <li class="list-group-item p-1" ng-repeat="element in hierarchy.levels" ng-class="{'list-group-item-info':element.level==$scope.selections.dimensionType}">
+                                 <span class="input-group" ng-if="element.level=='Top'">
+                                    <input type="text" class="form-control" ng-model="element.name" />
                                  </span>
-                                 <span style="padding-left:{{($index)*10}}px" ng-if="rollUp.level!='Top'">
-                                    <span ng-if="rollUp.level!='level 0'">-</span>
-                                    <span ng-if="rollUp.level=='level 0'">#</span>
-                                    {{examples[rollUp.name]}} ({{rollUp.name}})
+                                 <span style="padding-left:{{($index)*10}}px" ng-if="element.level!='Top'">
+                                    <span ng-if="element.level!=selections.dimensionType">
+                                       <a href class="click" ng-click="element.included = !element.included">
+                                          <i class="fa fa-toggle-on text-success" ng-if="element.included"></i>
+                                          <i class="fa fa-toggle-off" ng-if="!element.included"></i>
+                                       </a>
+                                    </span>{{element.level}}:{{examples[element.name]}}
                                  </span>
                               </li>
                            </ul>
