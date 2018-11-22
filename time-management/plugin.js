@@ -226,47 +226,59 @@ arc.directive("arcTimeManagement", function () {
             },
             hierarchyTypes: {
                Day: {
-                  CalendarMonth: {name:'CalendarMonth', topParent:'All Years',levels:[
-                     { level: 'Year', name: 'Year', included: true },
-                     { level: 'HalfYear', name: 'HalfYear', included: true },
-                     { level: 'Quarter', name: 'Quarter', included: true },
-                     { level: 'Month', name: 'Month', included: true },
-                     { level: 'Day', name: 'Day', included: true }
-                  ]},
-                  CalendarWeek: {name:'CalendarWeek', topParent:'All Years',levels:[
-                     { level: 'Year', name: 'Year', included: true },
-                     { level: 'Week', name: 'Week', included: true },
-                     { level: 'Day', name: 'Day', included: true }
-                  ]},
-                  CalendarFY: {name:'CalendarFY', topParent:'All Fiscal Years', levels:[
-                     { level: 'YearFY', name: 'Year', included: true },
-                     { level: 'HalfYearFY', name: 'HalfYear', included: true },
-                     { level: 'QuarterFY', name: 'Quarter', included: true },
-                     { level: 'MonthFY', name: 'Month', included: true },
-                     { level: 'Day', name: 'Day', included: true }
-                  ]}
+                  CalendarMonth: {
+                     name: 'CalendarMonth', topParent: 'All Years', levels: [
+                        { level: 'Year', name: 'Year', included: true },
+                        { level: 'HalfYear', name: 'HalfYear', included: true },
+                        { level: 'Quarter', name: 'Quarter', included: true },
+                        { level: 'Month', name: 'Month', included: true },
+                        { level: 'Day', name: 'Day', included: true }
+                     ]
+                  },
+                  CalendarWeek: {
+                     name: 'CalendarWeek', topParent: 'All Years', levels: [
+                        { level: 'Year', name: 'Year', included: true },
+                        { level: 'Week', name: 'Week', included: true },
+                        { level: 'Day', name: 'Day', included: true }
+                     ]
+                  },
+                  CalendarFY: {
+                     name: 'CalendarFY', topParent: 'All Fiscal Years', levels: [
+                        { level: 'YearFY', name: 'Year', included: true },
+                        { level: 'HalfYearFY', name: 'HalfYear', included: true },
+                        { level: 'QuarterFY', name: 'Quarter', included: true },
+                        { level: 'MonthFY', name: 'Month', included: true },
+                        { level: 'Day', name: 'Day', included: true }
+                     ]
+                  }
                },
                Month: {
-                  Calendar: {name:'CalendarFY',levels:[
-                     { level: '4', name: 'All Months', included: true },
-                     { level: '3', name: 'Year', included: true },
-                     { level: '2', name: 'HalfYear', included: true },
-                     { level: '1', name: 'Quarter', included: true },
-                     { level: '0', name: 'Month', included: true }
-                  ]},
-                  CalendarFY: {name:'CalendarFY',levels:[
-                     { level: '4', name: 'All Months', included: true },
-                     { level: '3', name: 'FYYear', included: true },
-                     { level: '2', name: 'FYHalfYear', included: true },
-                     { level: '1', name: 'FYQuarter', included: true },
-                     { level: '0', name: 'FYMonth', included: true }
-                  ]}
+                  Calendar: {
+                     name: 'CalendarFY', levels: [
+                        { level: '4', name: 'All Months', included: true },
+                        { level: '3', name: 'Year', included: true },
+                        { level: '2', name: 'HalfYear', included: true },
+                        { level: '1', name: 'Quarter', included: true },
+                        { level: '0', name: 'Month', included: true }
+                     ]
+                  },
+                  CalendarFY: {
+                     name: 'CalendarFY', levels: [
+                        { level: '4', name: 'All Months', included: true },
+                        { level: '3', name: 'FYYear', included: true },
+                        { level: '2', name: 'FYHalfYear', included: true },
+                        { level: '1', name: 'FYQuarter', included: true },
+                        { level: '0', name: 'FYMonth', included: true }
+                     ]
+                  }
                }
             },
             attributeTypes: ['Alias', 'String', 'Numeric'],
          };
          $scope.values = {};
 
+         //===================
+         // Manage hierarchies
          $scope.addHierarchy = function (hierarchyType) {
             var dimensionType = $scope.selections.dimensionType;
             var hierarchy = $scope.lists.hierarchyTypes[dimensionType][hierarchyType];
@@ -274,17 +286,51 @@ arc.directive("arcTimeManagement", function () {
             $timeout(function () {
                console.log($scope.hierarchies);
             });
-        };
+         };
 
-        $scope.hierarchies=[];
-        $scope.addHierarchy('CalendarMonth');
+         $scope.hierarchies = [];
+         $scope.addHierarchy('CalendarMonth');
 
-        $scope.removeHierarchy = function (hierarchyIndex) {
-         $scope.hierarchies.splice(hierarchyIndex,1);
-         $timeout(function () {
-            console.log($scope.hierarchies);
-         });
-     };
+         $scope.removeHierarchy = function (hierarchyIndex) {
+            $scope.hierarchies.splice(hierarchyIndex, 1);
+            $timeout(function () {
+               console.log($scope.hierarchies);
+            });
+         };
+
+         //===================
+         // Manage Aliases
+         $scope.addAlias = function () {
+            var dimensionType = $scope.selections.dimensionType;
+            var newAlias={
+               name:'Description',
+               format: {
+                  Day: { format: 'DD-MM-YYYY' },
+                  Month: { format: 'MM-YYYY' },
+                  Year: { format: 'YYYY' },
+                  Week: { format: 'Custom' },
+                  Quater: { format: 'Custom' },
+                  HalfYear: { format: 'Custom' }
+               }
+            };
+            $scope.aliases.push(newAlias);
+            $timeout(function () {
+               console.log($scope.aliases);
+            });
+         };
+
+         $scope.aliases = [];
+         $scope.addAlias();
+
+         $scope.removeAlias = function (AliasIndex) {
+            $scope.aliases.splice(AliasIndex, 1);
+            $timeout(function () {
+               console.log($scope.aliases);
+            });
+         };
+
+         //===================
+         // Manage Dimension
 
          $scope.updateDimensionOptions = function () {
             $scope.selections.allDimensionOptions = !$scope.selections.allDimensionOptions;
@@ -311,7 +357,7 @@ arc.directive("arcTimeManagement", function () {
             });
          };*/
 
-        // $scope.attachAttributesToHierarchies();
+         // $scope.attachAttributesToHierarchies();
 
          $scope.getMonthFormat = function (dateMoment) {
             var formatYear = $scope.lists.dateFormats['Year'].format;

@@ -153,7 +153,7 @@
                   <i class="fa subset"></i> Hierarchy
                </uib-tab-heading>
                <div class="row">
-                  <div class="col-lg-6 col-md-6 mb-3" ng-repeat="hierarchy in hierarchies track by $index">
+                  <div class="col-md-6" ng-class="{'col-md-12':aliases.length>1}" ng-repeat="hierarchy in hierarchies track by $index">
                      <div class="card">
                         <div class="card-header">
                            <span class="input-group">
@@ -186,10 +186,24 @@
                            <table class="table table-hover table-sm">
                               <thead>
                                  <tr>
-                                    <th></th>
-                                    <th>Level</th>
-                                    <th>Format</th>
-                                    <th>Example</th>
+                                    <th> </th>
+                                    <th class="text-center">Level</th>
+                                    <th class="text-center">Element</th>
+                                    <th ng-repeat="alias in aliases track by $index">
+                                       <span class="input-group">
+                                          <input type="text" class="form-control input-group-prepend" ng-model="alias.name" />
+                                          <span class="input-group-append">
+                                             <button ng-disabled="aliases.length==1" class="btn btn-danger" title="Delete" ng-click="removeAlias($index)" disabled="disabled">
+                                                <i class="fa fa-fw fa-trash"></i>
+                                             </button>
+                                          </span>
+                                          <span class="input-group-append">
+                                             <button ng-if="aliases.length==$index+1" class="btn btn-success" title="Add" ng-click="addAlias()">
+                                                <i class="fa fa-fw fa-plus"></i>
+                                             </button>
+                                          </span>
+                                       </span>
+                                    </th>
                                  </tr>
                               </thead>
                               <tbody>
@@ -203,15 +217,32 @@
                                     <td>
                                        {{element.level}}
                                     </td>
-                                    <td>
-                                       <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
-                                          ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
-                                          uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
-                                          typeahead-append-to-body="true"
-                                          ng-change="generateExample();generateDimension()">
                                     </td>
                                     <td>
-                                       {{examples[element.name]}}
+                                       <span class="input-group">
+                                          <span class="col-md-6">
+                                             <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
+                                                ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
+                                                uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
+                                                typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
+                                          </span>
+                                          <span class="col-md-6">
+                                             {{examples[element.name]}}
+                                          </span>
+                                       </span>
+                                    </td>
+                                    <td ng-repeat="alias in aliases">
+                                       <span class="input-group">
+                                          <span class="col-md-6">
+                                             <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
+                                                ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
+                                                uib-typeahead="type for type in alias.format[element.level].format | filter:$viewValue | limitTo:20"
+                                                typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
+                                          </span>
+                                          <span class="col-md-6">
+                                             {{examples[element.level] | amDateFormat:lists.aliasesFomat[alias.id][element.level].format}}
+                                          </span>
+                                       </span>
                                     </td>
                                  </tr>
                               </tbody>
@@ -221,77 +252,8 @@
                   </div>
                </div>
             </uib-tab>
-            <uib-tab ng-if="dimensionOptions['Aliases'].value">
-               <uib-tab-heading class="text-info">
-                  <i class="fa fa-sliders"></i> Alias
-               </uib-tab-heading>
-               <div class="auto-height">
-                  <div class="card">
-                     <div class="card-header" style="padding: 5px 10px;">
-                        <label>
-                           <span ng-repeat="alias in lists.aliases">
-                              Alias {{$index+1}} (
-                              <a href class="click" ng-click="alias.included = !alias.included">
-                                 <i class="fa fa-toggle-on text-success" ng-if="alias.included"></i>
-                                 <i class="fa fa-toggle-off" ng-if="!alias.included"></i>
-                              </a>)
-                           </span>
-                        </label>
-                     </div>
-                     <div class="card-body">
-                        <div class="row">
-                           <div class="col-md-12">
-                              <table class="table table-hover table-sm">
-                                 <thead>
-                                    <tr>
-                                       <th> Levels </th>
-                                       <th> Elements </th>
-                                       <th class="text-center" ng-repeat="alias in lists.aliases" ng-if="alias.included">
-                                          <span>
-                                             Alias {{$index+1}}:
-                                          </span>
-                                          <span>
-                                             <input type="text" class="form-control" ng-model="alias.name" />
-                                          </span>
-                                       </th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    <tr ng-repeat="element in lists.dimensionElements[selections.dimensionType]">
-                                       <td>
-                                          <span>
-                                             {{element}}
-                                          </span>
-                                       </td>
-                                       <td>
-                                          <span>
-                                             {{examples[element]}}
-                                          </span>
-                                       </td>
-                                       <td ng-repeat="alias in lists.aliases" ng-if="alias.included">
-                                          <span class="input-group">
-                                             <span class="col-md-7">
-                                                <select class="form-control input-group-append" ng-model="lists.aliasesFomat[alias.id][element].format" ng-options="f for f in  lists.dateFormats[element].formats"
-                                                   ng-change="">
-                                                   <option></option>
-                                                </select>
-                                             </span>
-                                             <span class="col-md-5">
-                                                {{examples[element] | amDateFormat:lists.aliasesFomat[alias.id][element].format}}
-                                             </span>
-                                          </span>
-                                       </td>
-                                    </tr>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </uib-tab>
             <uib-tab ng-if="dimensionOptions['Attributes'].value">
-               <uib-tab-heading class="text-info">
+               <uib-tab-heading>
                   <i class="fa fa-sliders"></i> Attributes
                </uib-tab-heading>
                <auto-height>
@@ -395,40 +357,8 @@
             </uib-tab>
             <uib-tab>
                <uib-tab-heading>
-                  Custom
+                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                </uib-tab-heading>
-               <div class="row mt-3">
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa subset"></i> Leaf Element ID:
-                           </label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-1">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{selections.dimensionType}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-8 text-center">
-                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[selections.dimensionType].format" ng-options="f for f in  lists.dateFormats[selections.dimensionType].formats"
-                                    ng-change="generateExample();generateDimension()">
-                                    <option></option>
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="row">
-                              <div class="col-md-4 text-right"></div>
-                              <div class="col-md-8">
-                                 <label>{{examples[selections.dimensionType]}}</label>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
                <div class="row">
                   <div class="col-md-6">
                      <div class="card">
