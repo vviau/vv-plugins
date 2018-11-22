@@ -175,7 +175,7 @@
                                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
                                     <li role="menuitem" ng-repeat="item in lists.hierarchyTypes[selections.dimensionType]">
                                        <div ng-click="addHierarchy(item.name)" style="cursor:pointer">
-                                          <span>{{item.name}} </span>
+                                          <span>{{item.desc}} </span>
                                        </div>
                                     </li>
                                  </ul>
@@ -219,7 +219,7 @@
                                     </td>
                                     </td>
                                     <td>
-                                       <span class="input-group">
+                                       <span class="input-group" ng-if="element.included">
                                           <span class="col-md-6">
                                              <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
                                                 ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
@@ -232,7 +232,7 @@
                                        </span>
                                     </td>
                                     <td ng-repeat="alias in aliases">
-                                       <span class="input-group">
+                                       <span class="input-group" ng-if="element.included">
                                           <span class="col-md-6">
                                              <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
                                                 ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
@@ -281,62 +281,6 @@
                            <td>
                               {{attribute.desc}}
                            </td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </auto-height>
-            </uib-tab>
-            <uib-tab ng-if="dimensionOptions['Cumulatives'].value">
-               <uib-tab-heading class="text-info">
-                  <i class="fa fa-sliders"></i> Cumulatives
-               </uib-tab-heading>
-               <auto-height>
-                  <table class="table table-hover table-sm">
-                     <thead>
-                        <tr>
-                           <th> # </th>
-                           <th> Cumulatives </th>
-                           <th> Description </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr ng-repeat="cumul in lists.cumuls[selections.dimensionType]">
-                           <td>
-                              <a href class="click" ng-click="cumul.included = !cumul.included">
-                                 <i class="fa fa-toggle-on text-success" ng-if="cumul.included"></i>
-                                 <i class="fa fa-toggle-off" ng-if="!cumul.included"></i>
-                              </a>
-                           </td>
-                           <td> {{lists.cumulsDesc[cumul.id].name}} </td>
-                           <td> {{lists.cumulsDesc[cumul.id].desc}} </td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </auto-height>
-            </uib-tab>
-            <uib-tab ng-if="dimensionOptions['Relatives'].value">
-               <uib-tab-heading class="text-info">
-                  <i class="fa fa-sliders"></i> Relatives
-               </uib-tab-heading>
-               <auto-height>
-                  <table class="table table-hover table-sm">
-                     <thead>
-                        <tr>
-                           <th> # </th>
-                           <th> Relatives </th>
-                           <th> Description </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr ng-repeat="relative in lists.relatives[selections.dimensionType]">
-                           <td>
-                              <a href class="click" ng-click="relative.included = !relative.included">
-                                 <i class="fa fa-toggle-on text-success" ng-if="relative.included"></i>
-                                 <i class="fa fa-toggle-off" ng-if="!relative.included"></i>
-                              </a>
-                           </td>
-                           <td> {{lists.relativesDesc[relative.id].name}} </td>
-                           <td> {{lists.relativesDesc[relative.id].desc}} </td>
                         </tr>
                      </tbody>
                   </table>

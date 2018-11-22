@@ -227,7 +227,7 @@ arc.directive("arcTimeManagement", function () {
             hierarchyTypes: {
                Day: {
                   CalendarMonth: {
-                     name: 'CalendarMonth', topParent: 'All Years', levels: [
+                     name: 'CalendarMonth', desc:'Calednar Month', topParent: 'All Years', levels: [
                         { level: 'Year', name: 'Year', included: true },
                         { level: 'HalfYear', name: 'HalfYear', included: true },
                         { level: 'Quarter', name: 'Quarter', included: true },
@@ -236,21 +236,63 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   CalendarWeek: {
-                     name: 'CalendarWeek', topParent: 'All Years', levels: [
+                     name: 'CalendarWeek', desc:'Calendar Week', topParent: 'All Years', levels: [
                         { level: 'Year', name: 'Year', included: true },
                         { level: 'Week', name: 'Week', included: true },
                         { level: 'Day', name: 'Day', included: true }
                      ]
                   },
                   CalendarFY: {
-                     name: 'CalendarFY', topParent: 'All Fiscal Years', levels: [
+                     name: 'CalendarFY', desc:'Calendar Fiscal Year', topParent: 'All Fiscal Years', levels: [
                         { level: 'YearFY', name: 'Year', included: true },
                         { level: 'HalfYearFY', name: 'HalfYear', included: true },
                         { level: 'QuarterFY', name: 'Quarter', included: true },
                         { level: 'MonthFY', name: 'Month', included: true },
                         { level: 'Day', name: 'Day', included: true }
                      ]
-                  }
+                  },
+                  YTG: { name: 'YTG', desc: 'Year To Go - SUM of Next Periods', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  YTD: { name: 'YTD', desc: 'Year To Date - SUM of previous period from beginning of the year', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  CYTD: { name: 'CYTD', desc: 'Cumul Year To Date - SUM of all previsous period from beginning of time', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  MTG: { name: 'MTG', desc: 'Month To Go: For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  MTD: { name: 'MTD', desc: 'Month To Date: For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  DTG: { name: 'DTG', desc: 'Day To Go: All days until the end of the year', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] },
+                  DTD: { name: 'DTD', desc: 'Day To Date: All previous days from beginning of the year', topParent: 'All Years YTG', levels: [
+                     { level: 'YTG', name: 'YearTG', included: true },
+                     { level: 'Year', name: 'Year', included: true },
+                     { level: 'MonthFY', name: 'Month', included: true },
+                     { level: 'Day', name: 'Day', included: true }
+                  ] }
                },
                Month: {
                   Calendar: {
@@ -302,8 +344,8 @@ arc.directive("arcTimeManagement", function () {
          // Manage Aliases
          $scope.addAlias = function () {
             var dimensionType = $scope.selections.dimensionType;
-            var newAlias={
-               name:'Description',
+            var newAlias = {
+               name: 'Description',
                format: {
                   Day: { format: 'DD-MM-YYYY' },
                   Month: { format: 'MM-YYYY' },
