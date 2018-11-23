@@ -103,20 +103,20 @@
                                     </div>
                                  </div>
                               </div>
-                              <div class="card-footer">
-                                 <div>
-                                    <label>plugin.js:</label>
-                                 </div>
-                                 <pre>$scope.executeChore = function (name) {
-         $tm1.choreExecute($scope.instance, name);
-      }; </pre>
-                                 <div>
-                                    <label>template.html:</label>
-                                 </div>
-                                 <pre>ng-click="executeChore(selections.chore)"
-   </pre>
-                              </div>
                            </div>
+                           <div ng-init="displayCodeS0 = 0" ng-click="displayCodeS0 = 1" class="btn btn-info open-copy-code">
+                                 <i class="fa fa-code" aria-hidden="true"></i>
+                              </div>
+                              <div  ng-show="displayCodeS0 == 1" class="btn btn-default closecodebtn"  ng-click="displayCodeS0 = 0" >x</div>
+                      <pre id="codeS0" class="codesnipet" ng-show="displayCodeS0 == 1" readonly content-editable>
+   <code><kbd> plugin.js:</kbd>
+         $scope.executeChore = function (name) {
+            $tm1.choreExecute($scope.instance, name);
+         }; 
+   <kbd> template.html:</kbd>
+   ng-click="executeChore(selections.chore)"
+   </code>
+                      </pre>
                         </div>
                         <div class="col-md-6">
                            <div class="card">
@@ -137,20 +137,20 @@
                                     </div>
                                  </div>
                               </div>
-                              <div class="card-footer">
-                                 <div>
-                                    <label>plugin.js:</label>
-                                 </div>
-                                 <pre>$scope.executeProcess = function (name) {
-   $tm1.processExecute($scope.instance, name);
-};</pre>
-                                 <div>
-                                    <label>template.html:</label>
-                                 </div>
-                                 <pre>ng-click="executeProcess(selections.process)"
-</pre>
-                              </div>
                            </div>
+                           <div ng-init="displayCodeS1 = 0" ng-click="displayCodeS1 = 1" class="btn btn-info open-copy-code">
+                                 <i class="fa fa-code" aria-hidden="true"></i>
+                              </div>
+                              <div  ng-show="displayCodeS1 == 1" class="btn btn-default closecodebtn"  ng-click="displayCodeS1 = 0" >x</div>
+                      <pre id="codeS1" class="codesnipet" ng-show="displayCodeS1 == 1" readonly content-editable>
+   <code><kbd> plugin.js:</kbd>
+      $scope.executeProcess = function (name) {
+         $tm1.processExecute($scope.instance, name);
+      }; 
+   <kbd> template.html:</kbd>
+   ng-click="executeProcess(selections.process)"
+   </code>
+                      </pre>
                         </div>
 
                      </div>
