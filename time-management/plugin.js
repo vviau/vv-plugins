@@ -227,7 +227,7 @@ arc.directive("arcTimeManagement", function () {
             hierarchyTypes: {
                Day: {
                   CalendarMonth: {
-                     name: 'CalendarMonth', desc:'Calednar Month', topParent: 'All Years', levels: [
+                     name: 'CalendarMonth', desc:'Calendar Month', topParent: 'All Years', levels: [
                         { level: 'Year', name: 'Year', included: true },
                         { level: 'HalfYear', name: 'HalfYear', included: true },
                         { level: 'Quarter', name: 'Quarter', included: true },
