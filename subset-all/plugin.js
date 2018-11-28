@@ -1,7 +1,7 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("cubewiseSubset", "Subset", "page", {
+    $rootScope.plugin("cubewiseSubset", "All Subsets", "page", {
         menu: "tools",
         icon: "subset",
         description: "This plugin can be used to search any TM1 objects",
@@ -19,7 +19,7 @@ arc.directive("cubewiseSubset", function () {
         scope: {
             instance: "=tm1Instance"
         },
-        templateUrl: "__/plugins/subset/template.html",
+        templateUrl: "__/plugins/subset-all/template.html",
         link: function ($scope, element, attrs) {
 
         },
