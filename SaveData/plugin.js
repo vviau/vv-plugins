@@ -21,7 +21,7 @@ arc.directive("arcSaveData", function () {
       scope: {
          instance: "=tm1Instance"
       },
-      templateUrl: "__/plugins/SaveData/template.html",
+      templateUrl: "__/plugins/savedata/template.html",
       link: function ($scope, element, attrs) {
 
       },
@@ -110,7 +110,7 @@ arc.directive("arcSaveData", function () {
             $scope.selections.responseTimeMs = 0;
             var dialog = ngDialog.open({
                className: "ngdialog-theme-default small",
-               template: "__/plugins/SaveData/m-saveDataAll.html",
+               template: "__/plugins/savedata/m-saveDataAll.html",
                name: "Instances",
                scope: $scope,
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
@@ -152,7 +152,7 @@ arc.directive("arcSaveData", function () {
             $scope.selections.responseTimeMs = 0;
             var dialog = ngDialog.open({
                className: "ngdialog-theme-default small",
-               template: "__/plugins/SaveData/m-saveData.html",
+               template: "__/plugins/savedata/m-saveData.html",
                name: "Instances",
                scope: $scope,
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
