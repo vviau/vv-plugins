@@ -208,8 +208,8 @@
                               <input type="text" ng-model="selections.chore" placeholder="Chore Name" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                                  style="display:inline">
                               <div class="input-group-append">
-                                 <button ng-disabled="!selections.chore" class="btn btn-warning" title="Delete" ng-click="executeChore(selections.chore)"
-                                    disabled="disabled">
+                                 <button ng-disabled="!selections.chore" class="btn btn-warning" title="Delete"
+                                    ng-click="executeChore(selections.chore)" disabled="disabled">
                                     <i class="fa fa-fw fa-bolt"></i>
                                  </button>
                               </div>
@@ -236,8 +236,8 @@ ng-click="executeChore(selections.chore)"
                      <div class="card-header" style="padding: 5px 10px;">
                         <label>
                            <i class="fa fa-fw processes"></i> Execute a process
-                     </label>
-                  </div>
+                        </label>
+                     </div>
                      <div class="card-body">
                         <div class="card-text">
                            Run a process:
@@ -341,8 +341,8 @@ ng-click="executeProcess(selections.process)"
                               <input type="text" ng-model="selections.valueToBeSent" placeholder="Value" class="col-md-4 form-control ng-pristine ng-untouched ng-valid ng-empty"
                                  style="display:inline">
                               <div class="col-md-4 text-center">
-                                 <button ng-disabled="!selections.valueToBeSent" class="btn btn-warning" title="Delete" ng-click="sendValueToCell(selections.valueToBeSent)"
-                                    disabled="disabled">
+                                 <button ng-disabled="!selections.valueToBeSent" class="btn btn-warning" title="Delete"
+                                    ng-click="sendValueToCell(selections.valueToBeSent)" disabled="disabled">
                                     <i class="fa fa-fw fa-arrow-right"></i>
                                  </button>
                               </div>
@@ -360,8 +360,38 @@ ng-click="executeProcess(selections.process)"
             <uib-tab-heading>
                Components
             </uib-tab-heading>
-            <div>
-               Subset Editor
+            <div class="row">
+               <div class="col-md-6 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>
+                           <i class="fa fa-fw chores"></i> Open Subset Editor</label>
+                     </div>
+                     <div class="card-body text-center">
+                        <div>
+                           <button type="button" class="btn btn-secondary btn-sm ml-1 px-1 py-0" ng-click="editSubset(hierarchy, 'titles')">
+                              <i class="fa subset" title="{{'EDITSUBSET' | translate}}"></i>
+                           </button>
+                        </div>
+                        <div>
+                           Result: {{elements}}
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-init="displayCodeS0 = 0" ng-click="displayCodeS0 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeS0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS0 = 0">x</div>
+                  <pre id="codeS0" class="codesnipet" ng-show="displayCodeS0 == 1" readonly content-editable>
+      <code><kbd> plugin.js:</kbd>
+            $scope.executeChore = function (name) {
+               $tm1.choreExecute($scope.instance, name);
+            }; 
+      <kbd> template.html:</kbd>
+      ng-click="executeChore(selections.chore)"
+      </code>
+                         </pre>
+               </div>
             </div>
          </uib-tab>
          <uib-tab>
@@ -407,7 +437,8 @@ $scope.getCubesCount = function () {
             <uib-tab-heading>
                Bootstrap 4
             </uib-tab-heading>
-            <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point
+            <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting
+               point
                to create something more unique by building on or modifying it. More information on
                <a href="https://getbootstrap.com/docs/4.0/components/buttons/">getbootstrap.com</a>.</p>
 
@@ -507,7 +538,8 @@ $scope.getCubesCount = function () {
             <uib-tab-heading>
                AngularJS
             </uib-tab-heading>
-            <p>This is a template showcasing the main AngularJS directives. AngularJS is a structural framework for dynamic
+            <p>This is a template showcasing the main AngularJS directives. AngularJS is a structural framework for
+               dynamic
                web apps. More information on the
                <a href="https://docs.angularjs.org/guide/introduction">AngularJS website</a>
             </p>
@@ -580,8 +612,8 @@ $scope.getCubesCount = function () {
                               <div class="card-body text-center">
                                  <div class="row">
                                     <div class="col-md-6">
-                                       <input type="text" class="form-control" ng-change="countChange = countChange + 1" ng-init="countChange=0" ng-model="myValue"
-                                       />
+                                       <input type="text" class="form-control" ng-change="countChange = countChange + 1"
+                                          ng-init="countChange=0" ng-model="myValue" />
                                     </div>
                                     <div class="col-md-6">
                                        <h2>{{countChange}}</h2>
@@ -615,7 +647,8 @@ $scope.getCubesCount = function () {
                               <div class="card-body text-center">
                                  <div class="row">
                                     <div class="col-md-6">
-                                       <button type="button" class="btn btn-primary" ng-click="countClick = countClick + 1" ng-init="countClick=0">Click</button>
+                                       <button type="button" class="btn btn-primary" ng-click="countClick = countClick + 1"
+                                          ng-init="countClick=0">Click</button>
 
                                     </div>
                                     <div class="col-md-6">
@@ -650,7 +683,8 @@ $scope.getCubesCount = function () {
                               <div class="card-body text-center">
                                  <div class="row">
                                     <div class="col-md-6">
-                                       <input type="text" class="form-control" ng-focus="countFocus = countFocus + 1" ng-init="countFocus=0" />
+                                       <input type="text" class="form-control" ng-focus="countFocus = countFocus + 1"
+                                          ng-init="countFocus=0" />
 
                                     </div>
                                     <div class="col-md-6">
@@ -685,7 +719,8 @@ $scope.getCubesCount = function () {
                               <div class="card-body text-center">
                                  <div class="row">
                                     <div class="col-md-6">
-                                       <input type="text" class="form-control" ng-blur="countBlur = countBlur + 1" ng-init="countBlur=0" />
+                                       <input type="text" class="form-control" ng-blur="countBlur = countBlur + 1"
+                                          ng-init="countBlur=0" />
                                     </div>
                                     <div class="col-md-6">
                                        <h2>{{countBlur}}</h2>
@@ -719,7 +754,8 @@ $scope.getCubesCount = function () {
                               <div class="card-body text-center">
                                  <div class="row" ng-init="showValue=true">
                                     <div class="col-md-6">
-                                       <button type="button" class="btn btn-primary" ng-click="showValue =! showValue" ng-init="countClick=0">Click</button>
+                                       <button type="button" class="btn btn-primary" ng-click="showValue =! showValue"
+                                          ng-init="countClick=0">Click</button>
                                     </div>
                                     <div class="col-md-6">
                                        <h2 ng-if="showValue">{{countFocus}}</h2>
