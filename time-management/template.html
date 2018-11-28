@@ -186,6 +186,7 @@
                      </div>
                   </div>
                   <div class="row">
+                     {{hierarchies}}
                      <div class="col-md-6 mt-2" ng-class="{'col-md-12':aliases.length>1}" ng-repeat="hierarchy in hierarchies track by $index">
                         <div class="card">
                            <div class="card-header">
@@ -201,9 +202,17 @@
                                        <i class="fa fa-fw fa-trash"></i>
                                     </button>
                                  </span>
+                                 <span class="input-group-append">
+                                    <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
+                                       <i class="fa fa-fw fa-eye-slash"></i>
+                                    </button>
+                                    <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
+                                       <i class="fa fa-fw fa-eye"></i>
+                                    </button>
+                                 </span>
                               </span>
                            </div>
-                           <div class="card-body p-2">
+                           <div class="card-body p-2" ng-if="hierarchy.display">
                               <table class="table table-hover table-sm">
                                  <thead>
                                     <tr>

@@ -1,6 +1,6 @@
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("arcSamples", "Samples", "page", {
+    $rootScope.plugin("arcCheatSheet", "Cheatsheet", "page", {
         menu: "tools",
         icon: "fa-archive",
         description: "This plugin can be used as a starting point for building new page plugins",
@@ -11,14 +11,14 @@ arc.run(['$rootScope', function ($rootScope) {
 
 }]);
 
-arc.directive("arcSamples", function () {
+arc.directive("arcCheatSheet", function () {
     return {
         restrict: "EA",
         replace: true,
         scope: {
             instance: "=tm1Instance"
         },
-        templateUrl: "__/plugins/samples/template.html",
+        templateUrl: "__/plugins/cheatsheet/template.html",
         link: function ($scope, element, attrs) {
 
         },
@@ -105,7 +105,7 @@ arc.directive("arcSamples", function () {
         $scope.openModalInstances = function (title, message){
             var dialog = ngDialog.open({
                 className: "ngdialog-theme-default large",
-                template: "__/plugins/samples/modal.html",
+                template: "__/plugins/cheatsheet/modal.html",
                 name: "Instances",
                 controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
                    
@@ -128,7 +128,7 @@ arc.directive("arcSamples", function () {
             //Close the tab
             $scope.$on("close-tab", function (event, args) {
                 // Event to capture when a user has clicked close on the tab
-                if (args.page == "arcSamples" && args.instance == $scope.instance && args.name == null) {
+                if (args.page == "arcCheatSheet" && args.instance == $scope.instance && args.name == null) {
                     // The page matches this one so close it
                     $rootScope.close(args.page, { instance: $scope.instance });
                 }

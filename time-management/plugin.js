@@ -25,6 +25,7 @@ arc.directive("arcTimeManagement", function () {
          instance: "=tm1Instance"
       },
       templateUrl: "__/plugins/time-management/template.html",
+      settingsJSON: "__/plugins/time-management/settings-en.json",
       link: function ($scope, element, attrs) {
 
       },
@@ -36,6 +37,9 @@ arc.directive("arcTimeManagement", function () {
          $scope.dateRangeEnd = moment().endOf('year');
          $scope.startTimeIsOpen = false;
          $scope.endTimeIsOpen = false;
+
+       // $scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
+       //  console.log($scope.myJSONFile);
 
          $scope.defaults = {
             useHierarchy: true,
@@ -227,7 +231,7 @@ arc.directive("arcTimeManagement", function () {
             hierarchyTypes: {
                Day: {
                   CalendarMonth: {
-                     name: 'CalendarMonth', shortDesc:'Calendar Month', desc:'Calendar Month', topParent: 'All Years', levels: [
+                     display:true, name: 'CalendarMonth', shortDesc:'Calendar Month', desc:'Calendar Month', topParent: 'All Years', levels: [
                         { level: 'Year', name: 'Year', included: true },
                         { level: 'HalfYear', name: 'HalfYear', included: true },
                         { level: 'Quarter', name: 'Quarter', included: true },
@@ -236,14 +240,14 @@ arc.directive("arcTimeManagement", function () {
                      ]
                   },
                   CalendarWeek: {
-                     name: 'CalendarWeek', shortDesc:'Calendar Week', desc:'Calendar Week', topParent: 'All Years', levels: [
+                     display:true,name: 'CalendarWeek', shortDesc:'Calendar Week', desc:'Calendar Week', topParent: 'All Years', levels: [
                         { level: 'Year', name: 'Year', included: true },
                         { level: 'Week', name: 'Week', included: true },
                         { level: 'Day', name: 'Day', included: true }
                      ]
                   },
                   CalendarFY: {
-                     name: 'CalendarFY', shortDesc:'Calendar Fiscal Year', desc:'Calendar Fiscal Year', topParent: 'All Fiscal Years', levels: [
+                     display:true,name: 'CalendarFY', shortDesc:'Calendar Fiscal Year', desc:'Calendar Fiscal Year', topParent: 'All Fiscal Years', levels: [
                         { level: 'YearFY', name: 'Year', included: true },
                         { level: 'HalfYearFY', name: 'HalfYear', included: true },
                         { level: 'QuarterFY', name: 'Quarter', included: true },
@@ -251,43 +255,43 @@ arc.directive("arcTimeManagement", function () {
                         { level: 'Day', name: 'Day', included: true }
                      ]
                   },
-                  YTG: { name: 'YTG', shortDesc:'Year To Go', desc: 'Year To Go - SUM of Next Periods', topParent: 'All Years YTG', levels: [
+                  YTG: { display:true,name: 'YTG', shortDesc:'Year To Go', desc: 'Year To Go - SUM of Next Periods', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  YTD: { name: 'YTD', shortDesc:'Year To Date', desc: 'Year To Date - SUM of previous period from beginning of the year', topParent: 'All Years YTG', levels: [
+                  YTD: { display:true,name: 'YTD', shortDesc:'Year To Date', desc: 'Year To Date - SUM of previous period from beginning of the year', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  CYTD: { name: 'CYTD', shortDesc:'Cumul Year To Date', desc: 'Cumul Year To Date - SUM of all previsous period from beginning of time', topParent: 'All Years YTG', levels: [
+                  CYTD: {display:true, name: 'CYTD', shortDesc:'Cumul Year To Date', desc: 'Cumul Year To Date - SUM of all previsous period from beginning of time', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  MTG: { name: 'MTG', shortDesc:'Month To Go', desc: 'Month To Go: For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31', topParent: 'All Years YTG', levels: [
+                  MTG: { display:true,name: 'MTG', shortDesc:'Month To Go', desc: 'Month To Go: For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  MTD: { name: 'MTD', shortDesc:'Month To Date', desc: 'Month To Date: For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25', topParent: 'All Years YTG', levels: [
+                  MTD: { display:true,name: 'MTD', shortDesc:'Month To Date', desc: 'Month To Date: For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  DTG: { name: 'DTG', shortDesc:'Day to Go', desc: 'Day To Go: All days until the end of the year', topParent: 'All Years YTG', levels: [
+                  DTG: { display:true,name: 'DTG', shortDesc:'Day to Go', desc: 'Day To Go: All days until the end of the year', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
                      { level: 'Day', name: 'Day', included: true }
                   ] },
-                  DTD: { name: 'DTD', shortDesc:'Day To Date', desc: 'Day To Date: All previous days from beginning of the year', topParent: 'All Years YTG', levels: [
+                  DTD: { display:true, name: 'DTD', shortDesc:'Day To Date', desc: 'Day To Date: All previous days from beginning of the year', topParent: 'All Years YTG', levels: [
                      { level: 'YTG', name: 'YearTG', included: true },
                      { level: 'Year', name: 'Year', included: true },
                      { level: 'MonthFY', name: 'Month', included: true },
@@ -326,7 +330,7 @@ arc.directive("arcTimeManagement", function () {
             var hierarchy = $scope.lists.hierarchyTypes[dimensionType][hierarchyType];
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
-               console.log($scope.hierarchies);
+               //console.log($scope.hierarchies);
             });
          };
 
@@ -336,7 +340,7 @@ arc.directive("arcTimeManagement", function () {
          $scope.removeHierarchy = function (hierarchyIndex) {
             $scope.hierarchies.splice(hierarchyIndex, 1);
             $timeout(function () {
-               console.log($scope.hierarchies);
+               //console.log($scope.hierarchies);
             });
          };
 
@@ -344,8 +348,13 @@ arc.directive("arcTimeManagement", function () {
          // Manage Aliases
          $scope.addAlias = function () {
             var dimensionType = $scope.selections.dimensionType;
+            if($scope.aliases.length==0){
+               var aliasName = 'Description';
+            }else{
+               var aliasName = 'Description'+ $scope.aliases.length;
+            }
             var newAlias = {
-               name: 'Description',
+               name: aliasName,
                format: {
                   Day: { format: 'DD-MM-YYYY' },
                   Month: { format: 'MM-YYYY' },
@@ -357,7 +366,7 @@ arc.directive("arcTimeManagement", function () {
             };
             $scope.aliases.push(newAlias);
             $timeout(function () {
-               console.log($scope.aliases);
+               //console.log($scope.aliases);
             });
          };
 
@@ -367,7 +376,7 @@ arc.directive("arcTimeManagement", function () {
          $scope.removeAlias = function (AliasIndex) {
             $scope.aliases.splice(AliasIndex, 1);
             $timeout(function () {
-               console.log($scope.aliases);
+               //console.log($scope.aliases);
             });
          };
 
