@@ -22,7 +22,7 @@ arc.directive("arcCheatSheet", function () {
         link: function ($scope, element, attrs) {
 
         },
-        controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "ngDialog",function ($scope, $rootScope, $http, $tm1, $translate, $timeout, ngDialog) {
+        controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "ngDialog", "$q", "$helper",function ($scope, $rootScope, $http, $tm1, $translate, $timeout, ngDialog, $q, $helper) {
 
          $scope.defaults = {
             systemCube: 'System info',
@@ -101,6 +101,57 @@ arc.directive("arcCheatSheet", function () {
                 $scope.getValueFromCell();
             });
         };
+
+        // Get Value
+        $scope.cellGet = function (instance, cube) {
+         var defer = $q.defer();
+         //Get all elements
+         var tuple = [];
+         for (var i = 2; i < arguments.length; i++) {
+            tuple.push(arguments[i]);
+         }
+         $tm1.cubeDimensions(instance, cube).then(function (dims) {
+            //Loop through dimensions
+            var elements = [];
+            for (var i = 0; i < tuple.length; i++) {
+               var item = tuple[i];
+               var dimension = dims[i];
+               var hierarchy = dims[i];
+               var element = $helper.escapeName(item);
+               var parts = item.split("::");
+               if (parts.length == 2) {
+                  hierarchy = parts[0];
+                  element = parts[1];
+               }
+               //Attach dimension hierarchy and elements together
+               var mdxElement = "[" + dimension + "].[" + hierarchy + "].[" + element + "]";
+               elements.push(mdxElement);
+            }
+            //Create MDX
+            var mdxQuery = "SELECT NON EMPTY {" + elements[0] + "} ON COLUMNS,NON EMPTY {" + elements[1] + "} ON ROWS FROM [" + cube + "]";
+            if (elements.length > 2) {
+               mdxQuery = mdxQuery + " WHERE(";
+               for (var i = 2; i < elements.length; i++) {
+                  element = elements[i];
+                  if (i < elements.length - 1) {
+                     mdxQuery = mdxQuery + " " + element + ",";
+                  } else {
+                     mdxQuery = mdxQuery + " " + element;
+                  }
+               }
+               mdxQuery = mdxQuery + " )";
+            }
+            var mdxJSON = { MDX: mdxQuery };
+            $http.post(encodeURIComponent($scope.instance) + "/ExecuteMDX?$expand=Cells", mdxJSON).then(function (values) {
+               defer.resolve(values.data.Cells[0]);
+            });
+         });
+         return defer.promise;
+      };
+
+      $scope.cellGet($scope.instance, "General Ledger", "Budget", "2017", "Year", "Local", "Total Europe", "Corporate", "Net Income", "Amount").then(function (data) {
+         $scope.returnedValue = data;
+      });
 
         $scope.openModalInstances = function (title, message){
             var dialog = ngDialog.open({
