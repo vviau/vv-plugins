@@ -65,6 +65,7 @@ arc.directive("cubewiseSubset", function () {
 
             // GET DIMENSION DATA
             $scope.getAllSubsets = function () {
+               $scope.lists.allSubsets=[];
                 $http.get(encodeURIComponent($scope.instance) + "/ModelDimensions()").then(function (dimensionsData) {
                     $scope.lists.dimensions = dimensionsData.data.value;
                     //LOOP THROUGH DIMENSIONS
@@ -106,6 +107,7 @@ arc.directive("cubewiseSubset", function () {
             //$scope.getAllSubsets();
             // GET ALL VIEWS AND SUBSETS
             $scope.getallViewsPerSubset = function () {
+               $scope.lists.allViewsPerSubset=[];
                 $http.get(encodeURIComponent($scope.instance) + "/Cubes?$select=Name&$expand=Views($select=Name;$expand=tm1.NativeView/Columns/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))),tm1.NativeView/Rows/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))),tm1.NativeView/Titles/Subset($select=Name;$expand=Hierarchy($select=Name;$expand=Dimension($select=Name))))").then(function (viewsData) {
                     //console.log(viewsData);
                     $scope.lists.viewsAndSubsetsUnstructured = viewsData.data.value;
@@ -235,7 +237,7 @@ arc.directive("cubewiseSubset", function () {
                             views: value.views
                         });
                     });
-                    console.log($scope.lists.allViewsPerSubset);
+                    //console.log($scope.lists.allViewsPerSubset);
                     //Create lists.allSubsetsPerView array
                     _.forEach(viewKeys, function (value, key) {
                         $scope.lists.allSubsetsPerView.push({

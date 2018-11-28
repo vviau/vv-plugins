@@ -1,8 +1,3 @@
-
-// Uncomment the code arc.run.. below to enable this plugin
-
-
-
 arc.run(['$rootScope', function ($rootScope) {
 
    $rootScope.plugin("arcTimeManagement", "Time Management", "page", {
@@ -31,15 +26,19 @@ arc.directive("arcTimeManagement", function () {
       },
       controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", function ($scope, $rootScope, $http, $tm1, $translate, $timeout) {
 
+        //$scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
+        //console.log($scope.myJSONFile);
+
+        $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
+         console.log(value.data);
+     });
+
          //Define variables
          $scope.startDate = moment().startOf('year');
          $scope.dateRangeStart = moment().startOf('year');
          $scope.dateRangeEnd = moment().endOf('year');
          $scope.startTimeIsOpen = false;
          $scope.endTimeIsOpen = false;
-
-       // $scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
-       //  console.log($scope.myJSONFile);
 
          $scope.defaults = {
             useHierarchy: true,
@@ -327,7 +326,7 @@ arc.directive("arcTimeManagement", function () {
          // Manage hierarchies
          $scope.addHierarchy = function (hierarchyType) {
             var dimensionType = $scope.selections.dimensionType;
-            var hierarchy = $scope.lists.hierarchyTypes[dimensionType][hierarchyType];
+            var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[dimensionType][hierarchyType]);
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
                //console.log($scope.hierarchies);
