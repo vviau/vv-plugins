@@ -369,26 +369,41 @@ ng-click="executeProcess(selections.process)"
                      </div>
                      <div class="card-body text-center">
                         <div>
-                           <button type="button" class="btn btn-secondary btn-sm ml-1 px-1 py-0" ng-click="editSubset(hierarchy, 'titles')">
+                           <button type="button" class="btn btn-secondary btn-sm" ng-click="editSubset(hierarchy, 'titles')">
                               <i class="fa subset" title="{{'EDITSUBSET' | translate}}"></i>
                            </button>
                         </div>
-                        <div>
+                        <div ng-if="elements">
                            Result: {{elements}}
                         </div>
                      </div>
                   </div>
-                  <div ng-init="displayCodeS0 = 0" ng-click="displayCodeS0 = 1" class="btn btn-info open-copy-code">
+                  <div ng-init="displayCodeC0 = 0" ng-click="displayCodeC0 = 1" class="btn btn-info open-copy-code">
                      <i class="fa fa-code" aria-hidden="true"></i>
                   </div>
-                  <div ng-show="displayCodeS0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS0 = 0">x</div>
-                  <pre id="codeS0" class="codesnipet" ng-show="displayCodeS0 == 1" readonly content-editable>
+                  <div ng-show="displayCodeC0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeC0 = 0">x</div>
+                  <pre id="codeC0" class="codesnipet" ng-show="displayCodeC0 == 1" readonly content-editable>
       <code><kbd> plugin.js:</kbd>
-            $scope.executeChore = function (name) {
-               $tm1.choreExecute($scope.instance, name);
-            }; 
+   $scope.editSubset = function (hierarchy) {
+      var handler = function (subset, elements) {
+         // subset.selected has what element was clicked
+         $scope.elements = subset.selected;
+      };
+      var subset = {
+         name: hierarchy.subset,
+         expression: hierarchy.expression,
+         expressions: hierarchy.expressions,
+         alias: hierarchy.alias,
+         isSelector: true
+      };
+      $subsetDialogs.open($scope.instance, hierarchy.dimension, hierarchy.name, subset, handler);
+   };
       <kbd> template.html:</kbd>
-      ng-click="executeChore(selections.chore)"
+   &lt;button type="button" 
+      class="btn btn-secondary btn-sm" 
+      ng-click="editSubset(hierarchy, 'titles')"&gt;
+         &lt;i class="fa subset" title="{{'EDITSUBSET' | translate}}"&gt;&lt;/i&gt;
+      &lt;/button&gt;
       </code>
                          </pre>
                </div>
@@ -396,10 +411,14 @@ ng-click="executeProcess(selections.process)"
          </uib-tab>
          <uib-tab>
             <uib-tab-heading>
-               TM1 REST API
+               TM1 Rest API
             </uib-tab-heading>
+            <p>Some examples about how to get data using the TM1 Rest API and display it in your page. More information
+               on the TM1 Rest API can be found
+               <a href="https://code.cubewise.com/tm1-rest-api" target="_blank">here</a>.
+            </p>
             <div class="row">
-               <div class="col-md-4">
+               <div class="col-md-4 mt-2">
                   <div class="card">
                      <div class="card-header" style="padding: 5px 10px;">
                         <label>
@@ -407,29 +426,60 @@ ng-click="executeProcess(selections.process)"
                         </label>
                      </div>
                      <div class="card-body">
-                        te
-                     </div>
-                     <div class="card-footer">
-                        <div class="highlight">
-                           <pre class="pre-scrollable"><code>
-$scope.getCubesCount = function () {
-   var query = "";
-   var queryAll = "/Cubes/$count";
-   var queryWithoutControlObjects = "/Cubes/$count?$filter=indexof(Name,'}') eq -1";
-   if ($rootScope.uiPrefs.controlObjects) {
-      query = queryAll;
-   } else {
-      query = queryWithoutControlObjects;
-   }
-      $http.get(encodeURIComponent($scope.instance) + query).then(function (value) {
-         $scope.tm1Objects[1].value = value.data;
-      });
-};                              
-                                                            </code>
-                                                                  </pre>
+                        <div>
+                           query: /Cubes/$count
+                        </div>
+                        <div>
+                           value.data: {{nbCubes}}
                         </div>
                      </div>
                   </div>
+                  <div ng-init="displayCodeR0 = 0" ng-click="displayCodeR0 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeR0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeR0 = 0">x</div>
+                  <pre id="codeR0" class="codesnipet" ng-show="displayCodeR0 == 1" readonly content-editable>
+      <code>
+         
+         
+         <kbd> plugin.js:</kbd>
+$http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (value) {
+   $scope.nbCubes = value.data;
+}); 
+      </code>
+                         </pre>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>
+                           Get names of Model cubes
+                        </label>
+                     </div>
+                     <div class="card-body">
+                        <div>
+                           query: /ModelCubes()?$select=Name
+                        </div>
+                        <div>
+                           value.data.value:
+                           <span ng-repeat="cube in modelCubes" class="badge badge-dark mr-1">{{cube.Name}}</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-init="displayCodeR1 = 0" ng-click="displayCodeR1 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeR1 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeR1 = 0">x</div>
+                  <pre id="codeR1" class="codesnipet" ng-show="displayCodeR1 == 1" readonly content-editable>
+         <code>
+            
+            
+            <kbd> plugin.js:</kbd>
+   $http.get(encodeURIComponent($scope.instance) + "/ModelCubes()?$select=Name").then(function (value) {
+      $scope.modelCubes = value.data;
+   }); 
+         </code>
+                            </pre>
                </div>
             </div>
          </uib-tab>
@@ -527,6 +577,40 @@ $scope.getCubesCount = function () {
       &lt;/uib-tab&gt;
    &lt;/uib-tabset&gt;</code>
                      </pre>
+                        </div>
+                        <!--Badges-->
+                        <div class="col-md-3">
+                           <div class="card">
+                              <div class="card-header">
+                                 Tabs
+                              </div>
+                              <div class="card-body">
+                                 <span class="badge badge-primary">Primary</span>
+                                 <span class="badge badge-secondary">Secondary</span>
+                                 <span class="badge badge-success">Success</span>
+                                 <span class="badge badge-danger">Danger</span>
+                                 <span class="badge badge-warning">Warning</span>
+                                 <span class="badge badge-info">Info</span>
+                                 <span class="badge badge-light">Light</span>
+                                 <span class="badge badge-dark">Dark</span>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB2 = 0" ng-click="displayCodeB2 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB2 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB2 = 0">x</div>
+                           <pre id="codeB2" class="codesnipet" ng-show="displayCodeB2 == 1" readonly content-editable>
+                           <code>
+   &lt;span class="badge badge-primary">Primary&lt;/span&gt;
+   &lt;span class="badge badge-secondary"&gt;Secondary&lt;/span&gt;
+   &lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+   &lt;span class="badge badge-danger"&gt;Danger&lt;/span&gt;
+   &lt;span class="badge badge-warning"&gt;Warning&lt;/span&gt;
+   &lt;span class="badge badge-info"&gt;Info&lt;/span&gt;
+   &lt;span class="badge badge-light"&gt;Light&lt;/span&gt;
+   &lt;span class="badge badge-dark"&gt;Dark&lt;/span&gt;
+                           </code>
+                                                </pre>
                         </div>
                      </div>
                   </auto-height>

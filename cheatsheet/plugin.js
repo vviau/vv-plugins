@@ -53,6 +53,22 @@ arc.directive("arcCheatSheet", function () {
             instanceData: []
          }
 
+         //=======================
+         // TM1 Rest Api
+
+         //get number of cubes
+         $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (value) {
+            $scope.nbCubes = value.data;
+        });
+
+        //get list of model cubes
+        $http.get(encodeURIComponent($scope.instance) + "/ModelCubes()?$select=Name").then(function (value) {
+         $scope.modelCubes = value.data.value;
+     });
+
+         //========================
+         // Arc Services
+
          $scope.executeChore = function (name) {
             $tm1.choreExecute($scope.instance, name);
          };
@@ -185,7 +201,6 @@ arc.directive("arcCheatSheet", function () {
                // subset.selected has what element was clicked
                $scope.elements = subset.selected;
             };
-            // Probably don't need the expression or expressions (not tested)
             var subset = {
                name: hierarchy.subset,
                expression: hierarchy.expression,
