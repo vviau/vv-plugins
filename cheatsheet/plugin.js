@@ -38,6 +38,10 @@ arc.directive("arcCheatSheet", function () {
             valueToBeSent: '15'
          };
 
+         $scope.showHideControlObjects = $rootScope.uiPrefs.controlObjects;
+
+         $scope.restAPIUrl = encodeURIComponent($scope.instance);
+
          $scope.results = {};
 
          $scope.values = {
@@ -172,6 +176,24 @@ arc.directive("arcCheatSheet", function () {
          $scope.openModalInstances = function (title, message) {
             var dialog = ngDialog.open({
                className: "ngdialog-theme-default large",
+               template: "__/plugins/cheatsheet/modal-json-formater.html",
+               name: "Instances",
+               controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+
+                  $scope.title = $scope.ngDialogData.title;
+                  $scope.message = $scope.ngDialogData.message;
+
+               }],
+               data: {
+                  title: title,
+                  message: message
+               }
+            });
+         };
+
+         $scope.openModal = function (title, message, size) {
+            var dialog = ngDialog.open({
+               className: "ngdialog-theme-default "+size,
                template: "__/plugins/cheatsheet/modal.html",
                name: "Instances",
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {

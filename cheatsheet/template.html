@@ -68,19 +68,44 @@
                Variables
             </uib-tab-heading>
             <div class="row">
-               <div class="col-md-12">
-                  <auto-height>
-                     <div class="row">
-                        <div class="col-md-12">
-                           Get instance name: $scope.instance: {{instance}}
-                        </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>Get instance name</label>
                      </div>
-                     <div class="row">
-                        <div class="col-md-12">
-                           Show/Hide control objects: $rootScope.uiPrefs.controlObjects: {{uiPrefs.controlObjects}}
-                        </div>
+                     <div class="card-body text-center">
+                        {{instance}}
                      </div>
-                  </auto-height>
+                     <div class="card-footer">
+                        <pre><code>$scope.instance</code></pre>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>Check if control objects on/off</label>
+                     </div>
+                     <div class="card-body text-center">
+                        {{showHideControlObjects}}
+                     </div>
+                     <div class="card-footer">
+                        <pre><code>$rootScope.uiPrefs.controlObjects</code></pre>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>Get URL</label>
+                     </div>
+                     <div class="card-body text-center">
+                        {{restAPIUrl}}
+                     </div>
+                     <div class="card-footer">
+                        <pre><code>encodeURIComponent($scope.instance)</code></pre>
+                     </div>
+                  </div>
                </div>
             </div>
          </uib-tab>
@@ -411,11 +436,12 @@ ng-click="executeProcess(selections.process)"
          </uib-tab>
          <uib-tab>
             <uib-tab-heading>
-               TM1 Rest API
+               TM1 REST API
             </uib-tab-heading>
             <p>Some examples about how to get data using the TM1 Rest API and display it in your page. More information
                on the TM1 Rest API can be found
                <a href="https://code.cubewise.com/tm1-rest-api" target="_blank">here</a>.
+               https://localhost:8882/api/v1/$metadata
             </p>
             <div class="row">
                <div class="col-md-4 mt-2">
@@ -426,11 +452,14 @@ ng-click="executeProcess(selections.process)"
                         </label>
                      </div>
                      <div class="card-body">
-                        <div>
-                           query: /Cubes/$count
+                        <div class="alert alert-primary" role="alert">
+                           Query: <label>/Cubes/$count</label>
                         </div>
-                        <div>
-                           value.data: {{nbCubes}}
+                        <div class="alert alert-primary" role="alert">
+                           Result: <label>value.data</label>
+                        </div>
+                        <div class="text-center">
+                           <label>{{nbCubes}}</label>
                         </div>
                      </div>
                   </div>
@@ -457,11 +486,13 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                         </label>
                      </div>
                      <div class="card-body">
-                        <div>
-                           query: /ModelCubes()?$select=Name
+                        <div class="alert alert-primary" role="alert">
+                           Query: <label>/ModelCubes()?$select=Name</label>
+                        </div>
+                        <div class="alert alert-primary" role="alert">
+                           Result: <label>value.data.value</label>
                         </div>
                         <div>
-                           value.data.value:
                            <span ng-repeat="cube in modelCubes" class="badge badge-dark mr-1">{{cube.Name}}</span>
                         </div>
                      </div>
@@ -497,7 +528,7 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                   <auto-height>
                      <div class="row">
                         <!--CARD-->
-                        <div class="col-md-3">
+                        <div class="col-md-4 mt-2">
                            <div class="card">
                               <div class="card-header">
                                  Card
@@ -535,7 +566,7 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                       </pre>
                         </div>
                         <!--TABS-->
-                        <div class="col-md-3">
+                        <div class="col-md-4 mt-2">
                            <div class="card">
                               <div class="card-header">
                                  Tabs
@@ -579,10 +610,10 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                      </pre>
                         </div>
                         <!--Badges-->
-                        <div class="col-md-3">
+                        <div class="col-md-4 mt-2">
                            <div class="card">
                               <div class="card-header">
-                                 Tabs
+                                 Badges
                               </div>
                               <div class="card-body">
                                  <span class="badge badge-primary">Primary</span>
@@ -611,6 +642,176 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
    &lt;span class="badge badge-dark"&gt;Dark&lt;/span&gt;
                            </code>
                                                 </pre>
+                        </div>
+                        <!--Buttons-->
+                        <div class="col-md-4 mt-2">
+                           <div class="card">
+                              <div class="card-header">
+                                 Buttons
+                              </div>
+                              <div class="card-body">
+                                 <button type="button" class="btn btn-primary">Primary</button>
+                                 <button type="button" class="btn btn-secondary">Secondary</button>
+                                 <button type="button" class="btn btn-success">Success</button>
+                                 <button type="button" class="btn btn-danger">Danger</button>
+                                 <button type="button" class="btn btn-warning">Warning</button>
+                                 <button type="button" class="btn btn-info">Info</button>
+                                 <button type="button" class="btn btn-light">Light</button>
+                                 <button type="button" class="btn btn-dark">Dark</button>
+
+                                 <button type="button" class="btn btn-link">Link</button>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB4 = 0" ng-click="displayCodeB4 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB4 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB4 = 0">x</div>
+                           <pre id="codeB4" class="codesnipet" ng-show="displayCodeB4 == 1" readonly content-editable>
+                                                      <code>
+   &lt;button type="button" class="btn btn-primary"&gt;Primary&lt;/button&gt;
+   &lt;button type="button" class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
+   &lt;button type="button" class="btn btn-success"&gt;Success&lt;/button&gt;
+   &lt;button type="button" class="btn btn-danger"&gt;Danger&lt;/button&gt;
+   &lt;button type="button" class="btn btn-warning"&gt;Warning&lt;/button&gt;
+   &lt;button type="button" class="btn btn-info"&gt;Info&lt;/button&gt;
+   &lt;button type="button" class="btn btn-light"&gt;Light&lt;/button&gt;
+   &lt;button type="button" class="btn btn-dark"&gt;Dark&lt;/button&gt;
+   
+   &lt;button type="button" class="btn btn-link"&gt;Link&lt;/button&gt;
+                                                      </code>
+                                                                           </pre>
+                        </div>
+                        <!--Button Group-->
+                        <div class="col-md-4 mt-2">
+                           <div class="card">
+                              <div class="card-header">
+                                 Button Group
+                              </div>
+                              <div class="card-body">
+                                 <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary">Left</button>
+                                    <button type="button" class="btn btn-secondary">Middle</button>
+                                    <button type="button" class="btn btn-secondary">Right</button>
+                                 </div>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB5 = 0" ng-click="displayCodeB5 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB5 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB5 = 0">x</div>
+                           <pre id="codeB5" class="codesnipet" ng-show="displayCodeB5 == 1" readonly content-editable>
+         <code>
+   &lt;div class="btn-group" role="group" aria-label="Basic example"&gt;
+   &lt;button type="button" class="btn btn-secondary"&gt;Left&lt;/button&gt;
+   &lt;button type="button" class="btn btn-secondary"&gt;Middle&lt;/button&gt;
+   &lt;button type="button" class="btn btn-secondary"&gt;Right&lt;/button&gt;
+   &lt;/div&gt;
+         </code>
+                              </pre>
+                        </div>
+                        <!--Input Group-->
+                        <div class="col-md-4 mt-2">
+                           <div class="card">
+                              <div class="card-header">
+                                 Input Group
+                              </div>
+                              <div class="card-body">
+                                 <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                       <span class="input-group-text" id="basic-addon1">@</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                                       aria-describedby="basic-addon1">
+                                    <div class="input-group-append">
+                                       <span class="input-group-text" id="basic-addon2">@example.com</span>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB6 = 0" ng-click="displayCodeB6 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB6 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB6 = 0">x</div>
+                           <pre id="codeB6" class="codesnipet" ng-show="displayCodeB6 == 1" readonly content-editable>
+                                    <code>
+   &lt;div class="input-group mb-3"&gt;
+   &lt;div class="input-group-prepend"&gt;
+      &lt;span class="input-group-text" id="basic-addon1"&gt;@&lt;/span&gt;
+   &lt;/div&gt;
+   &lt;input type="text" class="form-control" placeholder="Username" aria-label="Username"
+      aria-describedby="basic-addon1"&gt;
+   &lt;div class="input-group-append"&gt;
+      &lt;span class="input-group-text" id="basic-addon2"&gt;@example.com&lt;/span&gt;
+   &lt;/div&gt;
+   &lt;/div&gt;
+                                    </code>
+                                                         </pre>
+                        </div>
+                        <!--Alerts-->
+                        <div class="col-md-4 mt-2">
+                           <div class="card">
+                              <div class="card-header">
+                                 Alerts
+                              </div>
+                              <div class="card-body">
+                                 <div class="alert alert-primary" role="alert">
+                                    A simple primary alert—check it out!
+                                 </div>
+                                 <div class="alert alert-secondary" role="alert">
+                                    A simple secondary alert—check it out!
+                                 </div>
+                                 <div class="alert alert-success" role="alert">
+                                    A simple success alert—check it out!
+                                 </div>
+                                 <div class="alert alert-danger" role="alert">
+                                    A simple danger alert—check it out!
+                                 </div>
+                                 <div class="alert alert-warning" role="alert">
+                                    A simple warning alert—check it out!
+                                 </div>
+                                 <div class="alert alert-info" role="alert">
+                                    A simple info alert—check it out!
+                                 </div>
+                                 <div class="alert alert-light" role="alert">
+                                    A simple light alert—check it out!
+                                 </div>
+                                 <div class="alert alert-dark" role="alert">
+                                    A simple dark alert—check it out!
+                                 </div>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB3 = 0" ng-click="displayCodeB3 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB3 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB3 = 0">x</div>
+                           <pre id="codeB3" class="codesnipet" ng-show="displayCodeB3 == 1" readonly content-editable>
+                                                                                 <code>
+                                 &lt;div class="alert alert-primary" role="alert"&gt;
+                                 A simple primary alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-secondary" role="alert"&gt;
+                                 A simple secondary alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-success" role="alert"&gt;
+                                 A simple success alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-danger" role="alert"&gt;
+                                 A simple danger alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-warning" role="alert"&gt;
+                                 A simple warning alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-info" role="alert"&gt;
+                                 A simple info alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-light" role="alert"&gt;
+                                 A simple light alert—check it out!
+                              &lt;/div&gt;
+                              &lt;div class="alert alert-dark" role="alert"&gt;
+                                 A simple dark alert—check it out!
+                              &lt;/div&gt;
+                                                                                 </code>
+                                                                                                      </pre>
                         </div>
                      </div>
                   </auto-height>
@@ -867,6 +1068,87 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                </div>
             </div>
          </uib-tab>
+         <uib-tab>
+            <uib-tab-heading>
+               Third Party Libraries
+            </uib-tab-heading>
+            <p>To see all third party libraries available in Arc, check the About page by clicking the
+               <button class="btn btn-dark btn-sm" ng-click="" title="About">
+                  <i class="fa fa-info fa-fw"></i>
+               </button>
+               button at the top right corner. Below the most popular:
+            </p>
+            <div class="row">
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label><a href="https://github.com/likeastore/ngDialog" target="_blank">ngDialog</a></label>
+                     </div>
+                     <div class="card-body">
+                        <p>Modals and popups 
+                        </p>
+                        <div class="text-center">
+                              <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-primary" ng-click="openModal('My small modal','My message','small')">small</button>
+                                    <button type="button" class="btn btn-primary" ng-click="openModal('My medium modal','My message','medium')">medium</button>
+                                    <button type="button" class="btn btn-primary" ng-click="openModal('My large modal','My message','large')">large</button>
+                                    </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-init="displayCodeL1 = 0" ng-click="displayCodeL1 = 1" class="btn btn-info open-copy-code">
+                        <i class="fa fa-code" aria-hidden="true"></i>
+                     </div>
+                     <div ng-show="displayCodeL1 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeL1 = 0">x
+                     </div>
+                     <pre id="codeL1" class="codesnipet" ng-show="displayCodeL1 == 1" readonly content-editable>
+   <code>
+   <kbd> plugin.js</kbd>
+   $scope.openModal = function (title, message, size) {
+      var dialog = ngDialog.open({
+         className: "ngdialog-theme-default "+size,
+         template: "__/plugins/cheatsheet/modal.html",
+         name: "Instances",
+         controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+
+            $scope.title = $scope.ngDialogData.title;
+            $scope.message = $scope.ngDialogData.message;
+
+         }],
+         data: {
+            title: title,
+            message: message
+         }
+      });
+   };
+   <kbd> template.html:</kbd>
+   ng-click="openModal('My small modal','My message','small')"
+   </code>
+                   </pre>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                           <label><a href="https://lodash.com/docs/4.17.11" target="_blank">Lodash</a></label>
+                     </div>
+                     <div class="card-body">
+                           <p>A modern JavaScript utility library delivering modularity, performance & extras.</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                           <label><a href="https://morgul.github.io/ui-bootstrap4/" target="_blank">UI Bootstrap 4</a></label>
+                     </div>
+                     <div class="card-body text-center">
+                        <p>Bootstrap components written in pure AngularJS by the AngularUI Team</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </uib-tab>
+
       </uib-tabset>
 
    </div>
