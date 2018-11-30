@@ -97,20 +97,27 @@
                                  <li class="list-group-item"><strong>1.</strong> Duplicate the folder <strong>C:\Arc\plugins\template-page</strong>
                                  </li>
                                  <li class="list-group-item"><strong>2.</strong> Rename the folder my-new-plugin</li>
-                                 <li class="list-group-item"><strong>3.</strong> Open plugins\my-new-plugin\<strong>plugin.js</strong> file</li>
-                                 <li class="list-group-item"><strong>4.</strong> To activate the plugin, you have to uncomment the first part by removing /* line 4 and */
+                                 <li class="list-group-item"><strong>3.</strong> Open plugins\my-new-plugin\<strong>plugin.js</strong>
+                                    file</li>
+                                 <li class="list-group-item"><strong>4.</strong> To activate the plugin, you have to
+                                    uncomment the first part by removing /* line 4 and */
                                     line 19</li>
                                  <li class="list-group-item"><strong>5.</strong> <a href="https://code.cubewise.com/canvas-docs/disable-cache"
                                        target="_blank">Disable cache</a>, when working on plugins you need to disable
                                     the your browser cache to see the changes</li>
-                                 <li class="list-group-item"><strong>6.</strong> Refresh Arc, you should now see your new plugin under
+                                 <li class="list-group-item"><strong>6.</strong> Refresh Arc, you should now see your
+                                    new plugin under
                                     tools in the left-navigation pane with name <strong>Template Title</strong></li>
-                                 <li class="list-group-item"><strong>7.</strong>To update the menu title, replace <strong>Template Title</strong>
+                                 <li class="list-group-item"><strong>7.</strong>To update the menu title, replace
+                                    <strong>Template Title</strong>
                                     line 8 of the plugin.js with your new title</li>
-                                    <li class="list-group-item"><strong>8.</strong>To update the menu icon, replace <strong>fa-paw</strong>
-                                       line 9 of the plugin.js with your new icon</li>
-                                       <li class="list-group-item"><strong>9.</strong>Make your plugin unique by replacing <strong>arcTemplate</strong> line 8 and 21</li>
-                                       <li class="list-group-item"><strong>10.</strong> Replace the folder name <strong>template-page</strong> line 28 with your new folder name</li>
+                                 <li class="list-group-item"><strong>8.</strong>To update the menu icon, replace
+                                    <strong>fa-paw</strong>
+                                    line 9 of the plugin.js with your new icon</li>
+                                 <li class="list-group-item"><strong>9.</strong>Make your plugin unique by replacing
+                                    <strong>arcTemplate</strong> line 8 and 21</li>
+                                 <li class="list-group-item"><strong>10.</strong> Replace the folder name <strong>template-page</strong>
+                                    line 28 with your new folder name</li>
                               </ul>
                      </div>
                   </div>
@@ -369,6 +376,24 @@ ng-click="executeProcess(selections.process)"
                         </div>
                      </div>
                   </div>
+                  <div ng-init="displayCodeS2 = 0" ng-click="displayCodeS2 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeS2 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS2 = 0">x
+                  </div>
+                  <pre id="codeS2" class="codesnipet" ng-show="displayCodeS2 == 1" readonly content-editable>
+<code><kbd> plugin.js:</kbd>
+   $scope.getInstances = function () {
+      $tm1.instances().then(function (data) {
+         $scope.lists.instances = data;
+         //Open Modal
+         $scope.openModalInstances("List of instances", $scope.lists.instances);
+      });
+   };
+<kbd> template.html:</kbd>
+ng-click="getInstances()"
+</code>
+                   </pre>
                </div>
                <div class="col-md-6 mt-2">
                   <div class="card">
@@ -389,6 +414,24 @@ ng-click="executeProcess(selections.process)"
                         </div>
                      </div>
                   </div>
+                  <div ng-init="displayCodeS3 = 0" ng-click="displayCodeS3 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeS3 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS3 = 0">x
+                  </div>
+                  <pre id="codeS3" class="codesnipet" ng-show="displayCodeS3 == 1" readonly content-editable>
+<code><kbd> plugin.js:</kbd>
+   $scope.getInstance = function (name) {
+      $scope.options.showInstanceInfo = !$scope.options.showInstanceInfo;
+      $tm1.instance(name).then(function (data) {
+         $scope.lists.instanceData = data;
+         $scope.openModalInstances($scope.selections.instance, $scope.lists.instanceData);
+      });
+   };
+<kbd> template.html:</kbd>
+ng-click="getInstance(selections.instance)"
+</code>
+                   </pre>
                </div>
                <div class="col-md-6 mt-2">
                   <div class="card">
@@ -410,6 +453,23 @@ ng-click="executeProcess(selections.process)"
                         </div>
                      </div>
                   </div>
+                  <div ng-init="displayCodeS4 = 0" ng-click="displayCodeS4 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeS4 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS4 = 0">x
+                  </div>
+                  <pre id="codeS4" class="codesnipet" ng-show="displayCodeS4 == 1" readonly content-editable>
+<code><kbd> plugin.js:</kbd>
+   $scope.getCubeDimensions = function (cube) {
+      $tm1.cubeDimensions($scope.instance, cube).then(function (data) {
+         $scope.lists.dimensions = data;
+         $scope.openModalInstances($scope.selections.cube, $scope.lists.dimensions);
+      });
+   };
+<kbd> template.html:</kbd>
+ng-click="getCubeDimensions(selections.cube)"
+</code>
+                   </pre>
                </div>
                <div class="col-md-6 mt-2">
                   <div class="card">
@@ -436,6 +496,23 @@ ng-click="executeProcess(selections.process)"
                         </div>
                      </div>
                   </div>
+                  <div ng-init="displayCodeS5 = 0" ng-click="displayCodeS5 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeS5 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeS5 = 0">x
+                  </div>
+                  <pre id="codeS5" class="codesnipet" ng-show="displayCodeS5 == 1" readonly content-editable>
+<code><kbd> plugin.js:</kbd>
+   $scope.sendValueToCell = function (value) {
+      $tm1.cellUpdate(value, $scope.instance, $scope.defaults.systemCube, $scope.defaults.element1, $scope.defaults.element2).then(function (data) {
+         //console.log(data.status);
+         $scope.getValueFromCell();
+      });
+   };
+<kbd> template.html:</kbd>
+ng-click="sendValueToCell(selections.valueToBeSent)" 
+</code>
+                   </pre>
                </div>
             </div>
          </uib-tab>
