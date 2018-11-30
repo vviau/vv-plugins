@@ -63,12 +63,30 @@ arc.directive("arcCheatSheet", function () {
          //get number of cubes
          $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (value) {
             $scope.nbCubes = value.data;
-        });
+         });
 
-        //get list of model cubes
-        $http.get(encodeURIComponent($scope.instance) + "/ModelCubes()?$select=Name").then(function (value) {
-         $scope.modelCubes = value.data.value;
-     });
+         //get list of model cubes
+         $http.get(encodeURIComponent($scope.instance) + "/ModelCubes()?$select=Name").then(function (value) {
+            $scope.modelCubes = value.data.value;
+         });
+
+         //get HTTPPortNumber
+         $http.get(encodeURIComponent($scope.instance) + "/Configuration/HTTPPortNumber/$value").then(function (value) {
+            $scope.httpPortNumber = value.data;
+         });
+
+         //get Product Version
+         $http.get(encodeURIComponent($scope.instance) + "/Configuration/ProductVersion/$value").then(function (value) {
+            $scope.productVersion = value.data;
+         });
+
+         //get AdminHost
+         $http.get(encodeURIComponent($scope.instance) + "/Configuration/AdminHost/$value").then(function (value) {
+            $scope.adminHost = value.data;
+            if($scope.adminHost==''){
+               $scope.adminHost = 'localhost';
+            }
+         });
 
          //========================
          // Arc Services
@@ -193,7 +211,7 @@ arc.directive("arcCheatSheet", function () {
 
          $scope.openModal = function (title, message, size) {
             var dialog = ngDialog.open({
-               className: "ngdialog-theme-default "+size,
+               className: "ngdialog-theme-default " + size,
                template: "__/plugins/cheatsheet/modal.html",
                name: "Instances",
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {

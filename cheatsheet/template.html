@@ -65,6 +65,64 @@
       <uib-tabset>
          <uib-tab>
             <uib-tab-heading>
+               Getting Started
+            </uib-tab-heading>
+            <div class="row">
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label><i class="fa fa-book""></i> Most important articles</label>
+                     </div>
+                     <div class="
+                              card-body">
+                              <ul class="list-group list-group-flush">
+                                 <li class="list-group-item"><a href="https://code.cubewise.com/arc-plugins/" target="_blank">Plugin
+                                       Help Section</a></li>
+                                 <li class="list-group-item"><a href="https://code.cubewise.com/arc-docs/how-plugins-work"
+                                       target="_blank">How Plugins work</a></li>
+                                 <li class="list-group-item"><a href="https://code.cubewise.com/arc-docs/how-to-create-your-plugins"
+                                       target="_blank">How to create your plugins</a></li>
+                              </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-8 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label><i class="fa fa-book""></i> Build your first plugin</label>
+                     </div>
+                     <div class="
+                              card-body">
+                              <ul class="list-group list-group-flush">
+                                 <li class="list-group-item"><strong>1.</strong> Duplicate the folder <strong>C:\Arc\plugins\template-page</strong>
+                                 </li>
+                                 <li class="list-group-item"><strong>2.</strong> Rename the folder my-new-plugin</li>
+                                 <li class="list-group-item"><strong>3.</strong> Open plugins\my-new-plugin\<strong>plugin.js</strong> file</li>
+                                 <li class="list-group-item"><strong>4.</strong> To activate the plugin, you have to uncomment the first part by removing /* line 4 and */
+                                    line 19</li>
+                                 <li class="list-group-item"><strong>5.</strong> <a href="https://code.cubewise.com/canvas-docs/disable-cache"
+                                       target="_blank">Disable cache</a>, when working on plugins you need to disable
+                                    the your browser cache to see the changes</li>
+                                 <li class="list-group-item"><strong>6.</strong> Refresh Arc, you should now see your new plugin under
+                                    tools in the left-navigation pane with name <strong>Template Title</strong></li>
+                                 <li class="list-group-item"><strong>7.</strong>To update the menu title, replace <strong>Template Title</strong>
+                                    line 8 of the plugin.js with your new title</li>
+                                    <li class="list-group-item"><strong>8.</strong>To update the menu icon, replace <strong>fa-paw</strong>
+                                       line 9 of the plugin.js with your new icon</li>
+                                       <li class="list-group-item"><strong>9.</strong>Make your plugin unique by replacing <strong>arcTemplate</strong> line 8 and 21</li>
+                                       <li class="list-group-item"><strong>10.</strong> Replace the folder name <strong>template-page</strong> line 28 with your new folder name</li>
+                              </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+         </uib-tab>
+         <uib-tab>
+            <uib-tab-heading>
                Variables
             </uib-tab-heading>
             <div class="row">
@@ -441,7 +499,10 @@ ng-click="executeProcess(selections.process)"
             <p>Some examples about how to get data using the TM1 Rest API and display it in your page. More information
                on the TM1 Rest API can be found
                <a href="https://code.cubewise.com/tm1-rest-api" target="_blank">here</a>.
-               https://localhost:8882/api/v1/$metadata
+               https://{{adminHost}}:{{httpPortNumber}}/api/v1/$metadata
+            </p>
+            <p>To dig deeper in the TM1 REST API, you should have a look at the metadata of your instance at
+               <a href="https://{{adminHost}}:{{httpPortNumber}}/api/v1/$metadata" target="_blank">https://{{adminHost}}:{{httpPortNumber}}/api/v1/$metadata</a>.
             </p>
             <div class="row">
                <div class="col-md-4 mt-2">
@@ -511,6 +572,40 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
    }); 
          </code>
                             </pre>
+               </div>
+               <div class="col-md-4 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>
+                           Get Product Version
+                        </label>
+                     </div>
+                     <div class="card-body">
+                        <div class="alert alert-primary" role="alert">
+                           Query: <label>/Configuration/ProductVersion/$value</label>
+                        </div>
+                        <div class="alert alert-primary" role="alert">
+                           Result: <label>value.data</label>
+                        </div>
+                        <div class="text-center">
+                           <label>{{productVersion}}</label>
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-init="displayCodeR2 = 0" ng-click="displayCodeR2 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeR2 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeR2 = 0">x</div>
+                  <pre id="codeR2" class="codesnipet" ng-show="displayCodeR2 == 1" readonly content-editable>
+      <code>
+         
+         
+         <kbd> plugin.js:</kbd>
+   $http.get(encodeURIComponent($scope.instance) + "/Configuration/ProductVersion/$value").then(function (value) {
+      $scope.productVersion = value.data;
+   }); 
+      </code>
+                         </pre>
                </div>
             </div>
          </uib-tab>
@@ -1028,6 +1123,35 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
 </code>
                          </pre>
                         </div>
+                        <!--ng-class-->
+                        <div class="col-md-3 mb-3">
+                           <div class="card" ng-class="{'bg-dark text-white':changeClass==true}">
+                              <div class="card-header" style="padding: 5px 10px;">
+                                 <label>
+                                    ng-class
+                                 </label>
+                              </div>
+                              <div class="card-body text-center">
+                                 <div class="text-center" ng-init="changeClass=false">
+                                    <button type="button" class="btn btn-primary" ng-click="changeClass=!changeClass">Click</button>
+                                 </div>
+                              </div>
+                              <div class="card-footer">
+                                 <span>Click to change the class</span>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeA7 = 0" ng-click="displayCodeA7 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeA7 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeA7 = 0">x
+                           </div>
+                           <pre id="codeA7" class="codesnipet" ng-show="displayCodeA7 == 1" readonly content-editable>
+<code>
+<kbd> template.html:</kbd>
+   ng-class="{'bg-dark text-white':changeClass==true}"
+</code>
+                         </pre>
+                        </div>
                         <!--ng-if-->
                         <div class="col-md-3 mb-3">
                            <div class="card">
@@ -1051,17 +1175,48 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                                  <span>Show/Hide content</span>
                               </div>
                            </div>
-                           <div ng-init="displayCodeA7 = 0" ng-click="displayCodeA7 = 1" class="btn btn-info open-copy-code">
+                           <div ng-init="displayCodeA8 = 0" ng-click="displayCodeA8 = 1" class="btn btn-info open-copy-code">
                               <i class="fa fa-code" aria-hidden="true"></i>
                            </div>
-                           <div ng-show="displayCodeA7 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeA7 = 0">x
+                           <div ng-show="displayCodeA8 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeA8 = 0">x
                            </div>
-                           <pre id="codeA7" class="codesnipet" ng-show="displayCodeA7 == 1" readonly content-editable>
-<code>
-<kbd> template.html:</kbd>
-   ng-if="showValue"
-</code>
-                         </pre>
+                           <pre id="codeA8" class="codesnipet" ng-show="displayCodeA8 == 1" readonly content-editable>
+                           <code>
+                           <kbd> template.html:</kbd>
+                              ng-if="showValue"
+                           </code>
+                                                    </pre>
+                        </div>
+                        <!--ng-repeat-->
+                        <div class="col-md-3 mb-3">
+                           <div class="card">
+                              <div class="card-header" style="padding: 5px 10px;">
+                                 <label>
+                                    ng-repeat
+                                 </label>
+                              </div>
+                              <div class="card-body text-center">
+                                 <div class="row" ng-init="showValue=true">
+                                    <div>
+                                       <span ng-repeat="cube in modelCubes" class="badge badge-dark mr-1">{{cube.Name}}</span>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="card-footer">
+                                 <span>Repeat a component</span>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeA9 = 0" ng-click="displayCodeA9 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeA9 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeA9 = 0">x
+                           </div>
+                           <pre id="codeA9" class="codesnipet" ng-show="displayCodeA9 == 1" readonly content-editable>
+   <code>
+   <kbd> template.html:</kbd>
+   &lt;span ng-repeat="cube in modelCubes" class="badge badge-dark mr-1"&gt;<code ng-non-bindable>{{cube.Name}}</code>&lt;/span&gt;
+   </code>
+                              </pre>
                         </div>
                      </div>
                   </auto-height>
@@ -1085,23 +1240,23 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                         <label><a href="https://github.com/likeastore/ngDialog" target="_blank">ngDialog</a></label>
                      </div>
                      <div class="card-body">
-                        <p>Modals and popups 
+                        <p>Modals and popups
                         </p>
                         <div class="text-center">
-                              <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-primary" ng-click="openModal('My small modal','My message','small')">small</button>
-                                    <button type="button" class="btn btn-primary" ng-click="openModal('My medium modal','My message','medium')">medium</button>
-                                    <button type="button" class="btn btn-primary" ng-click="openModal('My large modal','My message','large')">large</button>
-                                    </div>
+                           <div class="btn-group" role="group" aria-label="Basic example">
+                              <button type="button" class="btn btn-primary" ng-click="openModal('My small modal','My message','small')">small</button>
+                              <button type="button" class="btn btn-primary" ng-click="openModal('My medium modal','My message','medium')">medium</button>
+                              <button type="button" class="btn btn-primary" ng-click="openModal('My large modal','My message','large')">large</button>
+                           </div>
                         </div>
                      </div>
                   </div>
                   <div ng-init="displayCodeL1 = 0" ng-click="displayCodeL1 = 1" class="btn btn-info open-copy-code">
-                        <i class="fa fa-code" aria-hidden="true"></i>
-                     </div>
-                     <div ng-show="displayCodeL1 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeL1 = 0">x
-                     </div>
-                     <pre id="codeL1" class="codesnipet" ng-show="displayCodeL1 == 1" readonly content-editable>
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeL1 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeL1 = 0">x
+                  </div>
+                  <pre id="codeL1" class="codesnipet" ng-show="displayCodeL1 == 1" readonly content-editable>
    <code>
    <kbd> plugin.js</kbd>
    $scope.openModal = function (title, message, size) {
@@ -1129,17 +1284,17 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                <div class="col-md-4 mt-2">
                   <div class="card">
                      <div class="card-header" style="padding: 5px 10px;">
-                           <label><a href="https://lodash.com/docs/4.17.11" target="_blank">Lodash</a></label>
+                        <label><a href="https://lodash.com/docs/4.17.11" target="_blank">Lodash</a></label>
                      </div>
                      <div class="card-body">
-                           <p>A modern JavaScript utility library delivering modularity, performance & extras.</p>
+                        <p>A modern JavaScript utility library delivering modularity, performance & extras.</p>
                      </div>
                   </div>
                </div>
                <div class="col-md-4 mt-2">
                   <div class="card">
                      <div class="card-header" style="padding: 5px 10px;">
-                           <label><a href="https://morgul.github.io/ui-bootstrap4/" target="_blank">UI Bootstrap 4</a></label>
+                        <label><a href="https://morgul.github.io/ui-bootstrap4/" target="_blank">UI Bootstrap 4</a></label>
                      </div>
                      <div class="card-body text-center">
                         <p>Bootstrap components written in pure AngularJS by the AngularUI Team</p>
