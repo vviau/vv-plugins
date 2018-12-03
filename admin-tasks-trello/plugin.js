@@ -1,9 +1,9 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("adminTasksVertical", "Admin Tasks Vertical", "page", {
+    $rootScope.plugin("adminTasksHorizontal", "Admin Tasks Trello", "page", {
         menu: "tools",
-        icon: "fa-arrow-circle-o-down",
+        icon: "fa-trello",
         description: "This plugin can be used to search any TM1 objects",
         author: "Cubewise",
         url: "https://github.com/cubewise-code/arc-plugins",
@@ -12,14 +12,14 @@ arc.run(['$rootScope', function ($rootScope) {
 
 }]);
 
-arc.directive("adminTasksVertical", function () {
+arc.directive("adminTasksHorizontal", function () {
     return {
         restrict: "EA",
         replace: true,
         scope: {
             instance: "=tm1Instance"
         },
-        templateUrl: "__/plugins/admin-tasks-vertical/template.html",
+        templateUrl: "__/plugins/admin-tasks-trello/template.html",
         link: function ($scope, element, attrs) {
 
         },
@@ -39,62 +39,72 @@ arc.directive("adminTasksVertical", function () {
             };
 
             $scope.tabs = [
-                { number:0, title:'Monthly', stepPercentage:0, content:[
+                { title:'Monthly', stepPercentage:0, content:[
                     {
-                        number: '1',
-                        title: 'Update System Info Parameters',
+                        title: '1 - Update System Info Parameters',
                         open: true,
                         actions: [{
+                            category: 'bg-info',
                             name: 'Open System Info cube',
                             cube: 'System Info',
                             view: 'Default'
                         },{
+                            category: 'bg-info',
                             name: 'Check Region Subset',
                             dimension: 'Region',
                             hierarchy: 'Region',
                             subset: 'All Countries'
+                        },{
+                            category: 'bg-warning',
+                            name: 'Run Time subsets update',
+                            process: 'Dim.Date.LoadFromODBC'
                         }]
                     },
                     {
-                        number: '2',
-                        title: 'Load General Ledger Data',
+                        title: '2 - Load General Ledger Data',
                         open: true,
                         actions: [{
+                            category: 'bg-warning',
                             name: 'Load from File',
                             process: 'Cube.GeneralLedger.LoadFromFile'
                         },
                         {
+                            category: 'bg-warning',
                             name: 'Run Migrate Daily chore',
                             chore: 'Migrate Daily'
                         },
                         {
+                            category: 'bg-info',
                             name: 'Save Data',
                             process: 'Bedrock.Server.SaveDataAll'
                         }]
                     },
                     {
-                        number: '3',
-                        title: 'Run TI and then check view',
+                        title: '3 - Run TI and then check view',
                         open: true,
                         actions: [{
-                            name: 'Load from File',
-                            process: 'Cube.GeneralLedger.LoadFromFile'
+                            category: 'bg-warning',
+                            name: 'Bedrock Server Wait',
+                            process: 'Bedrock.Server.Wait'
                         },
                         {
+                            category: 'bg-success',
                             name: 'System Info',
                             type: 'openView',
                             cube: 'System Info',
                             view: 'Default'
                         }]
-                    },{
-                        number: '4',
-                        title: 'Run TI and then check view',
+                    },
+                    {
+                        title: '4 - Check Reporting',
                         open: true,
                         actions: [{
+                            category: 'bg-warning',
                             name: 'Load from File',
                             process: 'Cube.GeneralLedger.LoadFromFile'
                         },
                         {
+                            category: 'bg-success',
                             name: 'System Info',
                             type: 'openView',
                             cube: 'System Info',
@@ -102,16 +112,18 @@ arc.directive("adminTasksVertical", function () {
                         }]
                     }
                 ] },
-                { number:1, title:'Weekly', stepPercentage:0, content:[
+                { 
+                    title:'Weekly', stepPercentage:0, content:[
                     {
-                        number: '1',
                         title: 'Update System Info Parameters',
                         open: true,
                         actions: [{
+                            category: '',
                             name: 'Open System Info cube',
                             cube: 'System Info',
                             view: 'Default'
                         },{
+                            category: '',
                             name: 'Check Region Subset',
                             dimension: 'Region',
                             hierarchy: 'Region',
@@ -121,17 +133,17 @@ arc.directive("adminTasksVertical", function () {
                 ] }
               ];
 
-              $scope.calculatePercentage = function (tab) {
-                var nbStepsOpen = 0 ;
-                var nbStepsTotal = 0 ;
-                for(var step in $scope.tabs[tab].content){
-                     nbStepsTotal ++;
-                     if($scope.tabs[tab].content[step].open == false){
-                         nbStepsOpen ++;
-                     }
-                } 
-                $scope.tabs[tab].stepPercentage = parseInt(nbStepsOpen / nbStepsTotal * 100);
-             };
+            $scope.calculatePercentage = function (tab) {
+               var nbStepsOpen = 0 ;
+               var nbStepsTotal = 0 ;
+               for(var step in tab.content){
+                    nbStepsTotal ++;
+                    if(tab.content[step].open == false){
+                        nbStepsOpen ++;
+                    }
+               } 
+               tab.stepPercentage = parseInt(nbStepsOpen / nbStepsTotal * 100);
+            };
 
             $scope.executeChore = function (name) {
                 $tm1.choreExecute($scope.instance, name);
@@ -147,7 +159,7 @@ arc.directive("adminTasksVertical", function () {
 
             $scope.$on("close-tab", function (event, args) {
                 // Event to capture when a user has clicked close on the tab
-                if (args.page == "adminTasksVertical" && args.instance == $scope.instance && args.name == null) {
+                if (args.page == "adminTasksHorizontal" && args.instance == $scope.instance && args.name == null) {
                     // The page matches this one so close it
                     $rootScope.close(args.page, { instance: $scope.instance });
                 }
