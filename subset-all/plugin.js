@@ -23,7 +23,7 @@ arc.directive("cubewiseSubset", function () {
         link: function ($scope, element, attrs) {
 
         },
-        controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", function ($scope, $rootScope, $http, $tm1, $translate, $timeout) {
+        controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "ngDialog",function ($scope, $rootScope, $http, $tm1, $translate, $timeout,ngDialog) {
 
             // Store the active tab index
             $scope.selections = {
@@ -63,6 +63,67 @@ arc.directive("cubewiseSubset", function () {
                 }
             };
 
+                     //OPEN MODAL WITH VIEWS TO BE DELETED
+         $scope.openModalSubset = function () {
+            var dialog = ngDialog.open({
+               className: "ngdialog-theme-default medium",
+               template: "__/plugins/subset-all/m-delete-subset.html",
+               name: "Subsets",
+               scope: $scope,
+               controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+                  $scope.subsets = $scope.ngDialogData.subsets;
+
+                  //DELETE ONE SUBSET
+                  $scope.deleteSubset = function(index){
+                     subset = $scope.subsetsToDelete[index];
+                     var subsetFullName = subset.fqn;
+                     var semiColumn = subsetFullName.indexOf(":");
+                     var dimension = subsetFullName.substr(0, semiColumn);
+                     var hierarchyAndSubset = subsetFullName.substr(semiColumn + 1, subsetFullName.length - semiColumn + 1);
+                     var semiColumn2 = hierarchyAndSubset.indexOf(":");
+                     var hierarchy = hierarchyAndSubset.substr(0, semiColumn2);
+                     var subset = hierarchyAndSubset.substr(semiColumn2 + 1, hierarchyAndSubset.length - semiColumn2 + 1);
+                     $http.delete(encodeURIComponent($scope.instance) + "/Dimensions('" + dimension + "')/Hierarchies('" + hierarchy + "')/Subsets('" + subset + "')").then(function (result) {
+                        if (result.status == 204) {
+                           // Add subsets to subsetsDeleted list
+                           $scope.subsetsDeleted.push(subsetFullName);
+                           //Remove subset from subset to delete list
+                           _.remove($scope.subsetsToDelete, function (i) {
+                              return i.fqn === subsetFullName;
+                           });
+                           var message = {class:'success',
+                                          icon:'fa-check-square-o',
+                                          message: subsetFullName+ " has been deleted"};
+                           $scope.messages.push(message);
+                        }else{
+                           //Can't delete subset
+                           $scope.errorMessage = "Delete "+subsetFullName+" failed because "+result.data.error.message;
+                           var message = {class:"warning",
+                                          icon:'fa-warning',
+                                          message:"Delete "+subsetFullName+" failed because "+result.data.error.message};
+                           $scope.messages.push(message);
+                        }
+                     });
+                  }
+                  //DELETE SUBSETS
+                  $scope.deleteSubsets = function () {
+                     // Delete subsets
+                     //Debugger;
+                     $scope.subsetsDeleted = [];
+                     $scope.messages = [];
+                     for (var s in $scope.subsetsToDelete) {
+                        $scope.deleteSubset(s);
+                     }
+                  }
+               }],
+               data: {
+                  subsets: $scope.subsetsToDelete,
+                  subsetsDeleted: $scope.subsetsDeleted,
+                  errorMessage: $scope.errorMessage,
+               }
+            });
+         };
+
             // GET DIMENSION DATA
             $scope.getAllSubsets = function () {
                $scope.lists.allSubsets=[];
@@ -71,13 +132,11 @@ arc.directive("cubewiseSubset", function () {
                     //LOOP THROUGH DIMENSIONS
                     _.forEach($scope.lists.dimensions, function (value, key) {
                         var dimension = value.Name;
-                        //console.log(dimension);
                         $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + dimension + "')/Hierarchies").then(function (hierarchiesData) {
                             $scope.lists.hierarchies = hierarchiesData.data.value;
                             //LOOP THROUGH HIERARCHIES FOR A DIMENSION
                             _.forEach($scope.lists.hierarchies, function (value, key) {
-                                var hierarchy = value.Name;
-                                //console.log(dimension, hierarchy);                                                                
+                                var hierarchy = value.Name;                                                              
                                 $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + dimension + "')/Hierarchies('" + hierarchy + "')/Subsets").then(function (subsetsData) {
                                     $scope.lists.subsets = subsetsData;
                                     //LOOP THROUGH SUBSET FOR A HIERARCHY FOR A DIMENSION

@@ -20,7 +20,7 @@
          <div class="toolbar">
             <label class="page-title">
                <i class="fa subset" style="padding-right:5px" aria-hidden="true"></i>
-               All subsets</label>
+               All Subsets</label>
             <div class="btn-toolbar  pull-right">
                <div class="input-group">
                   <input type="text" ng-model="select.filterallSubsets" placeholder="Search" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
@@ -31,7 +31,7 @@
                      </button>
                   </span>
                   <span class="input-group-append">
-                     <button ng-disabled="saving || !subsetsToDelete.length" class="btn btn-danger" title="Delete" ng-click="deleteObjects()"
+                     <button ng-disabled="saving || !subsetsToDelete.length" class="btn btn-danger" title="Delete" ng-click="openModalSubset()"
                         disabled="disabled">
                         <i class="fa fa-fw fa-trash"></i>
                      </button>
@@ -49,7 +49,7 @@
                   <tr>
                      <th class="text-center"> </th>
                      <th class="text-center"> Subset</th>
-                     <th class="text-center"> Expression</th>
+                     <th class="text-center"> MDX Expression</th>
                   </tr>
                </thead>
                <tbody>
