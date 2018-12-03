@@ -40,7 +40,7 @@ arc.directive("arcCheatSheet", function () {
 
          $scope.showHideControlObjects = $rootScope.uiPrefs.controlObjects;
 
-         $scope.restAPIUrl = encodeURIComponent($scope.instance);
+         $scope.encodeURIComponent = encodeURIComponent;
 
          $scope.results = {};
 
