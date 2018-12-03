@@ -26,7 +26,7 @@
                   <input type="text" ng-model="select.filterallSubsets" placeholder="Search" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                      style="display:inline; width:200px;">
                   <span class="input-group-append input-group-prepend">
-                     <button class="btn btn-primary" title="Refresh" ng-click="refresh()">
+                     <button class="btn btn-primary" title="Refresh" ng-click="getAllSubsets()">
                         <i class="fa fa-fw fa-refresh"></i>
                      </button>
                   </span>
@@ -60,8 +60,8 @@
                         <input type="checkbox" ng-disabled="item.chores.length" ng-model="item.change" ng-change="toggleSubsetsToDelete(item)" class="ng-pristine ng-untouched ng-valid ng-empty">
                      </td>
                      <td>
-                        <a href="#/dimension/{{instance}}/{{item.dimension}}/{{item.hierarchy}}/subset/{{item.shortName}}">
-                           {{item.shortName}}
+                        <a href="#/dimension/{{instance}}/{{item.dimension}}/{{item.hierarchy}}/subset/{{item.name}}">
+                           {{item.fqn}}
                         </a>
                      </td>
                      <td>

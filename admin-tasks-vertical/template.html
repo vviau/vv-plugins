@@ -27,7 +27,7 @@
                                                 <h5 class="card-title">
                                                     <i class="fa cubes" style="margin-right:5px"></i>{{action.name}}</h5>
                                                 <button class="btn btn-primary" title="{{action.view}}">
-                                                    <a href="#/cube/view/{{instance}}/{{action.cube}}/{{action.view}}?name={{action.view}}" ng-click="user_clicks_branch(row.branch)"
+                                                    <a href="#/cube/{{instance}}/{{action.cube}}/view/{{action.view}}" ng-click="user_clicks_branch(row.branch)"
                                                         ng-class="[row.branch.item_class]">
                                                         <i class="fa fa-fw fa-share" style="color:white"></i>
                                                     </a>
@@ -38,7 +38,7 @@
                                                 <h5 class="card-title">
                                                     <i class="fa subset" style="margin-right:5px"></i>{{action.name}}</h5>
                                                 <button class="btn btn-primary" title="{{action.subset}}">
-                                                    <a href="#/cube/view/{{instance}}/{{action.dimension}}/{{action.hierarchy}}/{{action.subset}}?name={{action.subset}}" ng-click="user_clicks_branch(row.branch)"
+                                                    <a href="#/dimension/{{instance}}/{{action.dimension}}/{{action.hierarchy}}/subset/{{action.subset}}" ng-click="user_clicks_branch(row.branch)"
                                                         ng-class="[row.branch.item_class]">
                                                         <i class="fa fa-fw fa-share" style="color:white"></i>
                                                     </a>
