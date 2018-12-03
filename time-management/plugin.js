@@ -322,6 +322,13 @@ arc.directive("arcTimeManagement", function () {
          };
          $scope.values = {};
 
+         //==============
+         // Set active tab
+         $scope.activeTab = 0;
+         $scope.setActiveTab = function (tabIndex){
+            $scope.activeTab = tabIndex;
+         };
+
          //===================
          // Manage hierarchies
          $scope.addHierarchy = function (hierarchyType) {

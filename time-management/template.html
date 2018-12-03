@@ -1,11 +1,24 @@
 <div>
    <div class="row">
       <div class="col-md-12">
-         <uib-tabset active="selections.activeTab">
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa dimensions"></i> Dimension
-               </uib-tab-heading>
+         <uib-tabset active="activeTab">
+            <uib-tab index="0" heading="1. Dimension">
+               <div class="toolbar">
+                  <div class="page-title">
+                     <h3>
+                        Step 1: Choose dimension type
+                     </h3>
+                     <h5>
+                        Pick the dimension type and the key information
+                     </h5>
+                  </div>
+                  <div class="pull-right">
+                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" ng-click="setActiveTab(3)">Review and Launch</button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">Next: Add Hierarchies</button>
+                     </div>
+                  </div>
+               </div>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <div class="card">
@@ -32,14 +45,17 @@
                                  </label>
                               </div>
                               <div class="col-md-8">
-                                 <select class="form-control input-group-append" ng-model="selections.dimensionType" ng-options="t for t in lists.dimensionTypes">
+                                 <select class="form-control input-group-append" ng-model="selections.dimensionType"
+                                    ng-options="t for t in lists.dimensionTypes">
                                     <option></option>
                                  </select>
                               </div>
                            </div>
                         </div>
                      </div>
-                     <div class="card mt-3">
+                  </div>
+                  <div class="col-md-6">
+                     <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
                            <label>
                               <i class="fa fa-calendar"></i> Calendar:
@@ -54,11 +70,13 @@
                                  <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
                                     <input type="text" class="form-control" ng-model="dateRangeStart" />
                                     <span class="input-group-append">
-                                       <button id="dropdownStartTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                                       <button id="dropdownStartTime" type="button" class="btn btn-secondary"
+                                          uib-dropdown-toggle>
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="startDateOnSetTime();startTimeIsOpen=!startTimeIsOpen"
+                                          <datetimepicker ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                             on-set-time="startDateOnSetTime();startTimeIsOpen=!startTimeIsOpen"
                                              before-render="startDateBeforeRender($dates)" />
                                        </span>
                                     </span>
@@ -73,13 +91,14 @@
                                  <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
                                     <input type="text" class="form-control" ng-model="dateRangeEnd" />
                                     <span class="input-group-append">
-                                       <button id="dropdownEndTime" type="button" class="btn btn-light" uib-dropdown-toggle>
+                                       <button id="dropdownEndTime" type="button" class="btn btn-secondary"
+                                          uib-dropdown-toggle>
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}" on-set-time="endDateOnSetTime();endTimeIsOpen=!endTimeIsOpen"
-                                             before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"
-                                          />
+                                          <datetimepicker ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                             on-set-time="endDateOnSetTime();endTimeIsOpen=!endTimeIsOpen"
+                                             before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)" />
                                        </span>
                                     </span>
                                  </span>
@@ -92,7 +111,8 @@
                                  </label>
                               </div>
                               <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek" ng-options="t for t in lists.weekDays">
+                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
+                                    ng-options="t for t in lists.weekDays">
                                     <option></option>
                                  </select>
                               </div>
@@ -102,7 +122,8 @@
                                  <label>First Fiscal Year Month:</label>
                               </div>
                               <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth" ng-options="m for m in lists.months">
+                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth"
+                                    ng-options="m for m in lists.months">
                                     <option></option>
                                  </select>
                               </div>
@@ -110,43 +131,27 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa fa-sliders"></i>
-                              Options (
-                              <a href class="click" ng-click="updateDimensionOptions()">
-                                 <i class="fa fa-toggle-on text-success" ng-if="selections.allDimensionOptions"></i>
-                                 <i class="fa fa-toggle-off" ng-if="!selections.allDimensionOptions"></i>
-                              </a>):
-                           </label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-1" ng-repeat="option in dimensionOptions">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{option.name}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-8 text-center">
-                                 <a href class="click" ng-click="option.value = !option.value">
-                                    <i class="fa fa-toggle-on text-success" ng-if="option.value"></i>
-                                    <i class="fa fa-toggle-off" ng-if="!option.value"></i>
-                                 </a>
-                              </div>
-                           </div>
+               </div>
+            </uib-tab>
+            <uib-tab index="1" heading="2. Hierarchy">
+               <auto-height>
+                  <div class="toolbar">
+                     <div class="page-title">
+                        <h3>
+                           Step 2: Choose Hierarchies
+                        </h3>
+                        <h5>
+                           Select between all available hierarchies which one to used in your dimension.
+                        </h5>
+                     </div>
+                     <div class="pull-right">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)">Previous</button>
+                           <button type="button" class="btn btn-primary" ng-click="setActiveTab(3)">Review and Launch</button>
+                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)">Next: Add Attributes</button>
                         </div>
                      </div>
                   </div>
-               </div>
-
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa subset"></i> Hierarchy
-               </uib-tab-heading>
-               <auto-height>
                   <div class="row">
                      <div class="col-md-6">
                         <div class="card">
@@ -154,8 +159,9 @@
                               <label>All {{selections.dimensionType}} Hierarchies</label>
                            </div>
                            <div class="card-body">
-                              <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index" class="badge ml-1" ng-style="generateHSLColour(hierarchy.name)"
-                                 style="cursor:pointer" ng-click="addHierarchy(hierarchy.name)" title="{{hierarchy.desc}}">
+                              <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
+                                 class="badge ml-1" ng-style="generateHSLColour(hierarchy.name)" style="cursor:pointer"
+                                 ng-click="addHierarchy(hierarchy.name)" title="{{hierarchy.desc}}">
                                  <span style="font-size:1.2em">
                                     <i class="fa fa-plus-circle"></i> {{hierarchy.shortDesc}}
                                  </span>
@@ -186,7 +192,6 @@
                      </div>
                   </div>
                   <div class="row">
-                     {{hierarchies}}
                      <div class="col-md-6 mt-2" ng-class="{'col-md-12':aliases.length>1}" ng-repeat="hierarchy in hierarchies track by $index">
                         <div class="card">
                            <div class="card-header">
@@ -239,9 +244,9 @@
                                        <td>
                                           <span class="input-group" ng-if="element.included">
                                              <span class="col-md-6">
-                                                <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
-                                                   ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
-                                                   uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
+                                                <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                   style="border-radius:0;display:inline" type="text" ng-model="lists.dateFormats[element.level].format"
+                                                   placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
                                                    typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
                                              </span>
                                              <span class="col-md-6">
@@ -252,13 +257,14 @@
                                        <td ng-repeat="alias in aliases">
                                           <span class="input-group" ng-if="element.included">
                                              <span class="col-md-6">
-                                                <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="border-radius:0;display:inline" type="text"
-                                                   ng-model="lists.dateFormats[element.level].format" placeholder="" ng-keydown="key($event,selection.cube)"
-                                                   uib-typeahead="type for type in alias.format[element.level].format | filter:$viewValue | limitTo:20"
+                                                <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                   style="border-radius:0;display:inline" type="text" ng-model="lists.dateFormats[element.level].format"
+                                                   placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in alias.format[element.level].format | filter:$viewValue | limitTo:20"
                                                    typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
                                              </span>
                                              <span class="col-md-6">
-                                                {{examples[element.level] | amDateFormat:lists.aliasesFomat[alias.id][element.level].format}}
+                                                {{examples[element.level] |
+                                                amDateFormat:lists.aliasesFomat[alias.id][element.level].format}}
                                              </span>
                                           </span>
                                        </td>
@@ -271,10 +277,23 @@
                   </div>
                </auto-height>
             </uib-tab>
-            <uib-tab ng-if="dimensionOptions['Attributes'].value">
-               <uib-tab-heading>
-                  <i class="fa fa-sliders"></i> Attributes
-               </uib-tab-heading>
+            <uib-tab index="2" heading="3. Attributes">
+               <div class="toolbar">
+                  <div class="page-title">
+                     <h3>
+                        Step 3: Choose Attributes
+                     </h3>
+                     <h5>
+                        Select which attributes to include.
+                     </h5>
+                  </div>
+                  <div class="pull-right">
+                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">Previous</button>
+                        <button type="button" class="btn btn-primary" ng-click="setActiveTab(3)">Review and Launch</button>
+                     </div>
+                  </div>
+               </div>
                <auto-height>
                   <table class="table table-hover table-sm">
                      <thead>
@@ -305,71 +324,45 @@
                   </table>
                </auto-height>
             </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa fa-eye"></i> Preview
-               </uib-tab-heading>
-               <div ng-repeat="element in lists.elements">
-                  {{element}}
-               </div>
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa fa-bolt"></i> Execute
-               </uib-tab-heading>
-            </uib-tab>
-            <uib-tab>
-               <uib-tab-heading>
-                  <i class="fa fa-info-circle" aria-hidden="true"></i>
-               </uib-tab-heading>
-               <div class="row">
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa subset"></i> Consolidations:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-3" ng-repeat="dimensionType in lists.dimensionElements[selections.dimensionType]" ng-if="$index>0">
-                              <div class="col-md-4 text-right">
-                                 <label>{{dimensionType}}:</label>
-                              </div>
-                              <div class="col-md-4">
-                                 <select class="form-control input-group-append" ng-model="lists.dateFormats[dimensionType].format" ng-options="f for f in  lists.dateFormats[dimensionType].formats"
-                                    ng-change="generateExample();generateDimension()">
-                                    <option></option>
-                                 </select>
-                              </div>
-                              <div class="col-md-4 text-left">
-                                 <label>{{examples[dimensionType]}}</label>
-                              </div>
-                           </div>
-                        </div>
+            <uib-tab index="3" heading="4.Review">
+               <div class="toolbar">
+                  <div class="page-title">
+                     <h3>
+                        Step 4: Review and Launch
+                     </h3>
+                     <h5>
+                           Please review your dimension launch details. You can go back to edit changes for each section.
+                     </h5>
+                  </div>
+                  <div class="pull-right">
+                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)">Previous</button>
+                        <button type="button" class="btn btn-warning" ng-click="createDimension()">Launch</button>
                      </div>
                   </div>
-                  <div class="col-md-6">
-                     <div class="card">
-                        <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa fa-pencil-square-o"></i> Custom Separators:</label>
-                        </div>
-                        <div class="card-body">
-                           <div class="row mt-3" ng-repeat="separator in lists.separators">
-                              <div class="col-md-4 text-right">
-                                 <label>
-                                    {{separator.type}}:
-                                 </label>
-                              </div>
-                              <div class="col-md-4">
-                                 <input type="text" class="form-control mr-1" ng-model="separator.value" />
-                              </div>
-                              <div class="col-md-4 text-left">
-                                 <label>
-                                    {{examples[separator.type]}}
-                                 </label>
-                              </div>
-                           </div>
-                        </div>
+               </div>
+               <div>
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>Preview</label>
+                     </div>
+                     <div class="card-body">
+                        <table class="table table-hover table-sm">
+                              <thead>
+                                 <tr>
+                                    <th> Elements </th>
+                                    <th> Attributes </th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr ng-repeat="element in lists.elements | limitTo:12">
+                                    <td>
+                                          {{element}}
+                                    </td>
+                                    <td> </td>
+                                 </tr>
+                              </tbody>
+                           </table>
                      </div>
                   </div>
                </div>
