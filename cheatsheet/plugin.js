@@ -35,7 +35,11 @@ arc.directive("arcCheatSheet", function () {
             process: 'Bedrock.Server.Wait',
             cube: 'General Ledger',
             instance: 'Canvas Sample',
-            valueToBeSent: '15'
+            valueToBeSent: '15',
+            dimension: 'Account',
+            hierarchy: 'Account',
+            subset: 'Default',
+            view: 'Default'
          };
 
          $scope.showHideControlObjects = $rootScope.uiPrefs.controlObjects;

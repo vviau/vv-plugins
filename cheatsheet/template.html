@@ -99,8 +99,9 @@
                                  <li class="list-group-item"><strong>2.</strong> Rename the folder my-new-plugin</li>
                                  <li class="list-group-item"><strong>3.</strong> Open plugins\my-new-plugin\<strong>plugin.js</strong>
                                     file</li>
-                                 <li class="list-group-item"><strong>4.</strong> To activate the plugin, you have to
-                                    uncomment the first part by removing /* line 4 and */
+                                 <li class="list-group-item"><strong></strong>4.</strong> To activate the plugin, you
+                                    have to
+                                    uncomment the first part by removing <strong>/*</strong> line 4 and <strong>*/</strong>
                                     line 19</li>
                                  <li class="list-group-item"><strong>5.</strong> <a href="https://code.cubewise.com/canvas-docs/disable-cache"
                                        target="_blank">Disable cache</a>, when working on plugins you need to disable
@@ -567,6 +568,76 @@ ng-click="sendValueToCell(selections.valueToBeSent)"
       </code>
                          </pre>
                </div>
+               <div class="col-md-6 mt-2">
+                  <div class="card">
+                     <div class="card-header" style="padding: 5px 10px;">
+                        <label>
+                           <i class="fa fa-fw chores"></i> Open TM1 objects</label>
+                     </div>
+                     <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                           <li class="list-group-item">
+                              <i class="fa dimensions"></i> Hierarchy Editor:
+                              <a href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}">
+                                 #/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}</a>
+                           </li>
+                           <li class="list-group-item">
+                              <i class="fa subset"></i> Subset:
+                              <a href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}/subset/{{selections.subset}}">
+                                 #/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}/subset/{{selections.subset}}</a>
+                           </li>
+                           <li class="list-group-item">
+                              <i class="fa view"></i> View:
+                              <a href="#/cube/{{instance}}/{{selections.cube}}/view/{{selections.view}}">
+                                 #/cube/{{instance}}/{{selections.cube}}/view/{{selections.view}}</a>
+                           </li>
+                           <li class="list-group-item">
+                              <i class="fa rule"></i> Rule Editor:
+                              <a href="#/cube/{{instance}}/{{selections.cube}}">
+                                 #/cube/{{instance}}/{{selections.cube}}</a>
+                           </li>
+                           <li class="list-group-item">
+                                 <i class="fa processes"></i> Process:
+                                 <a href="#/process/{{instance}}/{{selections.process}}">
+                                    #/process/{{instance}}/{{selections.process}}</a>
+                              </li>
+                              <li class="list-group-item">
+                                    <i class="fa chores"></i> Chore:
+                                    <a href="#/chore/{{instance}}/{{selections.chore}}">
+                                       #/chore/{{instance}}/{{selections.chore}}</a>
+                                 </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div ng-init="displayCodeC0 = 0" ng-click="displayCodeC0 = 1" class="btn btn-info open-copy-code">
+                     <i class="fa fa-code" aria-hidden="true"></i>
+                  </div>
+                  <div ng-show="displayCodeC0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeC0 = 0">x</div>
+                  <pre id="codeC0" class="codesnipet" ng-show="displayCodeC0 == 1" readonly content-editable>
+         <code><kbd> plugin.js:</kbd>
+      $scope.editSubset = function (hierarchy) {
+         var handler = function (subset, elements) {
+            // subset.selected has what element was clicked
+            $scope.elements = subset.selected;
+         };
+         var subset = {
+            name: hierarchy.subset,
+            expression: hierarchy.expression,
+            expressions: hierarchy.expressions,
+            alias: hierarchy.alias,
+            isSelector: true
+         };
+         $subsetDialogs.open($scope.instance, hierarchy.dimension, hierarchy.name, subset, handler);
+      };
+         <kbd> template.html:</kbd>
+      &lt;button type="button" 
+         class="btn btn-secondary btn-sm" 
+         ng-click="editSubset(hierarchy, 'titles')"&gt;
+            &lt;i class="fa subset" title="{{'EDITSUBSET' | translate}}"&gt;&lt;/i&gt;
+         &lt;/button&gt;
+         </code>
+                            </pre>
+               </div>
             </div>
          </uib-tab>
          <uib-tab>
@@ -957,33 +1028,61 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                            </div>
                            <div ng-show="displayCodeB3 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB3 = 0">x</div>
                            <pre id="codeB3" class="codesnipet" ng-show="displayCodeB3 == 1" readonly content-editable>
-                                                                                 <code>
-                                 &lt;div class="alert alert-primary" role="alert"&gt;
-                                 A simple primary alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-secondary" role="alert"&gt;
-                                 A simple secondary alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-success" role="alert"&gt;
-                                 A simple success alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-danger" role="alert"&gt;
-                                 A simple danger alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-warning" role="alert"&gt;
-                                 A simple warning alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-info" role="alert"&gt;
-                                 A simple info alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-light" role="alert"&gt;
-                                 A simple light alert—check it out!
-                              &lt;/div&gt;
-                              &lt;div class="alert alert-dark" role="alert"&gt;
-                                 A simple dark alert—check it out!
-                              &lt;/div&gt;
+                                                      <code>
+      &lt;div class="alert alert-primary" role="alert"&gt;
+      A simple primary alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-secondary" role="alert"&gt;
+      A simple secondary alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-success" role="alert"&gt;
+      A simple success alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-danger" role="alert"&gt;
+      A simple danger alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-warning" role="alert"&gt;
+      A simple warning alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-info" role="alert"&gt;
+      A simple info alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-light" role="alert"&gt;
+      A simple light alert—check it out!
+   &lt;/div&gt;
+   &lt;div class="alert alert-dark" role="alert"&gt;
+      A simple dark alert—check it out!
+   &lt;/div&gt;
                                                                                  </code>
                                                                                                       </pre>
+                        </div>
+                        <!--Lists-->
+                        <div class="col-md-4 mt-2">
+                           <div class="card">
+                              <div class="card-header">
+                                 Lists
+                              </div>
+                              <div class="card-body">
+                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Item 1</li>
+                                    <li class="list-group-item">Item 2</li>
+                                    <li class="list-group-item">Item 3</li>
+                                 </ul>
+                              </div>
+                           </div>
+                           <div ng-init="displayCodeB7 = 0" ng-click="displayCodeB7 = 1" class="btn btn-info open-copy-code">
+                              <i class="fa fa-code" aria-hidden="true"></i>
+                           </div>
+                           <div ng-show="displayCodeB7 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeB7 = 0">x</div>
+                           <pre id="codeB7" class="codesnipet" ng-show="displayCodeB7 == 1" readonly content-editable>
+<code>
+   &lt;ul class="list-group list-group-flush"&gt;
+   &lt;li class="list-group-item"&gt;Item 1/li&gt;
+   &lt;li class="list-group-item"&gt;Item 2&lt;/li&gt;
+   &lt;li class="list-group-item"&gt;Item 3&lt;/li&gt;
+   &lt;/ul&gt;
+</code>
+                                                                                                                              </pre>
                         </div>
                      </div>
                   </auto-height>
