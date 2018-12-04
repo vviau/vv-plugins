@@ -579,32 +579,32 @@ ng-click="sendValueToCell(selections.valueToBeSent)"
                            <li class="list-group-item">
                               <i class="fa dimensions"></i> Hierarchy Editor:
                               <a href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}">
-                                 #/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}</a>
+                                 href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}"</a>
                            </li>
                            <li class="list-group-item">
                               <i class="fa subset"></i> Subset:
                               <a href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}/subset/{{selections.subset}}">
-                                 #/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}/subset/{{selections.subset}}</a>
+                                 href="#/dimension/{{instance}}/{{selections.dimension}}/{{selections.hierarchy}}/subset/{{selections.subset}}"</a>
                            </li>
                            <li class="list-group-item">
                               <i class="fa view"></i> View:
                               <a href="#/cube/{{instance}}/{{selections.cube}}/view/{{selections.view}}">
-                                 #/cube/{{instance}}/{{selections.cube}}/view/{{selections.view}}</a>
+                                 href="#/cube/{{instance}}/{{selections.cube}}/view/{{selections.view}}"</a>
                            </li>
                            <li class="list-group-item">
                               <i class="fa rule"></i> Rule Editor:
                               <a href="#/cube/{{instance}}/{{selections.cube}}">
-                                 #/cube/{{instance}}/{{selections.cube}}</a>
+                                 href="#/cube/{{instance}}/{{selections.cube}}"</a>
                            </li>
                            <li class="list-group-item">
                                  <i class="fa processes"></i> Process:
                                  <a href="#/process/{{instance}}/{{selections.process}}">
-                                    #/process/{{instance}}/{{selections.process}}</a>
+                                    href="#/process/{{instance}}/{{selections.process}}"</a>
                               </li>
                               <li class="list-group-item">
                                     <i class="fa chores"></i> Chore:
                                     <a href="#/chore/{{instance}}/{{selections.chore}}">
-                                       #/chore/{{instance}}/{{selections.chore}}</a>
+                                       href="#/chore/{{instance}}/{{selections.chore}}"</a>
                                  </li>
                         </ul>
                      </div>
@@ -1357,10 +1357,10 @@ $http.get(encodeURIComponent($scope.instance) + "/Cubes/$count").then(function (
                            <div ng-show="displayCodeA8 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeA8 = 0">x
                            </div>
                            <pre id="codeA8" class="codesnipet" ng-show="displayCodeA8 == 1" readonly content-editable>
-                           <code>
-                           <kbd> template.html:</kbd>
-                              ng-if="showValue"
-                           </code>
+<code>
+<kbd> template.html:</kbd>
+   ng-if="showValue"
+</code>
                                                     </pre>
                         </div>
                         <!--ng-repeat-->

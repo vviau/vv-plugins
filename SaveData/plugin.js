@@ -4,7 +4,7 @@
 arc.run(['$rootScope', function ($rootScope) {
 
    $rootScope.plugin("arcSaveData", "Save Data", "page", {
-      menu: "administration",
+      menu: "tools",
       icon: "fa-cubes",
       description: "This plugin can be used to randomize data for any cubes",
       author: "Cubewise",
