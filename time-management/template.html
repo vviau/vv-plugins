@@ -5,31 +5,29 @@
             <uib-tab index="0" heading="1. Dimension">
                <div class="toolbar">
                   <div class="page-title">
-                     <h3>
-                        Step 1: Choose Dimension Configuration
+                     <h3 translate="TM-Step1Title">
                      </h3>
-                     <h5>
-                        Pick the dimension type and the key information
+                     <h5 translate="TM-Step1SubTitle">
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">Next: Add Hierarchies</button>
-                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)">Review and Create</button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step1Next"></button>
+                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa dimensions"></i> Dimension:
+                           <i class="fa dimensions"></i> <label translate="DIMENSION"> 
+                               :
                            </label>
                         </div>
                         <div class="card-body">
                            <div class="row">
                               <div class="col-md-4 text-right">
-                                 <label>
-                                    Name:
+                                 <label translate="NAME">
+                                    :
                                  </label>
                               </div>
                               <div class="col-md-8">
@@ -55,14 +53,15 @@
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
-                           <label>
-                              <i class="fa fa-calendar"></i> Calendar:
+                           <i class="fa fa-calendar"></i> 
+                           <label translate="TM-CALENDAR">
+                              :
                            </label>
                         </div>
                         <div class="card-body">
                            <div class="row mt-1">
                               <div class="col-md-6 text-right">
-                                 <label>From:</label>
+                                 <label translate="TM-FROM">:</label>
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
@@ -83,7 +82,7 @@
                            </div>
                            <div class="row mt-1">
                               <div class="col-md-6 text-right">
-                                 <label>To:</label>
+                                 <label translate="TM-TO">:</label>
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
@@ -104,8 +103,8 @@
                            </div>
                            <div class="row mt-1">
                               <div class="col-md-6 text-right">
-                                 <label>
-                                    First Week Day:
+                                 <label translate="TM-FirstWeekDay">
+                                    :
                                  </label>
                               </div>
                               <div class="col-md-6 text-center">
@@ -117,7 +116,7 @@
                            </div>
                            <div class="row mt-1">
                               <div class="col-md-6 text-right">
-                                 <label>First Fiscal Year Month:</label>
+                                 <label translate="TM-FirstFiscalYearMonth">:</label>
                               </div>
                               <div class="col-md-6 text-center">
                                  <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth"
@@ -135,24 +134,24 @@
                <auto-height>
                   <div class="toolbar">
                      <div class="page-title">
-                        <h3>
-                           Step 2: Choose Hierarchies
+                        <h3 translate="TM-Step2Title">
+                           
                         </h3>
-                        <h5>
-                           Select between all available hierarchies which one to used in your dimension.
+                        <h5 translate="TM-Step2SubTitle">
+                           
                         </h5>
                      </div>
                      <div class="pull-right">
-                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)">Previous: Dimension</button>
-                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)">Next: Add Attributes</button>
-                           <button type="button" class="btn btn-success" ng-click="setActiveTab(3)">Review and Create</button>
+                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
+                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
+                           <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label>All {{selections.dimensionType}} Hierarchies</label>
+                              <label>All {{selections.dimensionType}} <span translate="HIERARCHIES"></span></label>
                            </div>
                            <div class="card-body">
                               <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
@@ -168,7 +167,7 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label>Alias <i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()" style="cursor:pointer"></i></label>
+                              <label translate="ALIAS"><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()" style="cursor:pointer"></i></label>
                            </div>
                            <div class="card-body">
                               <div class="row">
@@ -192,10 +191,10 @@
                         <div class="card">
                            <div class="card-header">
                               <span class="input-group">
-                                 <span class="input-group-prepend input-group-text">Name:
+                                 <span class="input-group-prepend input-group-text" translate="NAME">:
                                  </span>
                                  <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
-                                 <span class="input-group-append input-group-text">Parent:
+                                 <span class="input-group-append input-group-text" translate="TM-PARENT">:
                                  </span>
                                  <input type="text" class="form-control input-group-append" ng-model="hierarchy.topParent" />
                                  <span class="input-group-append">
@@ -218,8 +217,8 @@
                                  <thead>
                                     <tr>
                                        <th> </th>
-                                       <th class="text-center">Level</th>
-                                       <th class="text-center">Element</th>
+                                       <th class="text-center" translate="LEVEL"></th>
+                                       <th class="text-center" translate="ELEMENT"></th>
                                        <th class="text-center" ng-repeat="alias in aliases track by $index">
                                           {{alias.name}}
                                        </th>
@@ -276,16 +275,14 @@
             <uib-tab index="2" heading="3. Attributes">
                <div class="toolbar">
                   <div class="page-title">
-                     <h3>
-                        Step 3: Choose Attributes
+                     <h3 translate="TM-Step3Title">
                      </h3>
-                     <h5>
-                        Select which attributes to include.
+                     <h5 translate="TM-Step3SubTitle">
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">Previous: Add Hierarchies</button>
-                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)">Review and Create</button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous"></button>
+                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
                <auto-height>
@@ -293,9 +290,9 @@
                      <thead>
                         <tr>
                            <th> # </th>
-                           <th> Attributes </th>
-                           <th> Type </th>
-                           <th> Description </th>
+                           <th translate="ATTRIBUTES"> </th>
+                           <th translate="TYPE"> </th>
+                           <th translate="DESCRIPTION"> </th>
                         </tr>
                      </thead>
                      <tbody>
@@ -321,29 +318,27 @@
             <uib-tab index="3" heading="4.Review">
                <div class="toolbar">
                   <div class="page-title">
-                     <h3>
-                        Step 4: Review and Create
+                     <h3 translate="TM-Step4Title">
                      </h3>
-                     <h5>
-                           Please review your dimension Create details. You can go back to edit changes for each section.
+                     <h5 translate="TM-Step4SubTitle">
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)">Previous: Add Attributes</button>
-                        <button type="button" class="btn btn-success" ng-click="createDimension()">Create</button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
+                        <button type="button" class="btn btn-success" ng-click="createDimension()" translate="CREATE"></button>
                   </div>
                </div>
                <div>
                   <div class="card">
                      <div class="card-header" style="padding: 5px 10px;">
-                        <label>Preview</label>
+                        <label translate="PREVIEW"></label>
                      </div>
                      <div class="card-body">
                         <table class="table table-hover table-sm">
                               <thead>
                                  <tr>
-                                    <th> Elements </th>
-                                    <th> Attributes </th>
+                                    <th translate="TM-ELEMENTS"> </th>
+                                    <th translate="ATTRIBUTES"> </th>
                                  </tr>
                               </thead>
                               <tbody>
