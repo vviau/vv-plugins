@@ -26,18 +26,18 @@ arc.directive("arcTimeManagement", function () {
       },
       controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", function ($scope, $rootScope, $http, $tm1, $translate, $timeout) {
 
-        //$scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
-        //console.log($scope.myJSONFile);
+         //$scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
+         //console.log($scope.myJSONFile);
 
-        $scope.lists = [];
-        $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
-         $scope.lists = value.data;
-         $timeout(function () {
-            $scope.addHierarchy('CalendarMonth');
-            $scope.generateExample();
-            $scope.generateDimension();
+         $scope.lists = [];
+         $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
+            $scope.lists = value.data;
+            $timeout(function () {
+               $scope.addHierarchy('CalendarMonth');
+               $scope.generateExample();
+               $scope.generateDimension();
+            });
          });
-     });
 
          //Define variables
          $scope.startDate = moment().startOf('year');
@@ -79,7 +79,7 @@ arc.directive("arcTimeManagement", function () {
          //==============
          // Set active tab
          $scope.activeTab = 0;
-         $scope.setActiveTab = function (tabIndex){
+         $scope.setActiveTab = function (tabIndex) {
             $scope.activeTab = tabIndex;
          };
 
@@ -108,10 +108,10 @@ arc.directive("arcTimeManagement", function () {
          // Manage Aliases
          $scope.addAlias = function () {
             var dimensionType = $scope.selections.dimensionType;
-            if($scope.aliases.length==0){
+            if ($scope.aliases.length == 0) {
                var aliasName = 'Description';
-            }else{
-               var aliasName = 'Description'+ $scope.aliases.length;
+            } else {
+               var aliasName = 'Description' + $scope.aliases.length;
             }
             var newAlias = {
                name: aliasName,
@@ -206,19 +206,53 @@ arc.directive("arcTimeManagement", function () {
          };
 
          $scope.generateDimension = function () {
-            $scope.lists.elements = [];
+            $scope.dimension = [];
+            //Loop through all hierarchies
+            _.each($scope.hierarchies, function (value, key) {
+               var hierarchy = value;
+               var hierarchyInfo = {
+                  'display': true,
+                  'type': hierarchy.type,
+                  'name': hierarchy.name,
+                  'topParent': hierarchy.topParent,
+                  'elements': $scope.generateElements(hierarchy)
+               };
+               $scope.dimension.push(hierarchyInfo);
+            });
+         };
+
+         $scope.generateElements = function (hierarchy) {
+            console.log(hierarchy);
+            //Loop through all elements
             var startTimeMoment = $scope.startDate;
             var endTimeMoment = $scope.dateRangeEnd;
+            var elements = [];
             for (var m = moment(startTimeMoment); m.diff(endTimeMoment, 'days') <= 0; m.add(1, 'days')) {
-               var day = m.format($scope.lists.dateFormats['Day'].format);
-               var month = $scope.getMonthFormat(m);
-               var year = m.format($scope.lists.dateFormats['Year'].format);
-               var elementInfo = {
-                  'leaf': day,
-                  'Month': month,
-                  'Year': year
-               };
-               $scope.lists.elements.push(elementInfo);
+               var elementInfo = [];
+               var levelNumber = 0;
+               _.each(hierarchy.levels, function (element, key) {
+                  if (element.included) {
+                     elementInfo.push({
+                        'level': levelNumber,
+                        'element': $scope.generateElement(m, element.level)
+                     });
+                     levelNumber = levelNumber + 1;
+                  };
+               });
+               elements.push(elementInfo);
+            }
+            return elements;
+         };
+
+         $scope.generateElement = function (day, level) {
+            if (level == 'Day') {
+               return day.format($scope.lists.dateFormats['Day'].format);
+            } else if (level == 'Month') {
+               return $scope.getMonthFormat(day);
+            } else if (level == 'Year') {
+               return day.format($scope.lists.dateFormats['Year'].format);
+            } else {
+               return 'NOT DEFINED';
             }
          };
 

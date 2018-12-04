@@ -11,16 +11,17 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step1Next"></button>
-                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step1Next"></button>
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                        translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
                <div class="row mt-3">
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
-                           <i class="fa dimensions"></i> <label translate="DIMENSION"> 
-                               :
+                           <i class="fa dimensions"></i> <label translate="DIMENSION">
+                              :
                            </label>
                         </div>
                         <div class="card-body">
@@ -53,7 +54,7 @@
                   <div class="col-md-6">
                      <div class="card">
                         <div class="card-header" style="padding: 5px 10px;">
-                           <i class="fa fa-calendar"></i> 
+                           <i class="fa fa-calendar"></i>
                            <label translate="TM-CALENDAR">
                               :
                            </label>
@@ -135,16 +136,17 @@
                   <div class="toolbar">
                      <div class="page-title">
                         <h3 translate="TM-Step2Title">
-                           
+
                         </h3>
                         <h5 translate="TM-Step2SubTitle">
-                           
+
                         </h5>
                      </div>
                      <div class="pull-right">
-                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
-                           <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
-                           <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
+                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                           translate="TM-ReviewAndCreate"></button>
                      </div>
                   </div>
                   <div class="row">
@@ -155,8 +157,8 @@
                            </div>
                            <div class="card-body">
                               <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
-                                 class="badge ml-1" ng-style="generateHSLColour(hierarchy.name)" style="cursor:pointer"
-                                 ng-click="addHierarchy(hierarchy.name)" title="{{hierarchy.desc}}">
+                                 class="badge ml-1" ng-style="generateHSLColour(hierarchy.type)" style="cursor:pointer"
+                                 ng-click="addHierarchy(hierarchy.type)" title="{{hierarchy.desc}}">
                                  <span style="font-size:1.2em">
                                     <i class="fa fa-plus-circle"></i> {{hierarchy.shortDesc}}
                                  </span>
@@ -167,7 +169,8 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label translate="ALIAS"><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()" style="cursor:pointer"></i></label>
+                              <label translate="ALIAS"><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()"
+                                    style="cursor:pointer"></i></label>
                            </div>
                            <div class="card-body">
                               <div class="row">
@@ -281,8 +284,9 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous"></button>
-                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3)" translate="TM-ReviewAndCreate"></button>
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous"></button>
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                        translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
                <auto-height>
@@ -324,33 +328,47 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
-                        <button type="button" class="btn btn-success" ng-click="createDimension()" translate="CREATE"></button>
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
+                     <button type="button" class="btn btn-success" ng-click="createDimension()" translate="CREATE"></button>
                   </div>
                </div>
-               <div>
-                  <div class="card">
-                     <div class="card-header" style="padding: 5px 10px;">
-                        <label translate="PREVIEW"></label>
-                     </div>
-                     <div class="card-body">
-                        <table class="table table-hover table-sm">
-                              <thead>
-                                 <tr>
-                                    <th translate="TM-ELEMENTS"> </th>
-                                    <th translate="ATTRIBUTES"> </th>
-                                 </tr>
-                              </thead>
-                              <tbody>
-                                 <tr ng-repeat="element in lists.elements | limitTo:12">
-                                    <td>
-                                          {{element}}
-                                    </td>
-                                    <td> </td>
-                                 </tr>
-                              </tbody>
-                           </table>
-                     </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <auto-height>
+                        <div ng-repeat="hierarchy in dimension | limitTo:12">
+                           <div class="card mb-2">
+                              <div class="card-header" style="padding: 5px 10px;">
+                                 <label>{{hierarchy.name}}</label>
+                                 <span class="pull-right">
+                                       <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
+                                          <i class="fa fa-fw fa-eye-slash"></i>
+                                       </button>
+                                       <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
+                                          <i class="fa fa-fw fa-eye"></i>
+                                       </button>
+                                    </span>
+                              </div>
+                              <div class="card-body" ng-if="hierarchy.display">
+                                 <table class="table table-hover table-sm">
+                                    <thead>
+                                       <tr>
+                                          <th translate="TM-ELEMENTS"> </th>
+                                          <th translate="ATTRIBUTES"> </th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr ng-repeat="element in hierarchy.elements | limitTo:12">
+                                          <td>
+                                             {{element}}
+                                          </td>
+                                          <td> </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </auto-height>
                   </div>
                </div>
             </uib-tab>

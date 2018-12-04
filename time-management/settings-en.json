@@ -160,7 +160,7 @@
    "hierarchyTypes": {
       "Day": {
          "CalendarMonth": {
-            "display":true, "name": "CalendarMonth", "shortDesc":"Calendar Month", "desc":"Calendar Month", "topParent": "All Years", "levels": [
+            "display":true, "type": "CalendarMonth", "name": "Calendar Month", "shortDesc":"Calendar Month", "desc":"Calendar Month", "topParent": "All Years", "levels": [
                { "level": "Year", "name": "Year", "included": true },
                { "level": "HalfYear", "name": "HalfYear", "included": true },
                { "level": "Quarter", "name": "Quarter", "included": true },
@@ -169,14 +169,14 @@
             ]
          },
          "CalendarWeek": {
-            "display":true,"name": "CalendarWeek", "shortDesc":"Calendar Week", "desc":"Calendar Week", "topParent": "All Years", "levels": [
+            "display":true,"type": "CalendarWeek", "name": "Calendar Week", "shortDesc":"Calendar Week", "desc":"Calendar Week", "topParent": "All Years", "levels": [
                { "level": "Year", "name": "Year", "included": true },
                { "level": "Week", "name": "Week", "included": true },
                { "level": "Day", "name": "Day", "included": true }
             ]
          },
          "CalendarFY": {
-            "display":true,"name": "CalendarFY", "shortDesc":"Calendar Fiscal Year", "desc":"Calendar Fiscal Year", "topParent": "All Fiscal Years", "levels": [
+            "display":true,"type": "CalendarFY", "name": "Calendar FY","shortDesc":"Calendar Fiscal Year", "desc":"Calendar Fiscal Year", "topParent": "All Fiscal Years", "levels": [
                { "level": "YearFY", "name": "Year", "included": true },
                { "level": "HalfYearFY", "name": "HalfYear", "included": true },
                { "level": "QuarterFY", "name": "Quarter", "included": true },
@@ -184,43 +184,43 @@
                { "level": "Day", "name": "Day", "included": true }
             ]
          },
-         "YTG": { "display":true,"name": "YTG", "shortDesc":"Year To Go", "desc": "Year To Go - SUM of Next Periods", "topParent": "All Years YTG", "levels": [
+         "YTG": { "display":true,"type": "YTG","name": "YTG", "shortDesc":"Year To Go", "desc": "Year To Go - SUM of Next Periods", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "YTD": { "display":true,"name": "YTD", "shortDesc":"Year To Date", "desc": "Year To Date - SUM of previous period from beginning of the year", "topParent": "All Years YTG", "levels": [
+         "YTD": { "display":true,"type": "YTD", "name": "YTD", "shortDesc":"Year To Date", "desc": "Year To Date - SUM of previous period from beginning of the year", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "CYTD": {"display":true, "name": "CYTD", "shortDesc":"Cumul Year To Date", "desc": "Cumul Year To Date - SUM of all previsous period from beginning of time", "topParent": "All Years YTG", "levels": [
+         "CYTD": {"display":true, "type": "CYTD", "name": "CYTD", "shortDesc":"Cumul Year To Date", "desc": "Cumul Year To Date - SUM of all previsous period from beginning of time", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "MTG": { "display":true,"name": "MTG", "shortDesc":"Month To Go", "desc": "Month To Go: For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31", "topParent": "All Years YTG", "levels": [
+         "MTG": { "display":true,"type": "MTG", "name": "MTG", "shortDesc":"Month To Go", "desc": "Month To Go: For example for 2016-12-25 MTG, SUM 2016-12-26 to 2016-12-31", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "MTD": { "display":true,"name": "MTD", "shortDesc":"Month To Date", "desc": "Month To Date: For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25", "topParent": "All Years YTG", "levels": [
+         "MTD": { "display":true,"type": "MTD","name": "MTD", "shortDesc":"Month To Date", "desc": "Month To Date: For example for 2016-12-25 MTD, SUM 2016-12-01 to 2016-12-25", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "DTG": { "display":true,"name": "DTG", "shortDesc":"Day to Go", "desc": "Day To Go: All days until the end of the year", "topParent": "All Years YTG", "levels": [
+         "DTG": { "display":true,"type": "DTG","name": "DTG", "shortDesc":"Day to Go", "desc": "Day To Go: All days until the end of the year", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
             { "level": "Day", "name": "Day", "included": true }
          ] },
-         "DTD": { "display":true, "name": "DTD", "shortDesc":"Day To Date", "desc": "Day To Date: All previous days from beginning of the year", "topParent": "All Years YTG", "levels": [
+         "DTD": { "display":true, "type": "DTD","name": "DTD", "shortDesc":"Day To Date", "desc": "Day To Date: All previous days from beginning of the year", "topParent": "All Years YTG", "levels": [
             { "level": "YTG", "name": "YearTG", "included": true },
             { "level": "Year", "name": "Year", "included": true },
             { "level": "MonthFY", "name": "Month", "included": true },
