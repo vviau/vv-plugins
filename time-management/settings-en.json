@@ -8,7 +8,10 @@
       "Quarter": { "type": "Quarter", "value": "-Q" },
       "Week": { "type": "Week", "value": "-W" },
       "FortNight": { "type": "FortNight", "value": "-F" },
-      "FiscalYear": { "type": "FiscalYear", "value": "FY" }
+      "YearFY": { "type": "YearFY", "value": "FY" },
+      "HalfYearFY": { "type": "HalfYearFY", "value": "-HFY" },
+      "QuarterFY": { "type": "QuarterFY", "value": "-QFY" },
+      "MonthFY": { "type": "MonthFY", "value": "-MFY" }
    },
    "dimensionTypes": ["Day", "Month", "Year"],
    "dimensionElements": {
@@ -28,7 +31,10 @@
       "Quarter": { "format": "Custom", "formats": ["Custom"] },
       "HalfYear": { "format": "Custom", "formats": ["Custom"] },
       "Week": { "format": "Custom", "formats": ["Custom"] },
-      "FiscalYear": { "format": "Custom", "formats": ["Custom"] }
+      "YearFY": { "format": "Custom", "formats": ["Custom"] },
+      "HalfYearFY": { "format": "Custom", "formats": ["Custom"] },
+      "QuarterFY": { "format": "Custom", "formats": ["Custom"] },
+      "MonthFY": { "format": "Custom", "formats": ["Custom"] }
    },
    "aliases": [
       { "included": true, "id": "alias1", "name": "Short Desc" },

@@ -26,32 +26,15 @@ arc.directive("arcTimeManagement", function () {
       },
       controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", function ($scope, $rootScope, $http, $tm1, $translate, $timeout) {
 
-         //$scope.myJSONFile = JSON.parse("__/plugins/time-management/settings-en.json");
-         //console.log($scope.myJSONFile);
-
-         $scope.lists = [];
-         $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
-            $scope.lists = value.data;
-            $timeout(function () {
-               $scope.addHierarchy('CalendarMonth');
-               $scope.generateExample();
-               $scope.generateDimension();
-            });
-         });
-
-         //Define variables
-         $scope.startDate = moment().startOf('year');
-         $scope.dateRangeStart = moment().startOf('year');
-         $scope.dateRangeEnd = moment().endOf('year');
-         $scope.startTimeIsOpen = false;
-         $scope.endTimeIsOpen = false;
-
+         //=========
+         // Variables
          $scope.defaults = {
             useHierarchy: true,
             useAttributes: true,
             startDayofWeek: 'Mon',
             fiscalYearStartMonth: 'Jul',
-            allDimensionOptions: false
+            allDimensionOptions: false,
+            dimensionCreated: false
          };
          $scope.selections = {
             startDate: $scope.defaults.startDate,
@@ -64,8 +47,29 @@ arc.directive("arcTimeManagement", function () {
             useAttributes: $scope.defaults.useAttributes,
             startDayofWeek: $scope.defaults.startDayofWeek,
             fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth,
-            allDimensionOptions: $scope.defaults.allDimensionOptions
+            allDimensionOptions: $scope.defaults.allDimensionOptions,
+            dimensionCreated: $scope.defaults.dimensionCreated
          };
+
+         //==========
+         // Populate $scope.lists from settings-en.json file
+         $scope.lists = [];
+         $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
+            $scope.lists = value.data;
+            $timeout(function () {
+               $scope.addHierarchy('CalendarMonth');
+               $scope.generateExample();
+               $scope.generateDimensionInfo();
+            });
+         });
+
+         //Define variables
+         $scope.startDate = moment().startOf('year');
+         $scope.dateRangeStart = moment().startOf('year');
+         $scope.dateRangeEnd = moment().endOf('year');
+         $scope.startTimeIsOpen = false;
+         $scope.endTimeIsOpen = false;
+
          $scope.dimensionOptions = {
             Hierarchies: { name: 'Hierarchies', value: false },
             Aliases: { name: 'Aliases', value: false },
@@ -86,12 +90,10 @@ arc.directive("arcTimeManagement", function () {
          //===================
          // Manage hierarchies
          $scope.addHierarchy = function (hierarchyType) {
-            //console.log($scope.lists.hierarchyTypes.Day.CalendarMonth);
             var dimensionType = $scope.selections.dimensionType;
             var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[dimensionType][hierarchyType]);
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
-               //console.log($scope.hierarchies);
             });
          };
 
@@ -100,7 +102,6 @@ arc.directive("arcTimeManagement", function () {
          $scope.removeHierarchy = function (hierarchyIndex) {
             $scope.hierarchies.splice(hierarchyIndex, 1);
             $timeout(function () {
-               //console.log($scope.hierarchies);
             });
          };
 
@@ -126,7 +127,6 @@ arc.directive("arcTimeManagement", function () {
             };
             $scope.aliases.push(newAlias);
             $timeout(function () {
-               //console.log($scope.aliases);
             });
          };
 
@@ -136,52 +136,7 @@ arc.directive("arcTimeManagement", function () {
          $scope.removeAlias = function (AliasIndex) {
             $scope.aliases.splice(AliasIndex, 1);
             $timeout(function () {
-               //console.log($scope.aliases);
             });
-         };
-
-         //===================
-         // Manage Dimension
-
-         $scope.updateDimensionOptions = function () {
-            $scope.selections.allDimensionOptions = !$scope.selections.allDimensionOptions;
-            for (option in $scope.dimensionOptions) {
-               $scope.dimensionOptions[option].value = $scope.selections.allDimensionOptions;
-            }
-         };
-
-         $scope.updateDimensionOptions();
-
-         /*$scope.attachAttributesToHierarchies = function () {
-            _.each($scope.lists.hierarchies, function (value, key) {
-               var hierarchies = value;
-               var type = key;
-               _.each(hierarchies, function (value, key) {
-                  var rollUps = value.rollUps;
-                  var hierarchy = key;
-                  _.each(rollUps, function (value, key) {
-                     var rollUp = value.name;
-                     var attributes = $scope.lists.attributes[rollUp];
-                     $scope.lists.hierarchies[type][hierarchy].rollUps[key].attributes.push(attributes);
-                  });
-               });
-            });
-         };*/
-
-         // $scope.attachAttributesToHierarchies();
-
-         $scope.getMonthFormat = function (dateMoment) {
-            var formatYear = $scope.lists.dateFormats['Year'].format;
-            var formatMonth = $scope.lists.dateFormats['Month'].format;
-            var year = dateMoment.format(formatYear);
-            if (formatMonth == 'Custom') {
-               var yearMonthSeparator = $scope.lists.separators['Month'].value;
-               var dateMonthNumber = dateMoment.format('M');
-               var month = year + yearMonthSeparator + dateMonthNumber;
-            } else {
-               var month = dateMoment.format(formatMonth);
-            }
-            return month;
          };
 
          $scope.generateExample = function () {
@@ -194,19 +149,22 @@ arc.directive("arcTimeManagement", function () {
             var year = dateMoment.format(formatYear);
             var day = dateMoment.format(formatDay);
             $scope.examples = {
-               Day: day,
-               Month: $scope.getMonthFormat(dateMoment),
-               Year: year,
-               Quarter: year + $scope.lists.separators['Quarter'].value + '1',
-               HalfYear: year + $scope.lists.separators['HalfYear'].value + '1',
-               Week: year + $scope.lists.separators['Week'].value + '1',
-               FortNight: year + $scope.lists.separators['FortNight'].value + '1',
-               FiscalYear: $scope.lists.separators['FiscalYear'].value + year
+               Day: $scope.generateElement(dateMoment, 'Day'),
+               Month: $scope.generateElement(dateMoment, 'Month'),
+               Year: $scope.generateElement(dateMoment, 'Year'),
+               Quarter: $scope.generateElement(dateMoment, 'Quarter'),
+               HalfYear: $scope.generateElement(dateMoment, 'HalfYear'),
+               Week: $scope.generateElement(dateMoment, 'Week'),
+               FortNight: $scope.generateElement(dateMoment, 'FortNight'),
+               YearFY: $scope.generateElement(dateMoment, 'YearFY'),
+               HalfYearFY: $scope.generateElement(dateMoment, 'HalfYearFY'),
+               QuarterFY: $scope.generateElement(dateMoment, 'QuarterFY'),
+               MonthFY: $scope.generateElement(dateMoment, 'MonthFY')
             };
          };
 
-         $scope.generateDimension = function () {
-            $scope.dimension = [];
+         $scope.generateDimensionInfo = function () {
+            $scope.dimensionInfo = [];
             //Loop through all hierarchies
             _.each($scope.hierarchies, function (value, key) {
                var hierarchy = value;
@@ -217,12 +175,11 @@ arc.directive("arcTimeManagement", function () {
                   'topParent': hierarchy.topParent,
                   'elements': $scope.generateElements(hierarchy)
                };
-               $scope.dimension.push(hierarchyInfo);
+               $scope.dimensionInfo.push(hierarchyInfo);
             });
          };
 
          $scope.generateElements = function (hierarchy) {
-            console.log(hierarchy);
             //Loop through all elements
             var startTimeMoment = $scope.startDate;
             var endTimeMoment = $scope.dateRangeEnd;
@@ -233,8 +190,8 @@ arc.directive("arcTimeManagement", function () {
                _.each(hierarchy.levels, function (element, key) {
                   if (element.included) {
                      elementInfo.push({
-                        'level': levelNumber,
-                        'element': $scope.generateElement(m, element.level)
+                        'level': element.level,
+                        'name': $scope.generateElement(m, element.level)
                      });
                      levelNumber = levelNumber + 1;
                   };
@@ -245,16 +202,114 @@ arc.directive("arcTimeManagement", function () {
          };
 
          $scope.generateElement = function (day, level) {
+            var formatYear = $scope.lists.dateFormats['Year'].format;
+            var formatMonth = $scope.lists.dateFormats['Month'].format;
+            var year = day.format(formatYear);
             if (level == 'Day') {
                return day.format($scope.lists.dateFormats['Day'].format);
             } else if (level == 'Month') {
-               return $scope.getMonthFormat(day);
+               if (formatMonth == 'Custom') {
+                  var yearMonthSeparator = $scope.lists.separators['Month'].value;
+                  var dateMonthNumber = day.format('M');
+                  var month = year + yearMonthSeparator + dateMonthNumber;
+               } else {
+                  var month = day.format(formatMonth);
+               }
+               return month;
             } else if (level == 'Year') {
-               return day.format($scope.lists.dateFormats['Year'].format);
-            } else {
-               return 'NOT DEFINED';
+               return year;
+            } else if (level == 'Quarter') {
+               return year + $scope.lists.separators['Quarter'].value + '1';
+            } else if (level == 'HalfYear') {
+               return year + $scope.lists.separators['HalfYear'].value + '1';
+            } else if (level == 'Week') {
+               return year + $scope.lists.separators['Week'].value + '1';
+            } else if (level == 'FortNight') {
+               return year + $scope.lists.separators['FortNight'].value + '1';
+            } else if (level == 'YearFY') {
+               return $scope.lists.separators['YearFY'].value + year;
+            } else if (level == 'HalfYearFY') {
+               return $scope.lists.separators['HalfYearFY'].value + year;
+            } else if (level == 'QuarterFY') {
+               return $scope.lists.separators['QuarterFY'].value + year;
+            } else if (level == 'MonthFY') {
+               return $scope.lists.separators['MonthFY'].value + year;
             }
          };
+
+         //=======
+         // Execute Ghost TI
+         $scope.executeGhostTI = function (prolog, epilog) {
+            //	TM1 version < PAL 2.0.5: /ExecuteProcess
+            //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
+            if ($scope.tm1VersionSupported) {
+               var executeQuery = "/ExecuteProcessWithReturn?$expand=ErrorLogFile";
+            } else {
+               var executeQuery = "/ExecuteProcess";
+            }
+            body = {
+               Process: {
+                  Name: "TIConsole",
+                  PrologProcedure: prolog,
+                  EpilogProcedure: epilog
+               }
+            };
+            var config = {
+               method: "POST",
+               url: encodeURIComponent($scope.instance) + executeQuery,
+               data: body
+            };
+            $http(config).then(function (result) {
+               //If ErrorLogFile does not exists => SUCCESS
+               if (result.data == "") {
+                  //No error
+               } else {
+                  //Error
+                  var errorLogFile = result.data.error.details.ProcessError;
+                  console.log("failed: " + errorLogFile);
+               }
+            });
+         };
+         //======
+         // Function to create TM1 objects
+         $scope.create = function () {
+            $scope.createDimension();
+            $scope.createHierarchies();
+         };
+
+         $scope.createDimension = function () {
+            var prolog = "DimensionCreate('" + $scope.selections.dimensionName + "');";
+            var epilog = "";
+            $scope.executeGhostTI(prolog, epilog);
+            $scope.selections.dimensionCreated = true;
+         };
+
+         $scope.createHierarchies = function () {
+            _.each($scope.dimensionInfo, function (hierarchy, key) {
+               $scope.insertElementsToDimension(hierarchy.topParent, hierarchy.elements);
+            });
+         };
+
+         $scope.insertElementsToDimension = function (topParent, elements) {
+            var prolog = '';
+            var consolidationsInserted = [];
+            _.each(elements, function (elementInfo, key) {
+               elementInfo.reverse();
+               _.each(elementInfo, function (element, key) {
+                  if(element.level == $scope.selections.dimensionType){
+                     prolog += "DimensionElementInsert('"+$scope.selections.dimensionName+"','','"+element.name+"','N');";
+                  } else{
+                     if(consolidationsInserted.indexOf(element.name) == -1){
+                        consolidationsInserted.push(element.name);
+                        prolog += "DimensionElementInsert('"+$scope.selections.dimensionName+"','','"+element.name+"','C');";
+                     }
+                  }
+               });
+            });
+            $scope.executeGhostTI(prolog, '');
+         };
+
+
 
          //Manage color:
          $scope.generateHSLColour = function (string) {

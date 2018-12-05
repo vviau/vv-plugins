@@ -12,7 +12,7 @@
                   </div>
                   <div class="pull-right">
                      <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step1Next"></button>
-                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
@@ -145,7 +145,7 @@
                      <div class="pull-right">
                         <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
                         <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
-                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                        <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                            translate="TM-ReviewAndCreate"></button>
                      </div>
                   </div>
@@ -169,8 +169,8 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label translate="ALIAS"><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()"
-                                    style="cursor:pointer"></i></label>
+                                 <label translate="ALIAS"></label><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias()"
+                                    style="cursor:pointer"></i>
                            </div>
                            <div class="card-body">
                               <div class="row">
@@ -245,7 +245,7 @@
                                                 <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                                                    style="border-radius:0;display:inline" type="text" ng-model="lists.dateFormats[element.level].format"
                                                    placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
-                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
+                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimensionInfo()">
                                              </span>
                                              <span class="col-md-6">
                                                 {{examples[element.name]}}
@@ -258,7 +258,7 @@
                                                 <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                                                    style="border-radius:0;display:inline" type="text" ng-model="lists.dateFormats[element.level].format"
                                                    placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in alias.format[element.level].format | filter:$viewValue | limitTo:20"
-                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimension()">
+                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimensionInfo()">
                                              </span>
                                              <span class="col-md-6">
                                                 {{examples[element.level] |
@@ -284,8 +284,9 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous"></button>
-                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimension()"
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous">:
+                     </button>
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
@@ -328,8 +329,12 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
-                     <button type="button" class="btn btn-success" ng-click="createDimension()" translate="CREATE"></button>
+                        <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}"
+                           class="btn btn-info" ng-if="selections.dimensionCreated">
+                        <span translate="TM-DIMENSIONCREATED"></span>:{{selections.dimensionName}}
+                    </a>
+                    <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
+                     <button type="button" class="btn btn-success" ng-click="create()" translate="CREATE"></button>
                   </div>
                </div>
                <div class="row">

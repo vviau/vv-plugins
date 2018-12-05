@@ -10,7 +10,7 @@
    "TM-Step3SubTitle": "Select which attributes to include.",
    "TM-Step3Previous": "Previous: Add Hierarchies",
    "TM-Step4Title": "Step 4: Review and Create",
-   "TM-Step4SubTitle": "Please review your dimension Create details. You can go back to edit changes for each section.",
+   "TM-Step4SubTitle": "You can go back to edit changes for each section.",
    "TM-Step4Previous": "Previous: Add Attributes",
    "TM-Step4Next": "Next: Add Attributes",
    "TM-ReviewAndCreate": "Review and Create",
@@ -20,5 +20,6 @@
    "TM-PARENT": "Parent",
    "TM-ELEMENTS": "Elements",
    "TM-FirstWeekDay": "First Week Day",
-   "TM-FirstFiscalYearMonth": "First Fiscal Year Month"
+   "TM-FirstFiscalYearMonth": "First Fiscal Year Month",
+   "TM-DIMENSIONCREATED": "Dimension Created"
 }
