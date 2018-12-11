@@ -34,7 +34,9 @@ arc.directive("arcTimeManagement", function () {
             startDayofWeek: 'Mon',
             fiscalYearStartMonth: 'Jul',
             allDimensionOptions: false,
-            dimensionCreated: false
+            dimensionCreated: false,
+            datePickerFormat: 'DD-MM-YYYY',
+            datePicketView: 'day'
          };
          $scope.selections = {
             startDate: $scope.defaults.startDate,
@@ -48,7 +50,9 @@ arc.directive("arcTimeManagement", function () {
             startDayofWeek: $scope.defaults.startDayofWeek,
             fiscalYearStartMonth: $scope.defaults.fiscalYearStartMonth,
             allDimensionOptions: $scope.defaults.allDimensionOptions,
-            dimensionCreated: $scope.defaults.dimensionCreated
+            dimensionCreated: $scope.defaults.dimensionCreated,
+            datePickerFormat: $scope.defaults.datePickerFormat,
+            datePicketView: $scope.defaults.datePicketView
          };
 
          //==========
@@ -79,6 +83,22 @@ arc.directive("arcTimeManagement", function () {
          };
 
          $scope.values = {};
+
+         //==============
+         // Date format for the datePicker
+         $scope.updateDatePicketFormat = function (){
+            if($scope.selections.dimensionType == 'Day'){
+               $scope.selections.datePickerFormat = 'DD-MM-YYYY';
+               $scope.selections.datePicketView = 'day';
+            } else if($scope.selections.dimensionType == 'Month'){
+               $scope.selections.datePickerFormat = 'MM-YYYY';
+               $scope.selections.datePicketView = 'month';
+            } else if($scope.selections.dimensionType == 'Year'){
+               $scope.selections.datePickerFormat = 'YYYY';
+               $scope.selections.datePicketView = 'year';
+            };
+            //console.log($scope.selections.datePickerFormat, $scope.selections.datePicketView);
+         };
 
          //==============
          // Set active tab
@@ -392,48 +412,6 @@ arc.directive("arcTimeManagement", function () {
             styleObject["background-color"] = 'hsl(' + h + ', ' + saturation + '%, ' + lightness + '%)';
             return styleObject;
          };
-
-         // START END DATE
-         /* Bindable functions
- -----------------------------------------------*/
-         $scope.endDateBeforeRender = endDateBeforeRender
-         $scope.endDateOnSetTime = endDateOnSetTime
-         $scope.startDateBeforeRender = startDateBeforeRender
-         $scope.startDateOnSetTime = startDateOnSetTime
-
-         function startDateOnSetTime() {
-            $scope.$broadcast('start-date-changed');
-         }
-
-         function endDateOnSetTime() {
-            $scope.$broadcast('end-date-changed');
-         }
-
-         function startDateBeforeRender($dates) {
-            if ($scope.dateRangeEnd) {
-               var activeDate = moment($scope.dateRangeEnd);
-
-               $dates.filter(function (date) {
-                  return date.localDateValue() >= activeDate.valueOf()
-               }).forEach(function (date) {
-                  date.selectable = false;
-               })
-            }
-         }
-
-         function endDateBeforeRender($view, $dates) {
-            if ($scope.dateRangeStart) {
-               var activeDate = moment($scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
-
-               $dates.filter(function (date) {
-                  return date.localDateValue() <= activeDate.valueOf()
-               }).forEach(function (date) {
-                  date.selectable = false;
-               })
-            }
-         }
-         // END START END DATE
-
 
          //Trigger an event after the login screen
          $scope.$on("login-reload", function (event, args) {

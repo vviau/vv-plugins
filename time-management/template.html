@@ -43,7 +43,7 @@
                               </div>
                               <div class="col-md-8">
                                  <select class="form-control input-group-append" ng-model="selections.dimensionType"
-                                    ng-options="t for t in lists.dimensionTypes">
+                                    ng-options="t for t in lists.dimensionTypes" ng-change="updateDatePicketFormat()">
                                     <option></option>
                                  </select>
                               </div>
@@ -66,16 +66,17 @@
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeStart" />
+                                    <input type="text" class="form-control" ng-model="dateRangeStart | amDateFormat:'DD-MM-YYYY'" />
                                     <span class="input-group-append">
                                        <button id="dropdownStartTime" type="button" class="btn btn-secondary"
                                           uib-dropdown-toggle>
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
-                                             on-set-time="startDateOnSetTime();startTimeIsOpen=!startTimeIsOpen"
-                                             before-render="startDateBeforeRender($dates)" />
+                                          <datetimepicker  
+                                             ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                             on-set-time="startTimeIsOpen=!startTimeIsOpen"
+                                              />
                                        </span>
                                     </span>
                                  </span>
@@ -87,43 +88,19 @@
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeEnd" />
+                                    <input type="text" class="form-control" ng-model="dateRangeEnd | amDateFormat:'DD-MM-YYYY'" />
                                     <span class="input-group-append">
                                        <button id="dropdownEndTime" type="button" class="btn btn-secondary"
                                           uib-dropdown-toggle>
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
-                                             on-set-time="endDateOnSetTime();endTimeIsOpen=!endTimeIsOpen"
-                                             before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)" />
+                                          <datetimepicker
+                                             ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                             on-set-time="endTimeIsOpen=!endTimeIsOpen" />
                                        </span>
                                     </span>
                                  </span>
-                              </div>
-                           </div>
-                           <div class="row mt-1">
-                              <div class="col-md-6 text-right">
-                                 <label translate="TM-FirstWeekDay">
-                                    :
-                                 </label>
-                              </div>
-                              <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
-                                    ng-options="t for t in lists.weekDays">
-                                    <option></option>
-                                 </select>
-                              </div>
-                           </div>
-                           <div class="row mt-1">
-                              <div class="col-md-6 text-right">
-                                 <label translate="TM-FirstFiscalYearMonth">:</label>
-                              </div>
-                              <div class="col-md-6 text-center">
-                                 <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth"
-                                    ng-options="m for m in lists.months">
-                                    <option></option>
-                                 </select>
                               </div>
                            </div>
                         </div>
@@ -269,6 +246,30 @@
                                     </tr>
                                  </tbody>
                               </table>
+                              <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
+                                    <div class="col-md-6 text-right">
+                                       <label translate="TM-FirstWeekDay">
+                                          :
+                                       </label>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                       <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
+                                          ng-options="t for t in lists.weekDays">
+                                          <option></option>
+                                       </select>
+                                    </div>
+                                 </div>
+                                 <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
+                                    <div class="col-md-6 text-right">
+                                       <label translate="TM-FirstFiscalYearMonth">:</label>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                       <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth"
+                                          ng-options="m for m in lists.months">
+                                          <option></option>
+                                       </select>
+                                    </div>
+                                 </div>
                            </div>
                         </div>
                      </div>
