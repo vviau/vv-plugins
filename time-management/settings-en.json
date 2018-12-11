@@ -234,22 +234,32 @@
          ] }
       },
       "Month": {
-         "Calendar": {
-            "name": "CalendarFY", "levels": [
-               { "level": "4", "name": "All Months", "included": true },
-               { "level": "3", "name": "Year", "included": true },
-               { "level": "2", "name": "HalfYear", "included": true },
-               { "level": "1", "name": "Quarter", "included": true },
-               { "level": "0", "name": "Month", "included": true }
+         "CalendarMonth": {
+            "display":true, "type": "CalendarMonth", "name": "Calendar Month", "shortDesc":"Calendar Month", "desc":"Calendar Month", "topParent": "All Years", "levels": [
+               { "level": "Year", "name": "Year", "included": true },
+               { "level": "HalfYear", "name": "HalfYear", "included": true },
+               { "level": "Quarter", "name": "Quarter", "included": true },
+               { "level": "Month", "name": "Month", "included": true }
             ]
          },
          "CalendarFY": {
-            "name": "CalendarFY", "levels": [
-               { "level": "4", "name": "All Months", "included": true },
-               { "level": "3", "name": "FYYear", "included": true },
-               { "level": "2", "name": "FYHalfYear", "included": true },
-               { "level": "1", "name": "FYQuarter", "included": true },
-               { "level": "0", "name": "FYMonth", "included": true }
+            "display":true,"type": "CalendarFY", "name": "Calendar FY","shortDesc":"Calendar Fiscal Year", "desc":"Calendar Fiscal Year", "topParent": "All Fiscal Years", "levels": [
+               { "level": "YearFY", "name": "Year", "included": true },
+               { "level": "HalfYearFY", "name": "HalfYear", "included": true },
+               { "level": "QuarterFY", "name": "Quarter", "included": true },
+               { "level": "MonthFY", "name": "Month", "included": true }
+            ]
+         }
+      },
+      "Year": {
+         "Calendar": {
+            "display":true, "type": "Calendar", "name": "Calendar", "shortDesc":"Calendar", "desc":"Calendar", "topParent": "All Years", "levels": [
+               { "level": "Year", "name": "Year", "included": true }
+            ]
+         },
+         "CalendarFY": {
+            "display":true,"type": "CalendarFY", "name": "Calendar FY","shortDesc":"Calendar Fiscal Year", "desc":"Calendar Fiscal Year", "topParent": "All Fiscal Years", "levels": [
+               { "level": "YearFY", "name": "Year", "included": true }
             ]
          }
       }

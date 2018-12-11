@@ -66,7 +66,9 @@
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeStart | amDateFormat:'DD-MM-YYYY'" />
+                                    <span type="text" class="form-control">
+                                       {{dateRangeStart | amDateFormat:'DD-MM-YYYY'}}
+                                    </span>
                                     <span class="input-group-append">
                                        <button id="dropdownStartTime" type="button" class="btn btn-secondary"
                                           uib-dropdown-toggle>
@@ -88,7 +90,9 @@
                               </div>
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
-                                    <input type="text" class="form-control" ng-model="dateRangeEnd | amDateFormat:'DD-MM-YYYY'" />
+                                    <span type="text" class="form-control">
+                                 {{dateRangeEnd | amDateFormat:'DD-MM-YYYY'}}
+                                    </span>
                                     <span class="input-group-append">
                                        <button id="dropdownEndTime" type="button" class="btn btn-secondary"
                                           uib-dropdown-toggle>

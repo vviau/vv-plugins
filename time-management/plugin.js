@@ -36,7 +36,8 @@ arc.directive("arcTimeManagement", function () {
             allDimensionOptions: false,
             dimensionCreated: false,
             datePickerFormat: 'DD-MM-YYYY',
-            datePicketView: 'day'
+            datePicketView: 'day',
+            defaultHierarchy: 'CalendarMonth'
          };
          $scope.selections = {
             startDate: $scope.defaults.startDate,
@@ -52,7 +53,8 @@ arc.directive("arcTimeManagement", function () {
             allDimensionOptions: $scope.defaults.allDimensionOptions,
             dimensionCreated: $scope.defaults.dimensionCreated,
             datePickerFormat: $scope.defaults.datePickerFormat,
-            datePicketView: $scope.defaults.datePicketView
+            datePicketView: $scope.defaults.datePicketView,
+            defaultHierarchy: $scope.defaults.defaultHierarchy
          };
 
          //==========
@@ -61,7 +63,8 @@ arc.directive("arcTimeManagement", function () {
          $http.get("__/plugins/time-management/settings-en.json").then(function (value) {
             $scope.lists = value.data;
             $timeout(function () {
-               $scope.addHierarchy('CalendarMonth');
+               var hierarchy = $scope.lists.hierarchyTypes[$scope.selections.dimensionType][[$scope.selections.defaultHierarchy]];
+               $scope.addHierarchy(hierarchy.type);
                $scope.generateExample();
                $scope.generateDimensionInfo();
             });
@@ -90,13 +93,17 @@ arc.directive("arcTimeManagement", function () {
             if($scope.selections.dimensionType == 'Day'){
                $scope.selections.datePickerFormat = 'DD-MM-YYYY';
                $scope.selections.datePicketView = 'day';
+               $scope.selections.defaultHierarchy = 'CalendarMonth';
             } else if($scope.selections.dimensionType == 'Month'){
                $scope.selections.datePickerFormat = 'MM-YYYY';
                $scope.selections.datePicketView = 'month';
+               $scope.selections.defaultHierarchy = 'CalendarMonth';
             } else if($scope.selections.dimensionType == 'Year'){
                $scope.selections.datePickerFormat = 'YYYY';
                $scope.selections.datePicketView = 'year';
+               $scope.selections.defaultHierarchy = 'Calendar';
             };
+            $scope.resetHierarchy();
             //console.log($scope.selections.datePickerFormat, $scope.selections.datePicketView);
          };
 
@@ -110,8 +117,17 @@ arc.directive("arcTimeManagement", function () {
          //===================
          // Manage hierarchies
          $scope.addHierarchy = function (hierarchyType) {
-            var dimensionType = $scope.selections.dimensionType;
-            var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[dimensionType][hierarchyType]);
+            var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[$scope.selections.dimensionType][hierarchyType]);
+            $scope.hierarchies.push(hierarchy);
+            $timeout(function () {
+               $scope.generateDimensionInfo();
+            });
+         };
+
+         $scope.resetHierarchy = function () {
+            $scope.hierarchies=[];
+            var defaultHierarchy = $scope.lists.hierarchyTypes[$scope.selections.dimensionType][[$scope.selections.defaultHierarchy]];
+            var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[$scope.selections.dimensionType][defaultHierarchy.type]);
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
                $scope.generateDimensionInfo();
