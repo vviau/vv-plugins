@@ -609,11 +609,11 @@ ng-click="sendValueToCell(selections.valueToBeSent)"
                         </ul>
                      </div>
                   </div>
-                  <div ng-init="displayCodeC0 = 0" ng-click="displayCodeC0 = 1" class="btn btn-info open-copy-code">
+                  <div ng-init="displayCodeC1 = 0" ng-click="displayCodeC1 = 1" class="btn btn-info open-copy-code">
                      <i class="fa fa-code" aria-hidden="true"></i>
                   </div>
-                  <div ng-show="displayCodeC0 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeC0 = 0">x</div>
-                  <pre id="codeC0" class="codesnipet" ng-show="displayCodeC0 == 1" readonly content-editable>
+                  <div ng-show="displayCodeC1 == 1" class="btn btn-default closecodebtn" ng-click="displayCodeC1 = 0">x</div>
+                  <pre id="codeC1" class="codesnipet" ng-show="displayCodeC1 == 1" readonly content-editable>
          <code><kbd> plugin.js:</kbd>
       $scope.editSubset = function (hierarchy) {
          var handler = function (subset, elements) {
