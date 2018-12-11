@@ -94,6 +94,7 @@ arc.directive("arcTimeManagement", function () {
             var hierarchy = _.cloneDeep($scope.lists.hierarchyTypes[dimensionType][hierarchyType]);
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
+               $scope.generateDimensionInfo();
             });
          };
 
@@ -102,6 +103,7 @@ arc.directive("arcTimeManagement", function () {
          $scope.removeHierarchy = function (hierarchyIndex) {
             $scope.hierarchies.splice(hierarchyIndex, 1);
             $timeout(function () {
+               $scope.generateDimensionInfo();
             });
          };
 
