@@ -1,0 +1,71 @@
+<div>
+
+   <div class="modal-header text-white bg-secondary">
+      <span>
+         <i class="fa fa-file-text-o"></i>
+         <span translate="Export cube data to file"></span>
+         <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Execute the process Bedrock.Cube.Data.Export" popover-trigger="'mouseenter'"
+            popover-class="popover-class-default"></i>
+   </div>
+
+   <div class="modal-body">
+      <label ng-if="label" translate="NAME">:</label>
+      <div style="margin-top:5px">
+         <div>File name:</div>
+         <input class="form-control" type="text" ng-model="ngDialogData.fileName" />
+      </div>
+      <div style="margin-top:5px">
+         <div>File path:</div>
+         <input class="form-control" type="text" ng-model="ngDialogData.filePath" />
+      </div>
+      <div style="margin-top:5px">
+         <div>
+            <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Use + to delimit elements such as 2006 + 2007" popover-trigger="'mouseenter'"
+               popover-class="popover-class-default"></i> Filter: (
+            <a href class="click" ng-click="ngDialogData.showDimensions = !ngDialogData.showDimensions">
+               <i class="fa fa-toggle-on" ng-if="ngDialogData.showDimensions"></i>
+               <i class="fa fa-toggle-off" ng-if="!ngDialogData.showDimensions"></i>
+               <span>Dimensions</span>
+            </a>)
+         </div>
+         <div class="row" ng-if="ngDialogData.showDimensions">
+            <div class="col-md-6" ng-repeat="dim in ngDialogData.dimensions">
+               <div>
+                  {{dim.Name}}:
+               </div>
+               <div class="input-group">
+                  <span class="input-group-prepend" style="width:80%">
+                     <input class="form-control" type="text" ng-model="dim.filter" />
+                  </span>
+                  <span class="input-group-append">
+                     <button type="button" class="btn btn-secondary" ng-click="editSubset(dim, 'titles')">
+                        <i class="fa subset" title="{{'OPENSUBSETEDITOR' | translate}}"></i>
+                     </button>
+                  </span>
+               </div>
+            </div>
+         </div>
+         <div ng-if="!ngDialogData.showDimensions">
+            <input class="form-control" type="text" ng-model="ngDialogData.filter" />
+            <div>Example: Year: 2006 + 2007 & Scenario: Actual + Budget & Organization: North America Operations
+            </div>
+         </div>
+      </div>
+      <div class="row m-2" style="margin-top:5px">
+         <div class="col">
+            <input type="checkbox" ng-model="ngDialogData.skipRules" />
+            <span translate="SKIPRULES"></span>
+         </div>
+         <div class="col">
+            <input type="checkbox" ng-model="ngDialogData.skipCons" />
+            <span translate="SKIPCONS"></span>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <button type="button" class="btn btn-secondary action" ng-disabled="!ngDialogData.fileName.length" ng-click="ngDialogData.action(ngDialogData)"
+         translate="OK"></button>
+      <button type="button" class="btn action" ng-click="closeThisDialog(0)" translate="CANCEL"></button>
+   </div>
+
+</div>

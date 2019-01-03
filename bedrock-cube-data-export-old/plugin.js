@@ -1,10 +1,7 @@
-// Add array to store element names
-// Add array.push to include new elements
-
 
 arc.run(['$rootScope', function ($rootScope) {
 
-   $rootScope.plugin("cubewiseBedrockCubeDataExport", "Bedrock Export", "menu/cube", {
+   $rootScope.plugin("cubewiseBedrockCubeDataExportOld", "Bedrock Export Old", "menu/cube", {
       icon: "fa-cloud-download",
       description: "This plugin exports cube data using Bedrock.Cube.Data.Export process. You can specify:....",
       author: "Cubewise",
@@ -14,10 +11,11 @@ arc.run(['$rootScope', function ($rootScope) {
 
 }]);
 
-arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', '$dialogs', '$http', function ($rootScope, $tm1, ngDialog, $dialogs, $http) {
+arc.service('cubewiseBedrockCubeDataExportOld', ['$rootScope', '$tm1', 'ngDialog', '$dialogs', '$http', function ($rootScope, $tm1, ngDialog, $dialogs, $http) {
 
    // The interface you must implement
    this.execute = function (instance, name) {
+
       // Create a callback function for the dialog
       var action = function (options) {
          dialog.close();
@@ -26,23 +24,15 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
          _.each(options.dimensions, function (item) {
             if (item.filter) {
                if(nbDimensionFiltered==1){
-                  options.filter = item.Name +'::'+item.filter;
+                  options.filter = item.Name +':'+item.filter;
                }else{
-                  options.filter = options.filter+' && '+item.Name +'::'+item.filter;
+                  options.filter = options.filter+' & '+item.Name +':'+item.filter;
                }
                nbDimensionFiltered++;
             }
          });
-
-         var processName;
-         // Define processName based on user choice in html form
-         if(options.exportSeparatorCSV){
-            processName = "Bedrock.Cube.Data.Export";
-         }else{
-            processName = "Bedrock.Cube.Data.Export.Tab";
-         };
          // Call Bedrock.Cube.Data.Export via the $tm1 service 
-         $tm1.processExecute(instance, processName, [
+         $tm1.processExecute(instance, "Bedrock.Cube.Data.Export", [
             {
                Name: "pCube",
                Value: name
@@ -61,15 +51,6 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
             }, {
                Name: "pFileName",
                Value: options.fileName
-            }, {
-               Name: "pDimensionDelim",
-               Value: options.dimensionDelim
-            }, {
-               Name: "pElementStartDelim",
-               Value: options.elementStartDelim
-            }, {
-               Name: "pElementDelim",
-               Value: options.elementDelim
             }
          ]).then(function (result) {
             if (result.success) {
@@ -80,13 +61,6 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
       };
 
       var dialog = undefined;
-      
-      // Get TM1 instance directory for default file path in dialog window
-      var directory;
-      var query = "/Configuration?$select=DataBaseDirectory";
-      $http.get(encodeURIComponent(instance) + query).then(function (result) {
-         directory = result.data.DataBaseDirectory;
-      });
 
       //Get all dimensions
       var query = "/Cubes('" + name + "')/Dimensions?$select=Name";
@@ -103,7 +77,7 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
                alias:dim.Name
             }
          });
-         // console.log(dimensions);
+         console.log(dimensions);
          // Use ngDialog (https://github.com/likeastore/ngDialog) for custom dialog boxes
          // Pass a template URL to use an external file, path should start with __/plugins/{{your-plugin-name}}
          // Use the data option to pass through data (or functions to the template), the data is then used in
@@ -111,8 +85,8 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
          // vincent:
          //initialize the diaglog box inside the REST API request to make sure the dimensions are initialized
          dialog = ngDialog.open({
-            className: "ngdialog-theme-default",
-            template: "__/plugins/bedrock-cube-data-export/template.html",
+            className: "ngdialog-theme-default small",
+            template: "__/plugins/bedrock-cube-data-export-old/template.html",
             controller: ['$rootScope', '$scope', '$subsetDialogs', function ($rootScope, $scope, $subsetDialogs) {
                //Open Subset Editor
                $scope.editSubset = function (dimension) {
@@ -122,15 +96,10 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
                   var handler = function(subset, elements){
                 
                      // subset.selected has what element was clicked
-                     // dimension.filter will append every selected element
-                     // if to workaround undefined value being by default
-                     if( dimension.filter === undefined){
-                        dimension.filter = subset.selected.alias
-                     }else{
-                        dimension.filter +=  "++"+subset.selected.alias;                
-                     }                    
+                     dimension.filter = subset.selected.alias;
+                     
                   };
-
+                  
                   // Probably don't need the expression or expressions (not tested)
                   var subset = {
                      name: hierarchy.subset,
@@ -139,38 +108,23 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
                      alias: hierarchy.alias,
                      isSelector: true
                   };
-
+   
                   $subsetDialogs.open(instance, hierarchy.dimension, hierarchy.name, subset, handler);
                   
                 };
-            
-            //  Maciej: My attempt to dynamically color all ++ in element filter
-            //     function chnColor(){
-            //       str=document.getElementsByClassName("dim.filter");
-            //       str=str.replace(/(\+)(\+)/g,"<font color='red'>$1$2</font>");
-            //       document.getElementsByClassName("dim.filter")=str;
-            //   }
-          
-            //    chnColor();
 
             }],
             data: {
                fileName: name + ".csv",
-               filePath: directory,
+               filePath: "C:\\Arc",
                filter: "",
-               dimensionDelim: "&&",
-               elementStartDelim: "::",
-               elementDelim: "++",
                skipRules: true,
                skipCons: true,
                dimensions: dimensions,
-               manualFilter: true,
-               exportSeparatorCSV: true,
+               showDimensions: true,
                action: action // pass through the function declared above
             }
-            
          });
-
       });
 
    };

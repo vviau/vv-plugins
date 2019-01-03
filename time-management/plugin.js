@@ -145,7 +145,7 @@ arc.directive("arcTimeManagement", function () {
 
          //===================
          // Manage Aliases
-         $scope.addAlias = function () {
+         $scope.addAlias = function (index) {
             var dimensionType = $scope.selections.dimensionType;
             if ($scope.aliases.length == 0) {
                var aliasName = 'Description';
@@ -158,18 +158,19 @@ arc.directive("arcTimeManagement", function () {
                   Day: { format: 'DD-MM-YYYY' },
                   Month: { format: 'MM-YYYY' },
                   Year: { format: 'YYYY' },
-                  Week: { format: 'Custom' },
-                  Quater: { format: 'Custom' },
-                  HalfYear: { format: 'Custom' }
+                  Week: { format: 'YYYY[-W]1' },
+                  Quater: { format: 'YYYY[-Q]1' },
+                  HalfYear: { format: 'YYYY[-H]1' }
                }
             };
             $scope.aliases.push(newAlias);
             $timeout(function () {
+               $scope.generateExampleAlias(index);
             });
          };
 
          $scope.aliases = [];
-         $scope.addAlias();
+         $scope.addAlias(0);
 
          $scope.removeAlias = function (AliasIndex) {
             $scope.aliases.splice(AliasIndex, 1);
@@ -178,14 +179,9 @@ arc.directive("arcTimeManagement", function () {
          };
 
          $scope.generateExample = function () {
-            // Get format
-            var formatDay = $scope.lists.dateFormats['Day'].format;
-            var formatYear = $scope.lists.dateFormats['Year'].format;
             // Get date
             var dateMoment = $scope.startDate;
             // Define variables
-            var year = dateMoment.format(formatYear);
-            var day = dateMoment.format(formatDay);
             $scope.examples = {
                Day: $scope.generateElement(dateMoment, 'Day'),
                Month: $scope.generateElement(dateMoment, 'Month'),
@@ -200,6 +196,28 @@ arc.directive("arcTimeManagement", function () {
                MonthFY: $scope.generateElement(dateMoment, 'MonthFY')
             };
          };
+
+         $scope.generateExampleAlias = function (alias) {
+            console.log(alias);
+            // Get date
+            var dateMoment = $scope.startDate;
+            // Define variables
+            $scope.aliases[alias].examples = {
+               Day: $scope.generateElement(dateMoment, 'Day'),
+               Month: $scope.generateElement(dateMoment, 'Month'),
+               Year: $scope.generateElement(dateMoment, 'Year'),
+               Quarter: $scope.generateElement(dateMoment, 'Quarter'),
+               HalfYear: $scope.generateElement(dateMoment, 'HalfYear'),
+               Week: $scope.generateElement(dateMoment, 'Week'),
+               FortNight: $scope.generateElement(dateMoment, 'FortNight'),
+               YearFY: $scope.generateElement(dateMoment, 'YearFY'),
+               HalfYearFY: $scope.generateElement(dateMoment, 'HalfYearFY'),
+               QuarterFY: $scope.generateElement(dateMoment, 'QuarterFY'),
+               MonthFY: $scope.generateElement(dateMoment, 'MonthFY')
+            };
+         };
+
+
 
          $scope.generateDimensionInfo = function () {
             $scope.dimensionInfo = [];
@@ -243,6 +261,7 @@ arc.directive("arcTimeManagement", function () {
             var formatYear = $scope.lists.dateFormats['Year'].format;
             var formatMonth = $scope.lists.dateFormats['Month'].format;
             var year = day.format(formatYear);
+            var monthNumber = day.format('MM');
             if (level == 'Day') {
                return day.format($scope.lists.dateFormats['Day'].format);
             } else if (level == 'Month') {
@@ -257,11 +276,49 @@ arc.directive("arcTimeManagement", function () {
             } else if (level == 'Year') {
                return year;
             } else if (level == 'Quarter') {
-               return year + $scope.lists.separators['Quarter'].value + '1';
+               return day.format($scope.lists.dateFormats['Quarter'].format);
             } else if (level == 'HalfYear') {
-               return year + $scope.lists.separators['HalfYear'].value + '1';
+               return day.format($scope.lists.dateFormats['HalfYear'].format);
             } else if (level == 'Week') {
-               return year + $scope.lists.separators['Week'].value + '1';
+               return day.format($scope.lists.dateFormats['Week'].format);
+            } else if (level == 'FortNight') {
+               return year + $scope.lists.separators['FortNight'].value + '1';
+            } else if (level == 'YearFY') {
+               return $scope.lists.separators['YearFY'].value + year;
+            } else if (level == 'HalfYearFY') {
+               return $scope.lists.separators['HalfYearFY'].value + year;
+            } else if (level == 'QuarterFY') {
+               return $scope.lists.separators['QuarterFY'].value + year;
+            } else if (level == 'MonthFY') {
+               return $scope.lists.separators['MonthFY'].value + year;
+            }
+         };
+
+         $scope.generateAlias = function (day, level) {
+            console.log('HERE WE ARE!!!');
+            var formatYear = $scope.lists.dateFormats['Year'].format;
+            var formatMonth = $scope.lists.dateFormats['Month'].format;
+            var year = day.format(formatYear);
+            var monthNumber = day.format('MM');
+            if (level == 'Day') {
+               return day.format($scope.lists.dateFormats['Day'].format);
+            } else if (level == 'Month') {
+               if (formatMonth == 'Custom') {
+                  var yearMonthSeparator = $scope.lists.separators['Month'].value;
+                  var dateMonthNumber = day.format('M');
+                  var month = year + yearMonthSeparator + dateMonthNumber;
+               } else {
+                  var month = day.format(formatMonth);
+               }
+               return month;
+            } else if (level == 'Year') {
+               return year;
+            } else if (level == 'Quarter') {
+               return day.format($scope.lists.dateFormats['Quarter'].format);
+            } else if (level == 'HalfYear') {
+               return day.format($scope.lists.dateFormats['HalfYear'].format);
+            } else if (level == 'Week') {
+               return day.format($scope.lists.dateFormats['Week'].format);
             } else if (level == 'FortNight') {
                return year + $scope.lists.separators['FortNight'].value + '1';
             } else if (level == 'YearFY') {

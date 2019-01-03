@@ -1,41 +1,68 @@
+<head>
+   <style type="text/css">
+      .ngdialog.ngdialog-theme-default .ngdialog-content {
+         width: 70%;
+         max-width: 650px;
+      }
+      #parameterSeparator{
+         margin-bottom: 0;
+         border: 0;
+         height: 1px;
+         background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+      }
+      
+   </style>
+</head>
+<body>
 <div>
-
+   <!-- Title -->
    <div class="modal-header text-white bg-secondary">
       <span>
-         <i class="fa fa-file-text-o"></i>
+         <i class="fa fa-cloud-download"></i>
          <span translate="Export cube data to file"></span>
          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Execute the process Bedrock.Cube.Data.Export" popover-trigger="'mouseenter'"
             popover-class="popover-class-default"></i>
    </div>
-
+   <!-- Body -->
    <div class="modal-body">
+      <!-- File name input box -->
       <label ng-if="label" translate="NAME">:</label>
       <div style="margin-top:5px">
          <div>File name:</div>
          <input class="form-control" type="text" ng-model="ngDialogData.fileName" />
       </div>
+      <!-- File path input box -->
       <div style="margin-top:5px">
          <div>File path:</div>
          <input class="form-control" type="text" ng-model="ngDialogData.filePath" />
       </div>
+      <!-- Filter definition -->
       <div style="margin-top:5px">
          <div>
-            <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Use + to delimit elements such as 2006 + 2007" popover-trigger="'mouseenter'"
-               popover-class="popover-class-default"></i> Filter: (
-            <a href class="click" ng-click="ngDialogData.showDimensions = !ngDialogData.showDimensions">
-               <i class="fa fa-toggle-on" ng-if="ngDialogData.showDimensions"></i>
-               <i class="fa fa-toggle-off" ng-if="!ngDialogData.showDimensions"></i>
-               <span>Dimensions</span>
-            </a>)
+            <!-- Pop-up information -->
+            <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Specify element filter manually, as shown in Example, or through subset editor. To choose multiple elements per dimension you need to reopen subset editor and choose additional elements." popover-trigger="'mouseenter'"
+            popover-class="popover-class-default"></i> 
+            <!-- Turn on/off manual filter definition -->
+            <span>Filter: </span>
+            <a href class="click" ng-click="ngDialogData.manualFilter = !ngDialogData.manualFilter">
+                    <i class="fa fa-toggle-on" ng-if="ngDialogData.manualFilter"></i>
+                    <i class="fa fa-toggle-off" ng-if="!ngDialogData.manualFilter"></i>
+                 </a>
+            <span> Manual</span>
          </div>
-         <div class="row" ng-if="ngDialogData.showDimensions">
-            <div class="col-md-6" ng-repeat="dim in ngDialogData.dimensions">
+         <!-- IF manual definition turned off, then display each dimension in a cube -->
+         <!-- Additionally: Skip Sandbox dimension with ng-if -->
+         <div class="row" ng-if="!ngDialogData.manualFilter">
+            <div class="col-md-6" ng-repeat="dim in ngDialogData.dimensions" ng-if="dim.Name!='Sandboxes'">
                <div>
                   {{dim.Name}}:
                </div>
                <div class="input-group">
                   <span class="input-group-prepend" style="width:80%">
-                     <input class="form-control" type="text" ng-model="dim.filter" />
+                     <input class="form-control" type="text" ng-model="dim.filter">
+                     <!-- Changed to textarea due to element filters becoming quickly too large if we allow multiple elements -->
+                     <!-- Doesn't work, subset editor doesn't input selection into textarea -->
+                     <!-- <textarea class="form-control dim.filter" ng-model="dim_filter" rows = "1"></textarea> -->
                   </span>
                   <span class="input-group-append">
                      <button type="button" class="btn btn-secondary" ng-click="editSubset(dim, 'titles')">
@@ -45,13 +72,26 @@
                </div>
             </div>
          </div>
-         <div ng-if="!ngDialogData.showDimensions">
+         <!-- IF manual definition turned off, then display additional information -->
+         <div ng-if="ngDialogData.manualFilter">
             <input class="form-control" type="text" ng-model="ngDialogData.filter" />
-            <div>Example: Year: 2006 + 2007 & Scenario: Actual + Budget & Organization: North America Operations
+            <div>Example: Year: 2006 ++ 2007 & Scenario: Actual ++ Budget & Organization: Europe
             </div>
          </div>
       </div>
-      <div class="row m-2" style="margin-top:5px">
+      <!-- Additional parameters -->
+      <hr id="parameterSeparator">
+      <div class="row m-3">
+         <!-- Export file separator -->
+         <div class="col">
+               <span>TAB</span> 
+               <a href class="click" ng-click="ngDialogData.exportSeparatorCSV = !ngDialogData.exportSeparatorCSV">  
+                  <i class="fa fa-toggle-on" ng-if="ngDialogData.exportSeparatorCSV"></i>
+                  <i class="fa fa-toggle-on fa-rotate-180" ng-if="!ngDialogData.exportSeparatorCSV"></i>
+               </a>
+               <span>CSV</span>
+         </div>
+         <!-- Checkboxes: Skip rules & Skip consolidations -->
          <div class="col">
             <input type="checkbox" ng-model="ngDialogData.skipRules" />
             <span translate="SKIPRULES"></span>
@@ -62,6 +102,7 @@
          </div>
       </div>
    </div>
+   <!-- Footer: Cancel / Run buttons -->
    <div class="modal-footer">
       <button type="button" class="btn btn-secondary action" ng-disabled="!ngDialogData.fileName.length" ng-click="ngDialogData.action(ngDialogData)"
          translate="OK"></button>
@@ -69,3 +110,5 @@
    </div>
 
 </div>
+
+</body>
