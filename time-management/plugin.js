@@ -284,7 +284,7 @@ arc.directive("arcTimeManagement", function () {
             var startTimeMoment = $scope.selections.dateRangeStart;
             var endTimeMoment = $scope.selections.dateRangeEnd;
             var elements = [];
-            for (var m = moment(startTimeMoment); m.diff(endTimeMoment, 'days') <= 0; m.add(1, 'days')) {
+            for (var m = moment(startTimeMoment); m.diff(endTimeMoment, 'days') < 0; m.add(1, 'days')) {
                var elementInfo = [];
                var levelNumber = 0;
                _.each(hierarchy.levels, function (element, key) {
@@ -312,9 +312,16 @@ arc.directive("arcTimeManagement", function () {
          $scope.generateElement = function (day, level) {
             var formatYear = $scope.lists.dateFormats['Year'].format;
             var formatMonth = $scope.lists.dateFormats['Month'].format;
-            var newDay = day
             var monthMMM = day.format('MMM');
-            var quarterNumber = $scope.lists[monthMMM].Quarter;
+            var newDay = _.cloneDeep(day)
+            var quarterFYNumber = $scope.lists[monthMMM].QuarterFY;
+            if(level == 'YearFY' || level == 'HalfYearFY' || level == 'QuarterFY' ){
+               //Change year if Q3 or Q4
+               if(quarterFYNumber == "3" || quarterFYNumber == "4"){
+                  //console.log(day,newDay);
+                  newDay = newDay.subtract(1, 'year');
+               }
+            }
             var year = newDay.format(formatYear);
             if (level == 'Day') {
                return newDay.format($scope.lists.dateFormats['Day'].format);
@@ -338,9 +345,6 @@ arc.directive("arcTimeManagement", function () {
             } else if (level == 'FortNight') {
                return year + $scope.lists.separators['FortNight'].value + '1';
             } else if (level == 'YearFY') {
-               if(quarterNumber == "3" || quarterNumber == "4"){
-                  newDay = newDay.add(1, 'years');
-               }
                return newDay.format($scope.lists.dateFormats['YearFY'].format);
             } else if (level == 'HalfYearFY') {
                return newDay.format($scope.lists.dateFormats['HalfYearFY'].format) + $scope.lists[monthMMM]['HalfYearFY'];
