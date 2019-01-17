@@ -32,7 +32,7 @@
                                  </label>
                               </div>
                               <div class="col-md-8">
-                                 <input type="text" class="form-control" ng-model="selections.dimensionName" />
+                                 <input type="text" class="form-control" ng-model="selections.dimensionName" ng-change="checkIfDimensionExist()" />
                               </div>
                            </div>
                            <div class="row mt-2">
@@ -67,7 +67,7 @@
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="startTimeIsOpen">
                                     <span type="text" class="form-control">
-                                       {{dateRangeStart | amDateFormat:'DD-MM-YYYY'}}
+                                       {{selections.dateRangeStart | amDateFormat:'DD-MM-YYYY'}}
                                     </span>
                                     <span class="input-group-append">
                                        <button id="dropdownStartTime" type="button" class="btn btn-secondary"
@@ -75,10 +75,8 @@
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker  
-                                             ng-model="dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
-                                             on-set-time="startTimeIsOpen=!startTimeIsOpen"
-                                              />
+                                          <datetimepicker ng-model="selections.dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                             on-set-time="startTimeIsOpen=!startTimeIsOpen" />
                                        </span>
                                     </span>
                                  </span>
@@ -91,7 +89,7 @@
                               <div class="col-md-6">
                                  <span class="input-group" uib-dropdown is-open="endTimeIsOpen">
                                     <span type="text" class="form-control">
-                                 {{dateRangeEnd | amDateFormat:'DD-MM-YYYY'}}
+                                       {{selections.dateRangeEnd | amDateFormat:'DD-MM-YYYY'}}
                                     </span>
                                     <span class="input-group-append">
                                        <button id="dropdownEndTime" type="button" class="btn btn-secondary"
@@ -99,8 +97,7 @@
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker
-                                             ng-model="dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                          <datetimepicker ng-model="selections.dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
                                              on-set-time="endTimeIsOpen=!endTimeIsOpen" />
                                        </span>
                                     </span>
@@ -127,7 +124,7 @@
                         <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
                         <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
                         <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
-                           translate="TM-ReviewAndCreate"></button>
+                           translate="TM-ReviewAndCreate"> <span></span></button>
                      </div>
                   </div>
                   <div class="row">
@@ -150,8 +147,8 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                                 <label translate="ALIAS"></label><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias(aliases.length)"
-                                    style="cursor:pointer"></i>
+                              <label translate="ALIAS"></label><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias(aliases.length)"
+                                 style="cursor:pointer"></i>
                            </div>
                            <div class="card-body">
                               <div class="row">
@@ -180,7 +177,7 @@
                                  <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
                                  <span class="input-group-append input-group-text" translate="TM-PARENT">:
                                  </span>
-                                 <input type="text" class="form-control input-group-append" ng-model="hierarchy.topParent" />
+                                 <input type="text" class="form-control input-group-append" ng-model="hierarchy.levels[0].name" />
                                  <span class="input-group-append">
                                     <button class="btn btn-danger" title="Delete" ng-click="removeHierarchy($index)">
                                        <i class="fa fa-fw fa-trash"></i>
@@ -209,7 +206,7 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                    <tr ng-repeat="element in hierarchy.levels">
+                                    <tr ng-repeat="element in hierarchy.levels" ng-if="$index != 0">
                                        <td>
                                           <a href class="click" ng-click="element.included = !element.included" ng-if="element.level!=selections.dimensionType">
                                              <i class="fa fa-toggle-on text-success" ng-if="element.included"></i>
@@ -229,7 +226,7 @@
                                                    typeahead-append-to-body="true" ng-change="generateExample();generateDimensionInfo()">
                                              </span>
                                              <span class="col-md-6">
-                                                {{examples[element.name]}}
+                                                {{examples[element.level]}}
                                              </span>
                                           </span>
                                        </td>
@@ -249,30 +246,91 @@
                                     </tr>
                                  </tbody>
                               </table>
+                              <div class="row mt-1" ng-if="hierarchy.type == 'CalendarMonth'">
+                                 <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
+                                    <label>
+                                       Manage Roll-ups:
+                                    </label>
+                                    <table class="table table-hover table-responsive">
+                                       <thead>
+                                          <tr>
+                                             <th ng-repeat="month in lists.months"> {{month}} </th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr ng-if="hierarchy.levels[2].included">
+                                             <td ng-repeat="month in lists.months">
+                                                <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYear==1,
+                                                                  'badge-success':lists[month].HalfYear==2}"
+                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYear', month)">
+                                                      H{{lists[month].HalfYear}}
+                                                   </span></h5>
+                                             </td>
+                                          </tr>
+                                          <tr ng-if="hierarchy.levels[3].included">
+                                             <td ng-repeat="month in lists.months">
+                                                <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].Quarter==1,
+                                                                     'badge-secondary':lists[month].Quarter==2,
+                                                                     'badge-success':lists[month].Quarter==3,
+                                                                     'badge-info':lists[month].Quarter==4}"
+                                                      style="cursor:pointer" ng-click="updateMonthConso('Quarter',month)">
+                                                      Q{{lists[month].Quarter}}
+                                                   </span></h5>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
-                                    <div class="col-md-6 text-right">
-                                       <label translate="TM-FirstWeekDay">
-                                          :
-                                       </label>
-                                    </div>
-                                    <div class="col-md-6 text-center">
-                                       <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
-                                          ng-options="t for t in lists.weekDays">
-                                          <option></option>
-                                       </select>
-                                    </div>
+                                 <div class="col-md-6 text-right">
+                                    <label translate="TM-FirstWeekDay">
+                                       :
+                                    </label>
                                  </div>
-                                 <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
-                                    <div class="col-md-6 text-right">
-                                       <label translate="TM-FirstFiscalYearMonth">:</label>
-                                    </div>
-                                    <div class="col-md-6 text-center">
-                                       <select class="form-control input-group-append" ng-model="selections.fiscalYearStartMonth"
-                                          ng-options="m for m in lists.months">
-                                          <option></option>
-                                       </select>
-                                    </div>
+                                 <div class="col-md-6 text-center">
+                                    <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
+                                       ng-options="t for t in lists.weekDays">
+                                       <option></option>
+                                    </select>
                                  </div>
+                              </div>
+                              <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
+                                 <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
+                                       <label>
+                                             Manage Roll-ups:
+                                          </label>
+                                    <table class="table table-hover table-responsive">
+                                       <thead>
+                                          <tr>
+                                             <th ng-repeat="month in lists.months"> {{month}} </th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr ng-if="hierarchy.levels[2].included">
+                                             <td ng-repeat="month in lists.months">
+                                                <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYearFY==1,
+                                                                     'badge-success':lists[month].HalfYearFY==2}"
+                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYearFY', month)">
+                                                      H{{lists[month].HalfYearFY}}
+                                                   </span></h5>
+                                             </td>
+                                          </tr>
+                                          <tr ng-if="hierarchy.levels[3].included">
+                                             <td ng-repeat="month in lists.months">
+                                                <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].QuarterFY==1,
+                                                                        'badge-secondary':lists[month].QuarterFY==2,
+                                                                        'badge-success':lists[month].QuarterFY==3,
+                                                                        'badge-info':lists[month].QuarterFY==4}"
+                                                      style="cursor:pointer" ng-click="updateMonthConso('QuarterFY',month)">
+                                                      Q{{lists[month].QuarterFY}}
+                                                   </span></h5>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -324,7 +382,7 @@
                   </table>
                </auto-height>
             </uib-tab>
-            <uib-tab index="3" heading="4.Review">
+            <uib-tab index="3" heading="4.Review" ng-click="generateDimensionInfo()">
                <div class="toolbar">
                   <div class="page-title">
                      <h3 translate="TM-Step4Title">
@@ -333,12 +391,40 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                        <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}"
-                           class="btn btn-info" ng-if="createDimensionDone">
+                     <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}" class="btn btn-info"
+                        ng-if="createDimensionDone">
                         <span translate="TM-DIMENSIONCREATED"></span>:{{selections.dimensionName}}
-                    </a>
-                    <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
+                     </a>
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
                      <button type="button" class="btn btn-success" ng-click="create()" translate="CREATE"></button>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="alert alert-info" role="alert" ng-if="!dimensionExists">
+                        Dimension {{selections.dimensionName}}
+                        does not exists yet. Waiting for you to click the Create button...
+                     </div>
+                     <div class="alert alert-warning" role="alert" ng-if="dimensionExists">
+                        <i class="fa fa-fw fa-warning"></i> Dimension
+                        <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}">
+                           {{selections.dimensionName}}
+                        </a> already exists, what do you want to do with leaf elements:
+                        <div class="form-check-inline">
+                           <div class="radio ml-1">
+                              <label class="form-check-label">
+                                 <input ng-model="selections.toDoLeafElements" type="radio" name="option1" ng-value="'unwindAllElements'">
+                                 Unwind All ELements
+                              </label>
+                           </div>
+                           <div class="radio ml-1">
+                              <label class="form-check-label">
+                                 <input ng-model="selections.toDoLeafElements" type="radio" name="option2" ng-value="'deleteAllElements'">
+                                 Delete All Elements
+                              </label>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                </div>
                <div class="row">
@@ -349,13 +435,13 @@
                               <div class="card-header" style="padding: 5px 10px;">
                                  <label>{{hierarchy.name}}</label>
                                  <span class="pull-right">
-                                       <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
-                                          <i class="fa fa-fw fa-eye-slash"></i>
-                                       </button>
-                                       <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
-                                          <i class="fa fa-fw fa-eye"></i>
-                                       </button>
-                                    </span>
+                                    <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
+                                       <i class="fa fa-fw fa-eye-slash"></i>
+                                    </button>
+                                    <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
+                                       <i class="fa fa-fw fa-eye"></i>
+                                    </button>
+                                 </span>
                               </div>
                               <div class="card-body" ng-if="hierarchy.display">
                                  <table class="table table-hover table-sm">
