@@ -1,7 +1,6 @@
 // Add array to store element names
 // Add array.push to include new elements
 
-
 arc.run(['$rootScope', function ($rootScope) {
 
    $rootScope.plugin("cubewiseBedrockCubeDataExport", "Bedrock Export", "menu/cube", {
@@ -9,15 +8,15 @@ arc.run(['$rootScope', function ($rootScope) {
       description: "This plugin exports cube data using Bedrock.Cube.Data.Export process. You can specify:....",
       author: "Cubewise",
       url: "https://github.com/cubewise-code/arc-plugins",
-      version: "1.0.0"
+      version: "1.0.2"
    });
 
 }]);
 
 arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', '$dialogs', '$http', function ($rootScope, $tm1, ngDialog, $dialogs, $http) {
-
    // The interface you must implement
    this.execute = function (instance, name) {
+
       // Create a callback function for the dialog
       var action = function (options) {
          dialog.close();
@@ -26,21 +25,16 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
          _.each(options.dimensions, function (item) {
             if (item.filter) {
                if(nbDimensionFiltered==1){
-                  options.filter = item.Name +'::'+item.filter;
+                  options.filter = item.Name + options.elementStartDelim + item.filter;
                }else{
-                  options.filter = options.filter+' && '+item.Name +'::'+item.filter;
+                  options.filter = options.filter + options.elementDelim + item.Name + options.elementStartDelim + item.filter;
                }
                nbDimensionFiltered++;
             }
          });
 
-         var processName;
-         // Define processName based on user choice in html form
-         if(options.exportSeparatorCSV){
-            processName = "Bedrock.Cube.Data.Export";
-         }else{
-            processName = "Bedrock.Cube.Data.Export.Tab";
-         };
+         var processName = "Bedrock.Cube.Data.Export";
+
          // Call Bedrock.Cube.Data.Export via the $tm1 service 
          $tm1.processExecute(instance, processName, [
             {
@@ -109,7 +103,8 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
          // Use the data option to pass through data (or functions to the template), the data is then used in
          //  the template with ngDialogData
          // vincent:
-         //initialize the diaglog box inside the REST API request to make sure the dimensions are initialized
+         //initialize the dialog box inside the REST API request to make sure the dimensions are initialized
+
          dialog = ngDialog.open({
             className: "ngdialog-theme-default",
             template: "__/plugins/bedrock-cube-data-export/template.html",
@@ -125,9 +120,9 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
                      // dimension.filter will append every selected element
                      // if to workaround undefined value being by default
                      if( dimension.filter === undefined){
-                        dimension.filter = subset.selected.alias
+                        dimension.filter = subset.selected.alias;
                      }else{
-                        dimension.filter +=  "++"+subset.selected.alias;                
+                        dimension.filter +=  document.querySelector("#elementDelim").value + subset.selected.alias;
                      }                    
                   };
 
@@ -143,18 +138,10 @@ arc.service('cubewiseBedrockCubeDataExport', ['$rootScope', '$tm1', 'ngDialog', 
                   $subsetDialogs.open(instance, hierarchy.dimension, hierarchy.name, subset, handler);
                   
                 };
-            
-            //  Maciej: My attempt to dynamically color all ++ in element filter
-            //     function chnColor(){
-            //       str=document.getElementsByClassName("dim.filter");
-            //       str=str.replace(/(\+)(\+)/g,"<font color='red'>$1$2</font>");
-            //       document.getElementsByClassName("dim.filter")=str;
-            //   }
-          
-            //    chnColor();
 
             }],
             data: {
+               cubeName: name,
                fileName: name + ".csv",
                filePath: directory,
                filter: "",
