@@ -106,6 +106,18 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.checkIfDimensionExist();
 
+         //================
+         // Check if dimension already exists
+         $scope.lists.dimensions = [];
+         $scope.getAllDimensionsName = function () {
+            $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
+               $scope.lists.dimensions = result.data.value;
+               console.log($scope.lists.dimensions);
+            });
+         };
+
+         $scope.getAllDimensionsName();
+
          //=================
          // Update Month consolidation Quarter, HalfYear...
          $scope.updateMonthConso = function (consolidation, month) {

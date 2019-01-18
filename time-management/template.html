@@ -27,19 +27,17 @@
                         <div class="card-body">
                            <div class="row">
                               <div class="col-md-4 text-right">
-                                 <label translate="NAME">
-                                    :
-                                 </label>
+                                 <label translate="NAME"></label>:
                               </div>
                               <div class="col-md-8">
-                                 <input type="text" class="form-control" ng-model="selections.dimensionName" ng-change="checkIfDimensionExist()" />
+                                 <input type="text" class="form-control" ng-model="selections.dimensionName" ng-change="checkIfDimensionExist()"
+                                 uib-typeahead="dimension.Name for dimension in lists.dimensions | filter:$viewValue | limitTo:20"
+                                 typeahead-append-to-body="true" />
                               </div>
                            </div>
                            <div class="row mt-2">
                               <div class="col-md-4 text-right">
-                                 <label>
-                                    Leaf:
-                                 </label>
+                                 <label translate="TM-LEAFS"></label>:
                               </div>
                               <div class="col-md-8">
                                  <select class="form-control input-group-append" ng-model="selections.dimensionType"

@@ -18,6 +18,7 @@
    "TM-FROM": "From",
    "TM-TO": "To",
    "TM-PARENT": "Parent",
+   "TM-LEAFS": "Leafs",
    "TM-ELEMENTS": "Elements",
    "TM-FirstWeekDay": "First Week Day",
    "TM-FirstFiscalYearMonth": "First Fiscal Year Month",
