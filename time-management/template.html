@@ -391,7 +391,7 @@
                               </a>
                            </td>
                            <td> <input type="text" class="form-control input-group-prepend" ng-model="attribute.name" />
-                               </td>
+                           </td>
                            <td>
                               {{attribute.type}}
                            </td>
@@ -472,15 +472,26 @@
                                     <thead>
                                        <tr>
                                           <th translate="TM-ELEMENTS"> </th>
-                                          <th translate="ATTRIBUTES"> </th>
+                                          <th ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included"> {{attribute.name}} </th>
                                        </tr>
                                     </thead>
                                     <tbody>
-                                       <tr ng-repeat="element in hierarchy.elements | limitTo:12">
+                                       <tr ng-repeat="elementInfo in hierarchy.elements | limitTo:12">
                                           <td>
-                                             {{element}}
+                                             <div ng-if="element.name.slice(-2)=='01' && element.name.length==10"
+                                                ng-repeat="element in elementInfo">
+                                                <div ng-repeat="element in elementInfo">
+                                                {{element.name}}
+                                             </div>
+                                             </div>
+                                             <div ng-if="element.name.slice(-2)!='01' && element.name.length==10"
+                                                ng-repeat="element in elementInfo">
+                                                {{element.name}}
+                                             </div>
                                           </td>
-                                          <td> </td>
+                                          <td ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included"> 
+                                             {{elementInfo[elementInfo.length-1].attributes[$index].value}}
+                                          </td>
                                        </tr>
                                     </tbody>
                                  </table>

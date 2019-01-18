@@ -135,7 +135,7 @@ arc.directive("arcTimeManagement", function () {
             } else {
                if (consolidation == 'Quarter' || consolidation == 'QuarterFY') {
                   for (var i = 0; i < 12; i++) {
-                      if (i < 3) {
+                     if (i < 3) {
                         // keep value as the new first month value
                         $scope.lists[monthToUpdate][consolidation] = value1;
                      } else if (i < 6) {
@@ -168,7 +168,7 @@ arc.directive("arcTimeManagement", function () {
          $scope.updateOneMonthValue = function (consolidation, month, newValue, action) {
             // H flip next 5
             // Q flip next 3 increase by 1
-               //$scope.updateOneMonthValue(consolidation, monthToUpdate, newValue);
+            //$scope.updateOneMonthValue(consolidation, monthToUpdate, newValue);
 
          };
 
@@ -336,15 +336,33 @@ arc.directive("arcTimeManagement", function () {
             }
          };
 
-         $scope.generateAttributeValue = function (day, format){
+         $scope.generateAttributeValue = function (day, format) {
             var attributeValue = "";
-            if(!_.isEmpty(format)){
+            if (!_.isEmpty(format)) {
                attributeValue = day.format(format);
-            }else{
+            } else {
                attributeValue = "";
             }
             return attributeValue;
          };
+
+         $scope.generateAttributesValuesForOneElement = function (day, level) {
+            var attributes = [];
+            if (level == $scope.selections.dimensionType) {
+               var attributesList = $scope.lists.attributes[$scope.selections.dimensionType];
+               for (var i = 0; i < attributesList.length; i++) {
+                  if(attributesList[i].included){
+                     var format = attributesList[i].format;
+                     var attribute = {
+                        'name':attributesList[i].name,
+                        'value': $scope.generateAttributeValue(day, format)
+                     }
+                     attributes.push(attribute);
+                  }
+               }
+            }
+            return attributes;
+         }
 
          $scope.generateDimensionInfo = function () {
             $scope.dimensionInfo = [];
@@ -382,7 +400,8 @@ arc.directive("arcTimeManagement", function () {
                   } else if (element.included) {
                      elementInfo.push({
                         'level': element.level,
-                        'name': $scope.generateElement(m, element.level)
+                        'name': $scope.generateElement(m, element.level),
+                        'attributes': $scope.generateAttributesValuesForOneElement(m, element.level)
                      });
                      levelNumber = levelNumber + 1;
                   };
