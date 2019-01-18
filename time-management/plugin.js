@@ -40,7 +40,8 @@ arc.directive("arcTimeManagement", function () {
             defaultHierarchy: 'CalendarMonth',
             toDoLeafElements: 'deleteAllElements',
             dateRangeStart: moment().startOf('year'),
-            dateRangeEnd: moment().endOf('year')
+            dateRangeEnd: moment().endOf('year'),
+            hierarchiesOrRollUps: 'RollUps'
 
          };
          $scope.selections = {
@@ -59,7 +60,8 @@ arc.directive("arcTimeManagement", function () {
             datePickerFormat: $scope.defaults.datePickerFormat,
             datePicketView: $scope.defaults.datePicketView,
             defaultHierarchy: $scope.defaults.defaultHierarchy,
-            toDoLeafElements: $scope.defaults.toDoLeafElements
+            toDoLeafElements: $scope.defaults.toDoLeafElements,
+            hierarchiesOrRollUps: $scope.defaults.hierarchiesOrRollUps
          };
 
          //==========
@@ -112,7 +114,6 @@ arc.directive("arcTimeManagement", function () {
          $scope.getAllDimensionsName = function () {
             $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
                $scope.lists.dimensions = result.data.value;
-               console.log($scope.lists.dimensions);
             });
          };
 
@@ -121,6 +122,8 @@ arc.directive("arcTimeManagement", function () {
          //=================
          // Update Month consolidation Quarter, HalfYear...
          $scope.updateMonthConso = function (consolidation, month) {
+            // H flip next 5
+            // Q flip next 3 increase by 1
             var currentValue = $scope.lists[month][consolidation];
             var newValue = "0"
             if (consolidation == 'Quarter' || consolidation == 'QuarterFY') {
@@ -406,7 +409,8 @@ arc.directive("arcTimeManagement", function () {
 
          //=======
          // Execute Ghost TI
-         $scope.executeGhostTI = function (prolog, epilog, step, topParent, elements) {
+         $scope.executeGhostTI = function (prolog, epilog, step, topParent, elements, continueToNextStep) {
+            console.log(step);
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
             if ($scope.tm1VersionSupported) {
@@ -428,10 +432,10 @@ arc.directive("arcTimeManagement", function () {
             };
             $http(config).then(function (result) {
                //If ErrorLogFile does not exists => SUCCESS
-               console.log(result);
+               //console.log(result);
                if (result.data == "") {
                   //No error
-                  $scope.executeNextStep(step, topParent, elements);
+                  $scope.executeNextStep(step, topParent, elements, continueToNextStep);
                } else {
                   //Error
                   var errorLogFile = result.data;
@@ -440,21 +444,23 @@ arc.directive("arcTimeManagement", function () {
             });
          };
 
-         $scope.executeNextStep = function (step, topParent, elements) {
-            if (step == 'dimension') {
-               $scope.createDimensionDone = true;
-               $scope.createHierarchies();
-               console.log('Dimension Created');
-            }
-            else if (step == 'insertElements') {
-               $scope.elementsInserted = true;
-               $scope.componentsAddToDimension(topParent, elements);
-               console.log('Elements Created');
-            }
-            else if (step == 'addComponents') {
-               $scope.componentsAdded = true;
-               console.log('Components Add');
-            }
+         $scope.executeNextStep = function (step, topParent, elements, continueToNextStep) {
+            if(continueToNextStep){
+               if (step == 'dimension') {
+                  $scope.createDimensionDone = true;
+                  $scope.createHierarchies();
+                  console.log('Dimension Created');
+               }
+               else if (step == 'insertElements') {
+                  $scope.elementsInserted = true;
+                  $scope.componentsAddToDimension(topParent, elements);
+                  console.log('Elements Created');
+               }
+               else if (step == 'addComponents') {
+                  $scope.componentsAdded = true;
+                  console.log('Components Add');
+               };
+            };
          };
 
          //======
@@ -481,7 +487,7 @@ arc.directive("arcTimeManagement", function () {
                var prolog = "DimensionCreate('" + $scope.selections.dimensionName + "');";
                var epilog = "";
             }
-            $scope.executeGhostTI(prolog, epilog, 'dimension');
+            $scope.executeGhostTI(prolog, epilog, 'dimension', "", "", true);
          };
 
          $scope.createHierarchies = function () {
@@ -496,26 +502,45 @@ arc.directive("arcTimeManagement", function () {
             var children = '';
             var consolidationsInserted = [];
             var linkAdded = [];
+            var insertLines = [];
             _.each(elements, function (elementInfo, key) {
                elementInfo.reverse();
+               // looping through elements
                _.each(elementInfo, function (element, key) {
+                  //looping through
                   if (element.level == $scope.selections.dimensionType) {
                      //Leaf elements
                      children = element.name;
-                     prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');\n";
+                     //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');\n";
+                     insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');");
                   } else {
                      //Consolidation
                      var consolidation = element.name;
                      if (consolidationsInserted.indexOf(consolidation) == -1) {
                         // insert consolidation only if does not already exists
                         consolidationsInserted.push(consolidation);
-                        prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
+                       //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
+                        insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');");
                      }
                   }
                });
             });
             //console.log(prolog);
-            $scope.executeGhostTI(prolog, epilogue, 'insertElements', topParent, elements);
+            var lineCount = 0;
+            //populate the Prolog
+            for( var i=0; i < insertLines.length ; i++ ){
+               if(lineCount == 10000){
+                  $scope.executeGhostTI(prolog, epilogue, 'insertElements', topParent, elements, false);
+                  lineCount = 0;
+                  prolog = "";
+               } else {
+                  prolog += insertLines[i] + "\n"; 
+               }
+               lineCount++;
+            }
+            if(!_.isEmpty(prolog)){
+               $scope.executeGhostTI(prolog, epilogue, 'insertElements', topParent, elements, true);
+            }
          };
 
          $scope.componentsAddToDimension = function (topParent, elements) {
@@ -546,7 +571,7 @@ arc.directive("arcTimeManagement", function () {
             });
             //prologue = "DimensionElementComponentAdd('Period Dailya','2018-01','2018-01-01',1);";
             console.log(prolog);
-            $scope.executeGhostTI(prolog, epilogue, 'addComponents');
+            $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", true);
          };
 
 

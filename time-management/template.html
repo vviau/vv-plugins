@@ -11,8 +11,8 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step1Next"></button>
-                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1);checkIfDimensionExist()" translate="TM-Step1Next"></button>
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
@@ -30,7 +30,7 @@
                                  <label translate="NAME"></label>:
                               </div>
                               <div class="col-md-8">
-                                 <input type="text" class="form-control" ng-model="selections.dimensionName" ng-change="checkIfDimensionExist()"
+                                 <input type="text" class="form-control" ng-model="selections.dimensionName"
                                  uib-typeahead="dimension.Name for dimension in lists.dimensions | filter:$viewValue | limitTo:20"
                                  typeahead-append-to-body="true" />
                               </div>
@@ -111,9 +111,20 @@
                <auto-height>
                   <div class="toolbar">
                      <div class="page-title">
-                        <h3 translate="TM-Step2Title">
-
+                        <h3>
+                           <span translate="TM-Step2Title"></span>
+                           <div class="form-check-inline">
+                              <div class="radio ml-1">
+                                    <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionH" ng-value="'Hierarchies'">
+                                    Hierarchies
+                              </div>
+                              <div class="radio ml-1">
+                                    <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionR" ng-value="'RollUps'">
+                                    RollUps
+                              </div>
+                           </div>
                         </h3>
+
                         <h5 translate="TM-Step2SubTitle">
 
                         </h5>
@@ -129,7 +140,7 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label>All {{selections.dimensionType}} <span translate="HIERARCHIES"></span></label>
+                              <label>All {{selections.dimensionType}} {{selections.hierarchiesOrRollUps}}</label>
                            </div>
                            <div class="card-body">
                               <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
