@@ -11,8 +11,9 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1);checkIfDimensionExist()" translate="TM-Step1Next"></button>
-                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist()"
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1);checkIfDimensionExist();generateAttributesExamples()"
+                        translate="TM-Step1Next"></button>
+                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist();generateAttributesExamples()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
@@ -31,8 +32,8 @@
                               </div>
                               <div class="col-md-8">
                                  <input type="text" class="form-control" ng-model="selections.dimensionName"
-                                 uib-typeahead="dimension.Name for dimension in lists.dimensions | filter:$viewValue | limitTo:20"
-                                 typeahead-append-to-body="true" />
+                                    uib-typeahead="dimension.Name for dimension in lists.dimensions | filter:$viewValue | limitTo:20"
+                                    typeahead-append-to-body="true" />
                               </div>
                            </div>
                            <div class="row mt-2">
@@ -107,7 +108,10 @@
                   </div>
                </div>
             </uib-tab>
-            <uib-tab index="1" heading="2. Hierarchy">
+            <uib-tab index="1">
+               <uib-tab-heading>
+                  2. {{selections.hierarchiesOrRollUps}}
+               </uib-tab-heading>
                <auto-height>
                   <div class="toolbar">
                      <div class="page-title">
@@ -115,12 +119,12 @@
                            <span translate="TM-Step2Title"></span>
                            <div class="form-check-inline">
                               <div class="radio ml-1">
-                                    <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionH" ng-value="'Hierarchies'">
-                                    Hierarchies
+                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionH" ng-value="'Hierarchies'">
+                                 Hierarchies
                               </div>
                               <div class="radio ml-1">
-                                    <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionR" ng-value="'RollUps'">
-                                    RollUps
+                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionR" ng-value="'RollUps'">
+                                 RollUps
                               </div>
                            </div>
                         </h3>
@@ -258,7 +262,10 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarMonth'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
-                                       Manage Roll-ups:
+                                       Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
+                                          <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
+                                          <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
+                                       </a> Custom):
                                     </label>
                                     <table class="table table-hover table-responsive">
                                        <thead>
@@ -271,7 +278,7 @@
                                              <td ng-repeat="month in lists.months">
                                                 <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYear==1,
                                                                   'badge-success':lists[month].HalfYear==2}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYear', month)">
+                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYear', month, selections.manageRollsUpsManually)">
                                                       H{{lists[month].HalfYear}}
                                                    </span></h5>
                                              </td>
@@ -282,7 +289,7 @@
                                                                      'badge-secondary':lists[month].Quarter==2,
                                                                      'badge-success':lists[month].Quarter==3,
                                                                      'badge-info':lists[month].Quarter==4}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('Quarter',month)">
+                                                      style="cursor:pointer" ng-click="updateMonthConso('Quarter',month, selections.manageRollsUpsManually)">
                                                       Q{{lists[month].Quarter}}
                                                    </span></h5>
                                              </td>
@@ -306,9 +313,12 @@
                               </div>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
-                                       <label>
-                                             Manage Roll-ups:
-                                          </label>
+                                    <label>
+                                       Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
+                                          <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
+                                          <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
+                                       </a> Custom):
+                                    </label>
                                     <table class="table table-hover table-responsive">
                                        <thead>
                                           <tr>
@@ -320,7 +330,7 @@
                                              <td ng-repeat="month in lists.months">
                                                 <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYearFY==1,
                                                                      'badge-success':lists[month].HalfYearFY==2}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYearFY', month)">
+                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYearFY', month, selections.manageRollsUpsManually)">
                                                       H{{lists[month].HalfYearFY}}
                                                    </span></h5>
                                              </td>
@@ -331,7 +341,7 @@
                                                                         'badge-secondary':lists[month].QuarterFY==2,
                                                                         'badge-success':lists[month].QuarterFY==3,
                                                                         'badge-info':lists[month].QuarterFY==4}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('QuarterFY',month)">
+                                                      style="cursor:pointer" ng-click="updateMonthConso('QuarterFY',month, selections.manageRollsUpsManually)">
                                                       Q{{lists[month].QuarterFY}}
                                                    </span></h5>
                                              </td>
@@ -346,7 +356,7 @@
                   </div>
                </auto-height>
             </uib-tab>
-            <uib-tab index="2" heading="3. Attributes">
+            <uib-tab index="2" heading="3. Attributes" ng-click="generateAttributesExamples()">
                <div class="toolbar">
                   <div class="page-title">
                      <h3 translate="TM-Step3Title">
@@ -369,6 +379,7 @@
                            <th translate="ATTRIBUTES"> </th>
                            <th translate="TYPE"> </th>
                            <th translate="DESCRIPTION"> </th>
+                           <th translate="TM-EXAMPLE"> </th>
                         </tr>
                      </thead>
                      <tbody>
@@ -379,12 +390,16 @@
                                  <i class="fa fa-toggle-off" ng-if="!attribute.included"></i>
                               </a>
                            </td>
-                           <td> {{attribute.name}} </td>
+                           <td> <input type="text" class="form-control input-group-prepend" ng-model="attribute.name" />
+                               </td>
                            <td>
                               {{attribute.type}}
                            </td>
                            <td>
                               {{attribute.desc}}
+                           </td>
+                           <td>
+                              {{attribute.example}}
                            </td>
                         </tr>
                      </tbody>

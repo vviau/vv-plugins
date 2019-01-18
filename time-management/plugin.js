@@ -41,8 +41,8 @@ arc.directive("arcTimeManagement", function () {
             toDoLeafElements: 'deleteAllElements',
             dateRangeStart: moment().startOf('year'),
             dateRangeEnd: moment().endOf('year'),
-            hierarchiesOrRollUps: 'RollUps'
-
+            hierarchiesOrRollUps: 'RollUps',
+            manageRollsUpsManually: false
          };
          $scope.selections = {
             dateRangeStart: $scope.defaults.dateRangeStart,
@@ -61,7 +61,8 @@ arc.directive("arcTimeManagement", function () {
             datePicketView: $scope.defaults.datePicketView,
             defaultHierarchy: $scope.defaults.defaultHierarchy,
             toDoLeafElements: $scope.defaults.toDoLeafElements,
-            hierarchiesOrRollUps: $scope.defaults.hierarchiesOrRollUps
+            hierarchiesOrRollUps: $scope.defaults.hierarchiesOrRollUps,
+            manageRollsUpsManually: $scope.defaults.manageRollsUpsManually
          };
 
          //==========
@@ -121,10 +122,60 @@ arc.directive("arcTimeManagement", function () {
 
          //=================
          // Update Month consolidation Quarter, HalfYear...
-         $scope.updateMonthConso = function (consolidation, month) {
+         $scope.updateMonthConso = function (consolidation, month, manual) {
+            var monthToUpdate = month;
+            var oldValue = $scope.lists[month][consolidation];
+            var value1 = $scope.increaseConsolidationValue(consolidation, oldValue);
+            var value2 = $scope.increaseConsolidationValue(consolidation, value1);
+            var value3 = $scope.increaseConsolidationValue(consolidation, value2);
+            var value4 = $scope.increaseConsolidationValue(consolidation, value3);
+            if (manual) {
+               console.log("UPDATED!");
+               $scope.lists[monthToUpdate][consolidation] = $scope.increaseConsolidationValue(consolidation, oldValue);
+            } else {
+               if (consolidation == 'Quarter' || consolidation == 'QuarterFY') {
+                  for (var i = 0; i < 12; i++) {
+                      if (i < 3) {
+                        // keep value as the new first month value
+                        $scope.lists[monthToUpdate][consolidation] = value1;
+                     } else if (i < 6) {
+                        // keep value as the new first month value
+                        $scope.lists[monthToUpdate][consolidation] = value2;
+                     } else if (i < 9) {
+                        // keep value as the new first month value
+                        $scope.lists[monthToUpdate][consolidation] = value3;
+                     } else {
+                        $scope.lists[monthToUpdate][consolidation] = value4;
+                     }
+                     monthToUpdate = $scope.lists[monthToUpdate]['NextMonth'];
+                  }
+               } else {
+                  for (var i = 0; i < 12; i++) {
+                     if (i < 6) {
+                        // keep value as the new first month value
+                        $scope.lists[monthToUpdate][consolidation] = value1;
+                     } else {
+                        $scope.lists[monthToUpdate][consolidation] = value2;
+                     }
+                     monthToUpdate = $scope.lists[monthToUpdate]['NextMonth'];
+                  }
+               }
+               //does not exisit
+               //$scope.updateMonthConsoAll(consolidation, month);
+            }
+         };
+
+         $scope.updateOneMonthValue = function (consolidation, month, newValue, action) {
             // H flip next 5
             // Q flip next 3 increase by 1
-            var currentValue = $scope.lists[month][consolidation];
+               //$scope.updateOneMonthValue(consolidation, monthToUpdate, newValue);
+
+         };
+
+         $scope.increaseConsolidationValue = function (consolidation, currentValue) {
+            // H flip next 5
+            // Q flip next 3 increase by 1
+            // increase by 1
             var newValue = "0"
             if (consolidation == 'Quarter' || consolidation == 'QuarterFY') {
                if (currentValue == "1") {
@@ -143,7 +194,7 @@ arc.directive("arcTimeManagement", function () {
                   newValue = "2"
                }
             }
-            $scope.lists[month][consolidation] = newValue
+            return newValue;
          };
 
          //==============
@@ -239,7 +290,7 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.generateExample = function () {
             // Get date
-            var dateMoment = $scope.startDate;
+            var dateMoment = $scope.selections.dateRangeStart;
             // Define variables
             $scope.examples = {
                Day: $scope.generateElement(dateMoment, 'Day'),
@@ -276,7 +327,24 @@ arc.directive("arcTimeManagement", function () {
             };
          };
 
+         $scope.generateAttributesExamples = function () {
+            var firstDay = $scope.selections.dateRangeStart;
+            var attributesList = $scope.lists.attributes[$scope.selections.dimensionType];
+            for (var i = 0; i < attributesList.length; i++) {
+               var format = attributesList[i].format;
+               $scope.lists.attributes[$scope.selections.dimensionType][i].example = $scope.generateAttributeValue(firstDay, format);
+            }
+         };
 
+         $scope.generateAttributeValue = function (day, format){
+            var attributeValue = "";
+            if(!_.isEmpty(format)){
+               attributeValue = day.format(format);
+            }else{
+               attributeValue = "";
+            }
+            return attributeValue;
+         };
 
          $scope.generateDimensionInfo = function () {
             $scope.dimensionInfo = [];
@@ -304,7 +372,7 @@ arc.directive("arcTimeManagement", function () {
                var levelNumber = 0;
                _.each(hierarchy.levels, function (element, key) {
                   // If Total
-                  if(element.level == 'Total'){
+                  if (element.level == 'Total') {
                      elementInfo.push({
                         'level': element.level,
                         'name': hierarchy.levels[0].name
@@ -330,9 +398,9 @@ arc.directive("arcTimeManagement", function () {
             var monthMMM = day.format('MMM');
             var newDay = _.cloneDeep(day)
             var quarterFYNumber = $scope.lists[monthMMM].QuarterFY;
-            if(level == 'YearFY' || level == 'HalfYearFY' || level == 'QuarterFY' ){
+            if (level == 'YearFY' || level == 'HalfYearFY' || level == 'QuarterFY') {
                //Change year if Q3 or Q4
-               if(quarterFYNumber == "3" || quarterFYNumber == "4"){
+               if (quarterFYNumber == "3" || quarterFYNumber == "4") {
                   //console.log(day,newDay);
                   newDay = newDay.subtract(1, 'year');
                }
@@ -445,7 +513,7 @@ arc.directive("arcTimeManagement", function () {
          };
 
          $scope.executeNextStep = function (step, topParent, elements, continueToNextStep) {
-            if(continueToNextStep){
+            if (continueToNextStep) {
                if (step == 'dimension') {
                   $scope.createDimensionDone = true;
                   $scope.createHierarchies();
@@ -474,16 +542,16 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.createDimension = function () {
             //dimension exist
-            if($scope.dimensionExists){
-               if($scope.selections.toDoLeafElements == 'deleteAllElements'){
-                  var prolog = "DimensionDeleteAllElements('"+$scope.selections.dimensionName+"');";
+            if ($scope.dimensionExists) {
+               if ($scope.selections.toDoLeafElements == 'deleteAllElements') {
+                  var prolog = "DimensionDeleteAllElements('" + $scope.selections.dimensionName + "');";
                   var epilog = "";
-               }else{
-                  var prolog = "EXECUTEPROCESS('Bedrock.Dim.Hierarchy.Unwind.All','pDimension', '"+$scope.selections.dimensionName+"','pDebug', 0);";
+               } else {
+                  var prolog = "EXECUTEPROCESS('Bedrock.Dim.Hierarchy.Unwind.All','pDimension', '" + $scope.selections.dimensionName + "','pDebug', 0);";
                   var epilog = "";
                }
-            // dimension does not exist
-            } else{
+               // dimension does not exist
+            } else {
                var prolog = "DimensionCreate('" + $scope.selections.dimensionName + "');";
                var epilog = "";
             }
@@ -519,7 +587,7 @@ arc.directive("arcTimeManagement", function () {
                      if (consolidationsInserted.indexOf(consolidation) == -1) {
                         // insert consolidation only if does not already exists
                         consolidationsInserted.push(consolidation);
-                       //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
+                        //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
                         insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');");
                      }
                   }
@@ -528,17 +596,17 @@ arc.directive("arcTimeManagement", function () {
             //console.log(prolog);
             var lineCount = 0;
             //populate the Prolog
-            for( var i=0; i < insertLines.length ; i++ ){
-               if(lineCount == 10000){
+            for (var i = 0; i < insertLines.length; i++) {
+               if (lineCount == 10000) {
                   $scope.executeGhostTI(prolog, epilogue, 'insertElements', topParent, elements, false);
                   lineCount = 0;
                   prolog = "";
                } else {
-                  prolog += insertLines[i] + "\n"; 
+                  prolog += insertLines[i] + "\n";
                }
                lineCount++;
             }
-            if(!_.isEmpty(prolog)){
+            if (!_.isEmpty(prolog)) {
                $scope.executeGhostTI(prolog, epilogue, 'insertElements', topParent, elements, true);
             }
          };
@@ -547,7 +615,7 @@ arc.directive("arcTimeManagement", function () {
             var prolog = '';
             var epilogue = '';
             var children = '';
-            var consolidationsInserted = [];
+            var insertLines = [];
             var linkAdded = [];
             _.each(elements, function (elementInfo, key) {
                //elementInfo.reverse();
@@ -563,7 +631,8 @@ arc.directive("arcTimeManagement", function () {
                         // add consolidation only if does not already exists
                         //console.log(consolidation);
                         linkAdded.push(linkAdded);
-                        prolog += "DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);\n";
+                        //prolog += "DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);\n";
+                        insertLines.push("DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);");
                         children = consolidation;
                      }
                   }
@@ -571,7 +640,21 @@ arc.directive("arcTimeManagement", function () {
             });
             //prologue = "DimensionElementComponentAdd('Period Dailya','2018-01','2018-01-01',1);";
             console.log(prolog);
-            $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", true);
+            var lineCount = 0;
+            //populate the Prolog
+            for (var i = 0; i < insertLines.length; i++) {
+               if (lineCount == 10000) {
+                  $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", false);
+                  lineCount = 0;
+                  prolog = "";
+               } else {
+                  prolog += insertLines[i] + "\n";
+               }
+               lineCount++;
+            }
+            if (!_.isEmpty(prolog)) {
+               $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", true);
+            }
          };
 
 
