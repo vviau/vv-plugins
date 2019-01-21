@@ -299,16 +299,27 @@
                                  </div>
                               </div>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
-                                 <div class="col-md-6 text-right">
-                                    <label translate="TM-FirstWeekDay">
-                                       :
+                                 <div class="col-md-12" ng-if="hierarchy.levels[2].included">
+                                    <label>
+                                       Manage Roll-ups:
                                     </label>
-                                 </div>
-                                 <div class="col-md-6 text-center">
-                                    <select class="form-control input-group-append" ng-model="selections.startDayofWeek"
-                                       ng-options="t for t in lists.weekDays">
-                                       <option></option>
-                                    </select>
+                                    <table class="table table-hover table-responsive">
+                                       <thead>
+                                          <tr>
+                                             <th ng-repeat="day in lists.weekDays"> {{day}} </th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr ng-if="hierarchy.levels[1].included">
+                                             <td ng-repeat="day in lists.weekDays">
+                                                <h5><span class="badge badge-pill badge-primary" ng-class="{'badge-secondary':lists[day].PositionInWeek!=1}"
+                                                      style="cursor:pointer" ng-click="updateDayPosition(day)">
+                                                      D{{lists[day].PositionInWeek}}
+                                                   </span></h5>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
                                  </div>
                               </div>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
@@ -457,7 +468,7 @@
                         <div ng-repeat="hierarchy in dimensionInfo | limitTo:12">
                            <div class="card mb-2">
                               <div class="card-header" style="padding: 5px 10px;">
-                                 <label>{{hierarchy.name}}</label>
+                                 <label>{{hierarchy.name}} from {{selections.dateRangeStart | amDateFormat:'DD-MM-YYYY'}} to {{selections.dateRangeEnd | amDateFormat:'DD-MM-YYYY'}}</label>
                                  <span class="pull-right">
                                     <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
                                        <i class="fa fa-fw fa-eye-slash"></i>

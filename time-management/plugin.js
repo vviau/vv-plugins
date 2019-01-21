@@ -120,6 +120,24 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.getAllDimensionsName();
 
+         //================
+         // Update position Week
+         $scope.updateDayPosition = function(day){
+            console.log(day);
+            var dayToUpdate = day;
+            var consolidation = 'Week';
+            var oldValue = "1";
+            var newValue = "1";
+            for (var i = 0; i < 7; i++) {
+               if(i != 0){
+                  oldValue = newValue;
+                  newValue = $scope.increaseConsolidationValue(consolidation, oldValue);
+               }
+               $scope.lists[dayToUpdate]['PositionInWeek'] = newValue;
+               dayToUpdate = $scope.lists[dayToUpdate]['NextDay'];
+            }
+         }
+
          //=================
          // Update Month consolidation Quarter, HalfYear...
          $scope.updateMonthConso = function (consolidation, month, manual) {
@@ -192,6 +210,22 @@ arc.directive("arcTimeManagement", function () {
                   newValue = "1"
                } else {
                   newValue = "2"
+               }
+            }if (consolidation == 'Week') {
+               if (currentValue == "1") {
+                  newValue = "2"
+               } else if (currentValue == "2") {
+                  newValue = "3"
+               } else if (currentValue == "3") {
+                  newValue = "4"
+               } else if (currentValue == "4") {
+                  newValue = "5"
+               } else if (currentValue == "5") {
+                  newValue = "6"
+               } else if (currentValue == "6") {
+                  newValue = "7"
+               } else {
+                  newValue = "1"
                }
             }
             return newValue;
@@ -374,10 +408,25 @@ arc.directive("arcTimeManagement", function () {
                   'type': hierarchy.type,
                   'name': hierarchy.name,
                   'topParent': hierarchy.topParent,
-                  'elements': $scope.generateElements(hierarchy)
+                  'elements': $scope.generateElements(hierarchy),
+                  'uniqueElements': []
                };
+               //hierarchyInfo.uniqueElements =  $scope.generateUniqueElements(hierarchy);
                $scope.dimensionInfo.push(hierarchyInfo);
             });
+         };
+
+         $scope.generateUniqueElements = function (hierarchy) {
+            //Loop through all elements
+            var startTimeMoment = $scope.selections.dateRangeStart;
+            var endTimeMoment = $scope.selections.dateRangeEnd;
+            var uniqueElements = [];
+            /*for (var d = moment(startTimeMoment); d.diff(endTimeMoment, 'days') < 0; d.add(1, 'days')) {
+               var startOfMonth = d.startOf('month').format('YYYY-MM-DD hh:mm');
+               var level = 'Day';
+               //console.log(d);
+            };*/
+            return uniqueElements;
          };
 
          $scope.generateElements = function (hierarchy) {
