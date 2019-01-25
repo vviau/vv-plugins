@@ -262,6 +262,8 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarMonth'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
+                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
                                        Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
                                           <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
@@ -301,6 +303,8 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included">
                                     <label>
+                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
                                        Manage Roll-ups:
                                     </label>
                                     <table class="table table-hover table-responsive">
@@ -325,6 +329,8 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
+                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
                                        Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
                                           <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>

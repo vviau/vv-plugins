@@ -148,7 +148,6 @@ arc.directive("arcTimeManagement", function () {
             var value3 = $scope.increaseConsolidationValue(consolidation, value2);
             var value4 = $scope.increaseConsolidationValue(consolidation, value3);
             if (manual) {
-               console.log("UPDATED!");
                $scope.lists[monthToUpdate][consolidation] = $scope.increaseConsolidationValue(consolidation, oldValue);
             } else {
                if (consolidation == 'Quarter' || consolidation == 'QuarterFY') {
@@ -168,6 +167,8 @@ arc.directive("arcTimeManagement", function () {
                      monthToUpdate = $scope.lists[monthToUpdate]['NextMonth'];
                   }
                } else {
+                  // If clicking Healf Year should update Half year and Quarters
+                  //Update Half Year
                   for (var i = 0; i < 12; i++) {
                      if (i < 6) {
                         // keep value as the new first month value
@@ -177,6 +178,19 @@ arc.directive("arcTimeManagement", function () {
                      }
                      monthToUpdate = $scope.lists[monthToUpdate]['NextMonth'];
                   }
+                  //Update quarters
+                  var quarterConso = 'Quarter';
+                  var newQuarterValue = "0";
+                  if(consolidation == 'HalfYearFY'){
+                     quarterConso = 'QuarterFY';
+                  }
+                  if(value1 == "1"){
+                     newQuarterValue = "4";
+                  } else{
+                     newQuarterValue = "2";
+                  }
+                  $scope.lists[monthToUpdate][quarterConso] = newQuarterValue;
+                  $scope.updateMonthConso(quarterConso, month);
                }
                //does not exisit
                //$scope.updateMonthConsoAll(consolidation, month);
@@ -399,6 +413,7 @@ arc.directive("arcTimeManagement", function () {
          }
 
          $scope.generateDimensionInfo = function () {
+            $scope.checkIfDimensionExist();
             $scope.dimensionInfo = [];
             //Loop through all hierarchies
             _.each($scope.hierarchies, function (value, key) {
