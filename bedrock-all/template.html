@@ -1,0 +1,75 @@
+<div>
+   <div class="row">
+      <div class="col-md-12">
+         <h2><i class="fa fa-recycle" style="padding-right:5px" aria-hidden="true"></i> Find Bedrock dependencies
+         <div class="pull-right">
+            <div class="input-group">
+               <div class="input-group-prepend">
+                  <input type="text" ng-model="filterTis" placeholder="Search" class="form-control"
+                     style="display:inline; width:200px;">
+               </div>
+               <div class="input-group-append input-group-prepend">
+                  <button class="btn btn-primary" title="Refresh" ng-click="getBedrockList()">
+                     <i class="fa fa-fw fa-refresh"></i>
+                  </button>
+               </div>
+            </div>
+         </div>
+      </h2>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+         <auto-height>
+            <table class="table table-hover table-sm">
+               <thead>
+                  <tr>
+                     <th> ProcessName </th>
+                     <th> Sub Processes
+                        <span class="badge badge-primary" style="font-size:0.9em">Prolog</span>
+                        <span class="badge badge-info" style="font-size:0.9em">Metadata</span>
+                        <span class="badge badge-success" style="font-size:0.9em">Data</span>
+                        <span class="badge badge-secondary" style="font-size:0.9em">Epilog</span>
+                     </th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr ng-repeat="process in lists.bedrockTIsInfo | filter:filterTis">
+                     <td>
+                        <a href="#/process/{{instance}}/{{process.name}}">{{process.name}}</a>
+                     </td>
+                     <td>
+                        <span ng-if="process.tisInProlog.length>0">
+                           <span ng-repeat="ti in process.tisInProlog">
+
+                              <span class="badge badge-primary" style="font-size:0.9em">
+                                 <a href="#/process/{{instance}}/{{ti}}" style="color:white">{{ti}}</a></span>
+                           </span>
+                        </span>
+                        <span ng-if="process.tisInMetaData.length>0">
+                           <span ng-repeat="ti in process.tisInMetaData">
+                              <span class="badge badge-info" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti}}"
+                                    style="color:white">{{ti}}</a></span>
+                           </span>
+                        </span>
+                        <span ng-if="process.tisInData.length>0">
+                           <span ng-repeat="ti in process.tisInData">
+                              <span class="badge badge-success" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti}}"
+                                    style="color:white">{{ti}}</a></span>
+                           </span>
+                        </span>
+                        <span ng-if="process.tisInEpilog.length>0">
+                           <span ng-repeat="ti in process.tisInEpilog">
+                              <span class="badge badge-secondary" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti}}"
+                                    style="color:white">{{ti}}</a></span>
+                           </span>
+                        </span>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </auto-height>
+      </div>
+
+   </div>
+</div>
