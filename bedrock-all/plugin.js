@@ -45,6 +45,9 @@ arc.directive("arcBedrockAll", function () {
             $http.get(encodeURIComponent($scope.instance) + "/Processes?$select=Name&?$filter=substringof('rock',Name) eq true").then(function (result) {
                $scope.lists.bedrockTIs = result.data.value;
                //console.log($scope.lists.bedrockTIs);
+               for (var ti = 0; ti < $scope.lists.bedrockTIs.length; ti++) {
+                  $scope.lists.bedrockTIinTM1.push($scope.lists.bedrockTIs[ti].Name);
+               }
                $scope.checkRelationship();
             });
          };
@@ -53,7 +56,6 @@ arc.directive("arcBedrockAll", function () {
             for (var ti = 0; ti < $scope.lists.bedrockTIs.length; ti++) {
                var tiSourceName = $scope.lists.bedrockTIs[ti].Name;
                //console.log(ti, tiSource.Name);
-               $scope.lists.bedrockTIinTM1.push(tiSourceName);
                $scope.lists.bedrockTIsInfo.push($scope.getTiInfo(tiSourceName));
             }
             // $scope.getTiInfo($scope.lists.bedrockTIs[0].Name);
