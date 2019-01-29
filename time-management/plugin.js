@@ -41,7 +41,7 @@ arc.directive("arcTimeManagement", function () {
             toDoLeafElements: 'deleteAllElements',
             dateRangeStart: moment().startOf('year'),
             dateRangeEnd: moment().endOf('year'),
-            hierarchiesOrRollUps: 'RollUps',
+            hierarchiesOrRollUps: 'Hierarchies',
             manageRollsUpsManually: false
          };
          $scope.selections = {
@@ -575,7 +575,8 @@ arc.directive("arcTimeManagement", function () {
          //=======
          // Execute Ghost TI
          $scope.executeGhostTI = function (prolog, epilog, step, hierarchy, continueToNextStep) {
-            console.log(step);
+            console.log("Starting "+step);
+            console.log(prolog);
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
             if ($scope.tm1VersionSupported) {
@@ -677,7 +678,7 @@ arc.directive("arcTimeManagement", function () {
                   // WORKING WITH HIERARCHIES
                   // check if Hierarchy exists
                   if(!_.includes($scope.existingHierarchies,hierarchy.name)){
-                     prolog = prolog + "HierarchyCreate(" + $scope.selections.dimensionName + "," + hierarchy.name + ");";
+                     prolog = prolog + "HierarchyCreate('" + $scope.selections.dimensionName + "','" + hierarchy.name + "');";
                   }  
                   epilog = "";
                }
@@ -706,7 +707,7 @@ arc.directive("arcTimeManagement", function () {
                      if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
                         insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');");
                      } else {
-                        insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.Name + "','','" + element.name + "','N');");
+                        insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','','" + element.name + "','N');");
                      }
                   } else {
                      //Consolidation
@@ -718,7 +719,7 @@ arc.directive("arcTimeManagement", function () {
                          if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
                            insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');");
                         } else {
-                           insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.Name + "','','" + consolidation + "','C');");
+                           insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','','" + consolidation + "','C');");
                         }
                      }
                   }
@@ -766,7 +767,7 @@ arc.directive("arcTimeManagement", function () {
                         if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
                            insertLines.push("DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);");
                         } else {
-                           insertLines.push("DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + hierarchy.Name + "','" + consolidation + "','" + children + "',1);");
+                           insertLines.push("HierarchyElementComponentAdd('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','" + consolidation + "','" + children + "',1);");
                         }
                         children = consolidation;
                      }
