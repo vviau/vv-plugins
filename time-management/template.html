@@ -393,7 +393,13 @@
                      <thead>
                         <tr>
                            <th> # </th>
-                           <th translate="ATTRIBUTES"> </th>
+                           <th > <span translate="ATTRIBUTES"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]">
+                              <a href class="click" ng-click="tickAttributesByGroup($index)">
+                                 <i class="fa fa-toggle-on text-success" ng-if="group.included"></i>
+                                 <i class="fa fa-toggle-off" ng-if="!group.included"></i>
+                              </a>
+                              {{group.name}}
+                           </span></th>
                            <th translate="TYPE"> </th>
                            <th translate="DESCRIPTION"> </th>
                            <th translate="TM-EXAMPLE"> </th>

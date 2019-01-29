@@ -880,6 +880,18 @@ arc.directive("arcTimeManagement", function () {
             }
          };
 
+         $scope.tickAttributesByGroup = function(index){
+            var groupName = $scope.lists.attributesGroup[$scope.selections.dimensionType][index].name;
+            var newStatus = !$scope.lists.attributesGroup[$scope.selections.dimensionType][index].included;
+            $scope.lists.attributesGroup[$scope.selections.dimensionType][index].included = newStatus;
+            for(var a=0; a < $scope.lists.attributes[$scope.selections.dimensionType].length; a++){
+              if( $scope.lists.attributes[$scope.selections.dimensionType][a].group == groupName){
+                  $scope.lists.attributes[$scope.selections.dimensionType][a].included = newStatus;
+                  //console.log($scope.lists.attributes[$scope.selections.dimensionType][a].group, $scope.lists.attributes[$scope.selections.dimensionType][a].included, included);
+               }
+            }
+         };
+
 
          //Manage color:
          $scope.generateHSLColour = function (string) {
