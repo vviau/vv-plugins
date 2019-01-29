@@ -101,7 +101,7 @@ arc.directive("arcTimeManagement", function () {
             $scope.existingHierarchies = [];
             $scope.existingDimensions = [];
             $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
-              
+
                for (var h = 0; h < result.data.value.length; h++) {
                   $scope.existingDimensions.push(result.data.value[h].Name);
                };
@@ -293,8 +293,12 @@ arc.directive("arcTimeManagement", function () {
             $scope.hierarchies.push(hierarchy);
             $timeout(function () {
                $scope.generateDimensionInfo();
+               //console.log($scope.hierarchies[0].levels[$scope.hierarchies[0].levels.length-1]);
+               //console.log($scope.lists.dateFormats[$scope.selections.dimensionType].format);
             });
          };
+
+         
 
          $scope.resetHierarchy = function () {
             $scope.hierarchies = [];
@@ -394,16 +398,27 @@ arc.directive("arcTimeManagement", function () {
             var attributesList = $scope.lists.attributes[$scope.selections.dimensionType];
             for (var i = 0; i < attributesList.length; i++) {
                var format = attributesList[i].format;
-               $scope.lists.attributes[$scope.selections.dimensionType][i].example = $scope.generateAttributeValue(firstDay, format);
+               var id = attributesList[i].id;
+               $scope.lists.attributes[$scope.selections.dimensionType][i].example = $scope.generateAttributeValue(firstDay, format, id);
             }
          };
 
-         $scope.generateAttributeValue = function (day, format) {
+         $scope.generateAttributeValue = function (day, format, id) {
+            var leafFormat = $scope.lists.dateFormats[$scope.selections.dimensionType].format;
+            //console.log(leafFormat);
             var attributeValue = "";
             if (!_.isEmpty(format)) {
                attributeValue = day.format(format);
             } else {
-               attributeValue = "";
+               if(id == "D011"){
+                  //previous day
+                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'days').format(leafFormat);
+               } else if(id == "D012"){
+                  //next day
+                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'days').format(leafFormat);
+               } else{
+                  attributeValue = "";
+               }
             }
             return attributeValue;
          };
@@ -414,10 +429,10 @@ arc.directive("arcTimeManagement", function () {
                var attributesList = $scope.lists.attributes[$scope.selections.dimensionType];
                for (var i = 0; i < attributesList.length; i++) {
                   if (attributesList[i].included) {
-                     var format = attributesList[i].format;
                      var attribute = {
                         'name': attributesList[i].name,
-                        'value': $scope.generateAttributeValue(day, format)
+                        'value': $scope.generateAttributeValue(day, attributesList[i].format, attributesList[i].id),
+                        'type': attributesList[i].type
                      }
                      attributes.push(attribute);
                   }
@@ -575,7 +590,7 @@ arc.directive("arcTimeManagement", function () {
          //=======
          // Execute Ghost TI
          $scope.executeGhostTI = function (prolog, epilog, step, hierarchy, continueToNextStep) {
-            console.log("Starting "+step);
+            //console.log("Starting " + step);
             //console.log(prolog);
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
@@ -610,6 +625,15 @@ arc.directive("arcTimeManagement", function () {
             });
          };
 
+         $scope.resetSettings = function(){
+            $scope.createDimensionDone = false;
+            $scope.createHierarchy = false;
+            $scope.elementsInserted = false;
+            $scope.componentsAdded = false;
+            $scope.attributesPopulated = false;
+            $scope.attributesCreated = false;
+         };
+
          $scope.executeNextStep = function (step, hierarchy, continueToNextStep) {
             if (continueToNextStep) {
                if (step == 'dimension') {
@@ -622,16 +646,26 @@ arc.directive("arcTimeManagement", function () {
                   $scope.createHierarchy = true;
                   // Next step
                   $scope.insertElements(hierarchy);
-               }
-               else if (step == 'insertElements') {
+               } else if (step == 'insertElements') {
                   console.log('Elements Inserted to ' + hierarchy.name);
                   $scope.elementsInserted = true;
                   // Next step
                   $scope.componentsAddToDimension(hierarchy);
-               }
-               else if (step == 'addComponents') {
-                  $scope.componentsAdded = true;
+               } else if (step == 'addComponents') {
                   console.log('Components Added');
+                  $scope.componentsAdded = true;
+                  // Next step -> attributes
+                  $scope.createAttributes();
+               } else if (step == 'createAttributes' & !$scope.attributesCreated) {
+                  console.log('Attributes Created');
+                  $scope.attributesCreated = true;
+                  // Next step -> attributes
+                  $scope.populateAttributes();
+               } else if (step == 'populateAttributes' & !$scope.attributesPopulated) {
+                  console.log('Attributes Populated');
+                  $scope.attributesPopulated = true;
+                  // Next step -> attributes
+                  console.log('All steps done!');
                };
             };
          };
@@ -639,9 +673,7 @@ arc.directive("arcTimeManagement", function () {
          //======
          // Function to create TM1 objects
          $scope.create = function () {
-            $scope.createDimensionDone = false;
-            $scope.elementsInserted = false;
-            $scope.componentsAdded = false;
+            $scope.resetSettings();
             $scope.createDimension();
          };
 
@@ -652,7 +684,7 @@ arc.directive("arcTimeManagement", function () {
                   var prolog = "DimensionDeleteAllElements('" + $scope.selections.dimensionName + "');";
                   var epilog = "";
                }
-            // dimension does not exist
+               // dimension does not exist
             } else {
                var prolog = "DimensionCreate('" + $scope.selections.dimensionName + "');";
                var epilog = "";
@@ -677,9 +709,9 @@ arc.directive("arcTimeManagement", function () {
                } else {
                   // WORKING WITH HIERARCHIES
                   // check if Hierarchy exists
-                  if(!_.includes($scope.existingHierarchies,hierarchy.name)){
+                  if (!_.includes($scope.existingHierarchies, hierarchy.name)) {
                      prolog = prolog + "HierarchyCreate('" + $scope.selections.dimensionName + "','" + hierarchy.name + "');";
-                  }  
+                  }
                   epilog = "";
                }
 
@@ -704,7 +736,7 @@ arc.directive("arcTimeManagement", function () {
                      //Leaf elements
                      children = element.name;
                      //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');\n";
-                     if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
+                     if ($scope.selections.hierarchiesOrRollUps == 'RollUps') {
                         insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + element.name + "','N');");
                      } else {
                         insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','','" + element.name + "','N');");
@@ -716,7 +748,7 @@ arc.directive("arcTimeManagement", function () {
                         // insert consolidation only if does not already exists
                         consolidationsInserted.push(consolidation);
                         //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
-                         if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
+                        if ($scope.selections.hierarchiesOrRollUps == 'RollUps') {
                            insertLines.push("DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');");
                         } else {
                            insertLines.push("HierarchyElementInsert('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','','" + consolidation + "','C');");
@@ -764,7 +796,7 @@ arc.directive("arcTimeManagement", function () {
                         //console.log(consolidation);
                         linkAdded.push(linkAdded);
                         //prolog += "DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);\n";
-                        if( $scope.selections.hierarchiesOrRollUps == 'RollUps'){
+                        if ($scope.selections.hierarchiesOrRollUps == 'RollUps') {
                            insertLines.push("DimensionElementComponentAdd('" + $scope.selections.dimensionName + "','" + consolidation + "','" + children + "',1);");
                         } else {
                            insertLines.push("HierarchyElementComponentAdd('" + $scope.selections.dimensionName + "','" + hierarchy.name + "','" + consolidation + "','" + children + "',1);");
@@ -780,7 +812,7 @@ arc.directive("arcTimeManagement", function () {
             //populate the Prolog
             for (var i = 0; i < insertLines.length; i++) {
                if (lineCount == 10000) {
-                  $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", false);
+                  $scope.executeGhostTI(prolog, epilogue, 'addComponents', hierarchy, false);
                   lineCount = 0;
                   prolog = "";
                } else {
@@ -789,10 +821,64 @@ arc.directive("arcTimeManagement", function () {
                lineCount++;
             }
             if (!_.isEmpty(prolog)) {
-               $scope.executeGhostTI(prolog, epilogue, 'addComponents', "", "", true);
+               $scope.executeGhostTI(prolog, epilogue, 'addComponents', hierarchy, true);
             }
          };
 
+         $scope.createAttributes = function () {
+            //dimension exist
+            var prolog = "";
+            var epilog = "";
+            for (var a = 0; a < $scope.lists.attributes[$scope.selections.dimensionType].length; a++) {
+               var attribute = $scope.lists.attributes[$scope.selections.dimensionType][a];
+               if (attribute.included) {
+                  prolog += "AttrInsert('" + $scope.selections.dimensionName + "','','" + attribute.name + "','" + attribute.type + "');";
+               }
+            };
+            $scope.executeGhostTI(prolog, epilog, 'createAttributes', "", true);
+         };
+
+         $scope.populateAttributes = function () {
+            var prolog = '';
+            var epilogue = '';
+            var insertLines = [];
+            console.log("Inside populate Attributes");
+            _.each($scope.dimensionInfo[0].elements, function (elementInfo, key) {
+               //elementInfo.reverse();
+               var leafElement = elementInfo[0];
+                  //Loop through attributes
+                  for (var a = 0; a < leafElement.attributes.length; a++) {
+                     var attribute = leafElement.attributes[a];
+                     //console.log(attribute);
+                        if(attribute.type == 'S'){
+                           //AttrPutS(Value,'DimName', 'ElName', 'AttrName')
+                           insertLines.push("AttrPutS('"+attribute.value+"','" + $scope.selections.dimensionName + "','" + leafElement.name + "','" + attribute.name + "');");
+                        } else {
+                           //AttrPutN(Value,'DimName', 'ElName', 'AttrName')
+                           insertLines.push("AttrPutN("+attribute.value+",'" + $scope.selections.dimensionName + "','" + leafElement.name + "','" + attribute.name + "');");
+                        }
+                  };
+               
+            });
+            //prologue = "DimensionElementComponentAdd('Period Dailya','2018-01','2018-01-01',1);";
+            //console.log(prolog);
+            var lineCount = 0;
+            //populate the Prolog
+            for (var i = 0; i < insertLines.length; i++) {
+               if (lineCount == 10000) {
+                  $scope.executeGhostTI(prolog, epilogue, 'populateAttributes', "", false);
+                  lineCount = 0;
+                  prolog = "";
+               } else {
+                  prolog += insertLines[i] + "\n";
+               }
+               lineCount++;
+            }
+            console.log(prolog);
+            if (!_.isEmpty(prolog)) {
+               $scope.executeGhostTI(prolog, epilogue, 'populateAttributes', "", true);
+            }
+         };
 
 
          //Manage color:

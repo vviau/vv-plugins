@@ -98,14 +98,20 @@
    },
    "attributes": {
       "Day": [
-         { "included": true, "type": "S", "name": "Year Short", "desc": "Year Short (YYYY)", "format": "YY" },
-         { "included": true, "type": "S", "name": "Year Long", "desc": "Year Long (YYYY)","format": "YYYY" },
-         { "included": true, "type": "S", "name": "Month Short", "desc": "Month Short (MMM)", "format": "MMM" },
-         { "included": true, "type": "S", "name": "Month Long" , "desc": "Month Long (MMMM)", "format": "MMMM" },
-         { "included": true, "type": "N", "name": "Month Number", "desc": "Month Number (mm)", "format": "mm" },
-         { "included": true, "type": "N", "name": "Num Day", "desc": "Num Day", "format": "dddd" },
-         { "included": true, "type": "S", "name": "Week Day Short", "desc": "Month Long (MMMM)", "format": "" },
-         { "included": true, "type": "S", "name": "Week Day Long", "desc": "Month Long (MMMM)", "format": "" }
+         { "id":"D001", "included": true, "type": "S", "name": "Year Short", "desc": "Year Short (YYYY)", "format": "YY" },
+         { "id":"D002","included": true, "type": "S", "name": "Year Long", "desc": "Year Long (YYYY)","format": "YYYY" },
+         { "id":"D003","included": true, "type": "S", "name": "Month Short", "desc": "Month Short (MMM)", "format": "MMM" },
+         { "id":"D004","included": true, "type": "S", "name": "Month Long" , "desc": "Month Long (MMMM)", "format": "MMMM" },
+         { "id":"D005","included": true, "type": "S", "name": "Month Number", "desc": "Month Number (MM)", "format": "MM" },
+         { "id":"D006","included": true, "type": "N", "name": "Month Number Numeric", "desc": "Month Number (M)", "format": "M" },
+         { "id":"D007","included": true, "type": "S", "name": "Num Day", "desc": "Num Day", "format": "DD" },
+         { "id":"D008","included": true, "type": "S", "name": "YearMonthDay", "desc": "YearMonthDay", "format": "YYYYMMDD" },
+         { "id":"D009","included": true, "type": "S", "name": "Week Number Short", "desc": "Week Number (W)", "format": "W" },
+         { "id":"D010","included": true, "type": "S", "name": "Week Number Long", "desc": "Week Number (WW)", "format": "WW" },
+         { "id":"D011","included": true, "type": "S", "name": "Previous Day", "desc": "Previous Day", "format": "" },
+         { "id":"D012","included": true, "type": "S", "name": "Next Day", "desc": "Next Day", "format": "" },
+         { "id":"D013","included": true, "type": "S", "name": "Day of the week", "desc": "Day of the week (dddd)", "format": "dddd" },
+         { "id":"D013","included": true, "type": "S", "name": "Day of the week short", "desc": "Day of the week short (ddd)", "format": "ddd" }
       ],
       "Month": [
          { "included": true, "type": "S", "name": "Year Short", "format": "YY" },
