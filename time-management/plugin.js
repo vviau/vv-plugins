@@ -99,8 +99,14 @@ arc.directive("arcTimeManagement", function () {
          // Check if dimension already exists
          $scope.checkIfDimensionExist = function () {
             $scope.existingHierarchies = [];
-            $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + $scope.selections.dimensionName + "')").then(function (value) {
-               if (value.data.Name == $scope.selections.dimensionName) {
+            $scope.existingDimensions = [];
+            $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
+              
+               for (var h = 0; h < result.data.value.length; h++) {
+                  $scope.existingDimensions.push(result.data.value[h].Name);
+               };
+
+               if (_.includes($scope.existingDimensions, $scope.selections.dimensionName)) {
                   $scope.dimensionExists = true;
                   // If dimension exists check Hierarchies
                   $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + $scope.selections.dimensionName + "')/Hierarchies?$select=Name").then(function (result) {
