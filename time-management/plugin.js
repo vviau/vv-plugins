@@ -521,7 +521,7 @@ arc.directive("arcTimeManagement", function () {
             } else if (level == 'HalfYear') {
                return newDay.format($scope.lists.dateFormats['HalfYear'].format) + $scope.lists[monthMMM]['HalfYear'];
             } else if (level == 'Week') {
-               return newDay.format($scope.lists.dateFormats['Week'].format);
+               return newDay.format($scope.lists.dateFormats['Week'].format) + newDay.week();
             } else if (level == 'FortNight') {
                return year + $scope.lists.separators['FortNight'].value + '1';
             } else if (level == 'YearFY') {
@@ -576,7 +576,7 @@ arc.directive("arcTimeManagement", function () {
          // Execute Ghost TI
          $scope.executeGhostTI = function (prolog, epilog, step, hierarchy, continueToNextStep) {
             console.log("Starting "+step);
-            console.log(prolog);
+            //console.log(prolog);
             //	TM1 version < PAL 2.0.5: /ExecuteProcess
             //	TM1 version > PAL 2.0.5: /ExecuteProcessWithReturn?$expand=ErrorLogFile
             if ($scope.tm1VersionSupported) {
@@ -775,7 +775,7 @@ arc.directive("arcTimeManagement", function () {
                });
             });
             //prologue = "DimensionElementComponentAdd('Period Dailya','2018-01','2018-01-01',1);";
-            console.log(prolog);
+            //console.log(prolog);
             var lineCount = 0;
             //populate the Prolog
             for (var i = 0; i < insertLines.length; i++) {
