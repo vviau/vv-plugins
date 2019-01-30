@@ -19,7 +19,7 @@
                      already exists
                   </div>
                </div>
-        <div class="col-md-6" ng-if="dimensionExists && hierarchiesOrRollUps=='RollUps'">
+        <div class="col-md-12" ng-if="dimensionExists && hierarchiesOrRollUps=='RollUps'">
             <div class="alert alert-secondary p-2" role="alert">
                <div class="form-check-inline">
                   <div class="radio ml-1">
@@ -66,13 +66,15 @@
                   </tbody>
                </table>
          </div>
-        <div class="pull-right">
-            <a href="#/dimension/{{instance}}/{{dimensionName}}/{{dimensionName}}" class="btn btn-info"
-               ng-if="createDimensionDone">
+    </div>
+    <div class="modal-footer">
+         <div class="pull-right">
+               <a href="#/dimension/{{instance}}/{{dimensionName}}/{{dimensionName}}" class="btn btn-info"
+               ng-if="createDimensionDone" ng-click="closeThisDialog('')">
                <span translate="TM-DIMENSIONCREATED"></span>:{{dimensionName}}
             </a>
             <button type="button" class="btn btn-success" ng-click="create()" translate="CREATE"></button>
-            <button type="button" class="btn btn-default" ng-click="" translate="CANCEL"></button>
-         </div>
+            <button type="button" class="btn btn-default" ng-click="closeThisDialog('')" translate="CANCEL"></button>
+           </div>
     </div>
 </div>

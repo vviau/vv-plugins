@@ -950,7 +950,7 @@ arc.directive("arcTimeManagement", function () {
                scope: $scope,
                controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
 
-                  $scope.selections.toDoLeafElements = $scope.ngDialogData.toDoLeafElements;
+                  //$scope.selections.toDoLeafElements = $scope.ngDialogData.toDoLeafElements;
                   //$scope.selections.hierarchiesOrRollUps = $scope.ngDialogData.hierarchiesOrRollUps;
 
                   $scope.dimensionName = $scope.selections.dimensionName;
