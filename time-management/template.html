@@ -379,7 +379,8 @@
             <uib-tab index="2" heading="3. Attributes" ng-click="generateAttributesExamples()">
                <div class="toolbar">
                   <div class="page-title">
-                     <h3 translate="TM-Step3Title">
+                     <h3>
+                        <span translate="TM-Step3Title"></span> ({{lists.attributes[selections.dimensionType].length}})
                      </h3>
                      <h5 translate="TM-Step3SubTitle">
                      </h5>
@@ -450,59 +451,10 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}" class="btn btn-info"
-                        ng-if="createDimensionDone">
-                        <span translate="TM-DIMENSIONCREATED"></span>:{{selections.dimensionName}}
-                     </a>
                      <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
-                     <button type="button" class="btn btn-success" ng-click="create()" translate="CREATE"></button>
+                     <button type="button" class="btn btn-success" ng-click="openCreateModal()" translate="CREATE"></button>
                   </div>
                </div>
-               <div class="row">
-                  <div class="col-md-3">
-                     <div class="alert alert-info" role="alert" ng-if="!dimensionExists">
-                        Dimension {{selections.dimensionName}}
-                        does not exists yet. Waiting for you to click the Create button...
-                     </div>
-                     <div class="alert alert-warning" role="alert" ng-if="dimensionExists">
-                        <i class="fa fa-fw fa-warning"></i>
-                        Dimension
-                        <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}">
-                           {{selections.dimensionName}}
-                        </a>
-                        already exists
-                     </div>
-                  </div>
-                  <div class="col-md-3" ng-if="dimensionExists && selections.hierarchiesOrRollUps!='RollUps'">
-                     <span><label translate="TM-EXISTINGHIERARCHIES"></label>:</span>
-                  </div>
-                  <div ng-repeat="hierarchy in existingHierarchies" class="col-md-3" ng-if="dimensionExists && selections.hierarchiesOrRollUps!='RollUps'">
-                     <div class="alert alert-secondary p-2" role="alert">
-                        <i class="fa hierarchy"></i> <label>{{hierarchy.name}}</label> ({{hierarchy.cardinality}}):<span
-                           class="badge ml-1" ng-click="updateHierarchyAction($index)" style="cursor:pointer" ng-class="{'badge-secondary':hierarchy.action=='NOTHING','badge-danger':hierarchy.action=='DESTROY','badge-warning':hierarchy.action=='RECREATE','badge-primary':hierarchy.action=='DELETEALLELEMENTS','badge-info':hierarchy.action=='UNWINDALLELEMENTS'}">
-                           {{hierarchy.action}}</div>
-                  </div>
-                  <div class="col-md-6" ng-if="dimensionExists && selections.hierarchiesOrRollUps=='RollUps'">
-                     <div class="alert alert-secondary p-2" role="alert">
-                        <div class="form-check-inline">
-                           <div class="radio ml-1">
-                              <label class="form-check-label">
-                                 <input ng-model="selections.toDoLeafElements" type="radio" name="option1" ng-value="'unwindAllElements'">
-                                 Unwind All ELements
-                              </label>
-                           </div>
-                           <div class="radio ml-1">
-                              <label class="form-check-label">
-                                 <input ng-model="selections.toDoLeafElements" type="radio" name="option2" ng-value="'deleteAllElements'">
-                                 Delete All Elements
-                              </label>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-               </div>
-
                <div class="row">
                   <div class="col-md-12">
                      <auto-height>
