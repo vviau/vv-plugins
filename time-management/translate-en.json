@@ -23,5 +23,9 @@
    "TM-FirstWeekDay": "First Week Day",
    "TM-FirstFiscalYearMonth": "First Fiscal Year Month",
    "TM-DIMENSIONCREATED": "Dimension Created",
-   "TM-EXAMPLE": "Example"
+   "TM-EXAMPLE": "Example",
+   "TM-HIERARCHIES": "Hierarchies",
+   "TM-EXISTINGHIERARCHIES": "Existing Hierarchies",
+   "TM-EXISTINGELEMENTS": "Existing Elements",
+   "TM-NBOFELEMENETS": "Nb of Elements"
 }

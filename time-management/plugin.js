@@ -98,7 +98,6 @@ arc.directive("arcTimeManagement", function () {
          //================
          // Check if dimension already exists
          $scope.checkIfDimensionExist = function () {
-            $scope.existingHierarchies = [];
             $scope.existingDimensions = [];
             $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
 
@@ -107,12 +106,21 @@ arc.directive("arcTimeManagement", function () {
                };
 
                if (_.includes($scope.existingDimensions, $scope.selections.dimensionName)) {
+                  $scope.existingHierarchies = [];
+                  $scope.existingHierarchiesName = [];
                   $scope.dimensionExists = true;
                   // If dimension exists check Hierarchies
-                  $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + $scope.selections.dimensionName + "')/Hierarchies?$select=Name").then(function (result) {
+                  $http.get(encodeURIComponent($scope.instance) + "/Dimensions('" + $scope.selections.dimensionName + "')/Hierarchies").then(function (result) {
                      //$scope.existingHierarchies = result.data.value;
                      for (var h = 0; h < result.data.value.length; h++) {
-                        $scope.existingHierarchies.push(result.data.value[h].Name);
+                        $scope.existingHierarchiesName.push(result.data.value[h].Name);
+                        var existingHierarchyInfo = {
+                           name:result.data.value[h].Name,
+                           cardinality:result.data.value[h].Cardinality,
+                           action: 'RECREATE'
+                        };
+                        //console.log(result.data.value[h]);
+                        $scope.existingHierarchies.push(existingHierarchyInfo);
                      };
                   });
                } else {
@@ -121,7 +129,7 @@ arc.directive("arcTimeManagement", function () {
             });
          };
 
-         $scope.checkIfDimensionExist();
+         //$scope.checkIfDimensionExist();
 
          //================
          // Check if dimension already exists
@@ -405,15 +413,29 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.generateAttributeValue = function (day, format, id) {
             var leafFormat = $scope.lists.dateFormats[$scope.selections.dimensionType].format;
+            var yearFormat = $scope.lists.dateFormats['Year'].format;
+            var monthFormat = $scope.lists.dateFormats['Month'].format;
             //console.log(leafFormat);
             var attributeValue = "";
             if (!_.isEmpty(format)) {
                attributeValue = day.format(format);
             } else {
-               if(id == "D011"){
+               if(id == "DY03"){
+                  //Previous Year
+                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'year').format(yearFormat);
+               } else if(id == "DY04"){
+                  //Next Year
+                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'year').format(yearFormat);
+               } else if(id == "DM05"){
+                  //Previous Month
+                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'month').format(monthFormat);
+               } else if(id == "DM06"){
+                  //Next Month
+                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'month').format(monthFormat);
+               } else if(id == "DD03"){
                   //previous day
                   attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'days').format(leafFormat);
-               } else if(id == "D012"){
+               } else if(id == "DD04"){
                   //next day
                   attributeValue = moment(day, "YYYY-MM-DD").add(1, 'days').format(leafFormat);
                } else{
@@ -709,7 +731,7 @@ arc.directive("arcTimeManagement", function () {
                } else {
                   // WORKING WITH HIERARCHIES
                   // check if Hierarchy exists
-                  if (!_.includes($scope.existingHierarchies, hierarchy.name)) {
+                  if (!_.includes($scope.existingHierarchiesName, hierarchy.name)) {
                      prolog = prolog + "HierarchyCreate('" + $scope.selections.dimensionName + "','" + hierarchy.name + "');";
                   }
                   epilog = "";
@@ -891,6 +913,21 @@ arc.directive("arcTimeManagement", function () {
                }
             }
          };
+
+         $scope.updateHierarchyAction= function(index){
+            var currentAction = $scope.existingHierarchies[index].action;
+            var newAction = "NOTHING"
+            if(currentAction == "DESTROY"){
+               newAction = "RECREATE"
+            } else if(currentAction == "RECREATE"){
+               newAction = "DELETEALLELEMENTS"
+            } else if(currentAction == "DELETEALLELEMENTS"){
+               newAction = "UNWINDALLELEMENTS"
+            } else if(currentAction == "NOTHING"){
+               newAction = "DESTROY"
+            }
+            $scope.existingHierarchies[index].action = newAction;
+         }
 
 
          //Manage color:

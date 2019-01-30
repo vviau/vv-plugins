@@ -262,8 +262,9 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarMonth'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
-                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
-                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
+                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
+                                          popover-append-to-body="true"></i>
                                        Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
                                           <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
@@ -303,8 +304,9 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included">
                                     <label>
-                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
-                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
+                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
+                                          popover-append-to-body="true"></i>
                                        Manage Roll-ups:
                                     </label>
                                     <table class="table table-hover table-responsive">
@@ -329,8 +331,9 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
-                                          <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
-                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
+                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
+                                          popover-append-to-body="true"></i>
                                        Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
                                           <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
@@ -392,14 +395,18 @@
                   <table class="table table-hover table-sm">
                      <thead>
                         <tr>
+                           <th> Group </th>
                            <th> # </th>
-                           <th > <span translate="ATTRIBUTES"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]">
-                              <a href class="click" ng-click="tickAttributesByGroup($index)">
-                                 <i class="fa fa-toggle-on text-success" ng-if="group.included"></i>
-                                 <i class="fa fa-toggle-off" ng-if="!group.included"></i>
-                              </a>
-                              {{group.name}}
-                           </span></th>
+                           <th> <span translate="ATTRIBUTES"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]"
+                                 class="badge ml-1" ng-click="tickAttributesByGroup($index)" style="cursor:pointer"
+                                 ng-class="{'badge-secondary':group.name=='Year','badge-info':group.name=='Month','badge-primary':group.name=='Day','badge-success':group.name=='Week'}">
+                                 <a href class="click">
+                                    <i class="fa fa-toggle-on" ng-if="group.included"></i>
+                                    <i class="fa fa-toggle-off" ng-if="!group.included"></i>
+                                 </a>
+                                 {{group.name}}
+
+                              </span></th>
                            <th translate="TYPE"> </th>
                            <th translate="DESCRIPTION"> </th>
                            <th translate="TM-EXAMPLE"> </th>
@@ -407,6 +414,11 @@
                      </thead>
                      <tbody>
                         <tr ng-repeat="attribute in lists.attributes[selections.dimensionType]">
+                           <td>
+                              <span class="badge ml-1" ng-class="{'badge-secondary':attribute.group=='Year','badge-info':attribute.group=='Month','badge-primary':attribute.group=='Day','badge-success':attribute.group=='Week'}">
+                                 {{attribute.group}}</span>
+
+                           </td>
                            <td>
                               <a href class="click" ng-click="attribute.included = !attribute.included">
                                  <i class="fa fa-toggle-on text-success" ng-if="attribute.included"></i>
@@ -447,16 +459,31 @@
                   </div>
                </div>
                <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-3">
                      <div class="alert alert-info" role="alert" ng-if="!dimensionExists">
                         Dimension {{selections.dimensionName}}
                         does not exists yet. Waiting for you to click the Create button...
                      </div>
                      <div class="alert alert-warning" role="alert" ng-if="dimensionExists">
-                        <i class="fa fa-fw fa-warning"></i> Dimension
+                        <i class="fa fa-fw fa-warning"></i>
+                        Dimension
                         <a href="#/dimension/{{instance}}/{{selections.dimensionName}}/{{selections.dimensionName}}">
                            {{selections.dimensionName}}
-                        </a> already exists, what do you want to do with leaf elements:
+                        </a>
+                        already exists
+                     </div>
+                  </div>
+                  <div class="col-md-3" ng-if="dimensionExists && selections.hierarchiesOrRollUps!='RollUps'">
+                     <span><label translate="TM-EXISTINGHIERARCHIES"></label>:</span>
+                  </div>
+                  <div ng-repeat="hierarchy in existingHierarchies" class="col-md-3" ng-if="dimensionExists && selections.hierarchiesOrRollUps!='RollUps'">
+                     <div class="alert alert-secondary p-2" role="alert">
+                        <i class="fa hierarchy"></i> <label>{{hierarchy.name}}</label> ({{hierarchy.cardinality}}):<span
+                           class="badge ml-1" ng-click="updateHierarchyAction($index)" style="cursor:pointer" ng-class="{'badge-secondary':hierarchy.action=='NOTHING','badge-danger':hierarchy.action=='DESTROY','badge-warning':hierarchy.action=='RECREATE','badge-primary':hierarchy.action=='DELETEALLELEMENTS','badge-info':hierarchy.action=='UNWINDALLELEMENTS'}">
+                           {{hierarchy.action}}</div>
+                  </div>
+                  <div class="col-md-6" ng-if="dimensionExists && selections.hierarchiesOrRollUps=='RollUps'">
+                     <div class="alert alert-secondary p-2" role="alert">
                         <div class="form-check-inline">
                            <div class="radio ml-1">
                               <label class="form-check-label">
@@ -473,14 +500,18 @@
                         </div>
                      </div>
                   </div>
+
                </div>
+
                <div class="row">
                   <div class="col-md-12">
                      <auto-height>
                         <div ng-repeat="hierarchy in dimensionInfo | limitTo:12">
                            <div class="card mb-2">
                               <div class="card-header" style="padding: 5px 10px;">
-                                 <label>{{hierarchy.name}} from {{selections.dateRangeStart | amDateFormat:'DD-MM-YYYY'}} to {{selections.dateRangeEnd | amDateFormat:'DD-MM-YYYY'}}</label>
+                                 <label>{{hierarchy.name}} from {{selections.dateRangeStart |
+                                    amDateFormat:'DD-MM-YYYY'}} to {{selections.dateRangeEnd |
+                                    amDateFormat:'DD-MM-YYYY'}}</label>
                                  <span class="pull-right">
                                     <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
                                        <i class="fa fa-fw fa-eye-slash"></i>
@@ -495,7 +526,8 @@
                                     <thead>
                                        <tr>
                                           <th translate="TM-ELEMENTS"> </th>
-                                          <th ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included"> {{attribute.name}} </th>
+                                          <th ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included">
+                                             {{attribute.name}} </th>
                                        </tr>
                                     </thead>
                                     <tbody>
@@ -504,15 +536,15 @@
                                              <div ng-if="element.name.slice(-2)=='01' && element.name.length==10"
                                                 ng-repeat="element in elementInfo">
                                                 <div ng-repeat="element in elementInfo">
-                                                {{element.name}}
-                                             </div>
+                                                   {{element.name}}
+                                                </div>
                                              </div>
                                              <div ng-if="element.name.slice(-2)!='01' && element.name.length==10"
                                                 ng-repeat="element in elementInfo">
                                                 {{element.name}}
                                              </div>
                                           </td>
-                                          <td ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included"> 
+                                          <td ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included">
                                              {{elementInfo[elementInfo.length-1].attributes[$index].value}}
                                           </td>
                                        </tr>
