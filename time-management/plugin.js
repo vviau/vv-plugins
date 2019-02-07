@@ -422,19 +422,20 @@ arc.directive("arcTimeManagement", function () {
             } else {
                if (id == "DY03") {
                   //Previous Year
-                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'year').format(yearFormat);
+                  // y+1 y-1
+                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'year').format(yearFormat);
                } else if (id == "DY04") {
                   //Next Year
                   attributeValue = moment(day, "YYYY-MM-DD").add(1, 'year').format(yearFormat);
                } else if (id == "DM05") {
                   //Previous Month
-                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'month').format(monthFormat);
+                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'month').format(monthFormat);
                } else if (id == "DM06") {
                   //Next Month
                   attributeValue = moment(day, "YYYY-MM-DD").add(1, 'month').format(monthFormat);
                } else if (id == "DD03") {
                   //previous day
-                  attributeValue = moment(day, "YYYY-MM-DD").subtract(1, 'days').format(leafFormat);
+                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'days').format(leafFormat);
                } else if (id == "DD04") {
                   //next day
                   attributeValue = moment(day, "YYYY-MM-DD").add(1, 'days').format(leafFormat);

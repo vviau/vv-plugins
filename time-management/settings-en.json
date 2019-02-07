@@ -100,8 +100,8 @@
       "Day": [
          { "group":"Year","id":"DY01", "included": true, "type": "S", "name": "Year Short", "desc": "Year Short (YYYY)", "format": "YY" },
          { "group":"Year","id":"DY02","included": true, "type": "S", "name": "Year Long", "desc": "Year Long (YYYY)","format": "YYYY" },
-         { "group":"Year","id":"DY03","included": true, "type": "S", "name": "Previous Year", "desc": "Previous Year","format": "" },
-         { "group":"Year","id":"DY04","included": true, "type": "S", "name": "Next Year", "desc": "Next Year","format": "" },
+         { "group":"Year","id":"DY03","included": true, "type": "S", "name": "Previous Year", "desc": "Previous Year", "func": "y-1" },
+         { "group":"Year","id":"DY04","included": true, "type": "S", "name": "Next Year", "desc": "Next Year", "func": "y-1"  },
          { "group":"Month","id":"DM01","included": true, "type": "S", "name": "Month Short", "desc": "Month Short (MMM)", "format": "MMM" },
          { "group":"Month","id":"DM02","included": true, "type": "S", "name": "Month Long" , "desc": "Month Long (MMMM)", "format": "MMMM" },
          { "group":"Month","id":"DM03","included": true, "type": "S", "name": "Month Number", "desc": "Month Number (MM)", "format": "MM" },
