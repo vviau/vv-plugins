@@ -42,12 +42,13 @@ arc.directive("arcBedrockAll", function () {
 
          //Functions
          $scope.getBedrockList = function () {
-            $http.get(encodeURIComponent($scope.instance) + "/Processes?$select=Name&?$filter=substringof('rock',Name) eq true").then(function (result) {
+            $http.get(encodeURIComponent($scope.instance) + "/Processes?$select=Name&$filter=contains(Name,'edrock')").then(function (result) {
                $scope.lists.bedrockTIs = result.data.value;
                //console.log($scope.lists.bedrockTIs);
                for (var ti = 0; ti < $scope.lists.bedrockTIs.length; ti++) {
                   $scope.lists.bedrockTIinTM1.push($scope.lists.bedrockTIs[ti].Name);
                }
+               // _each TODO
                $scope.checkRelationship();
             });
          };
@@ -56,13 +57,13 @@ arc.directive("arcBedrockAll", function () {
             for (var ti = 0; ti < $scope.lists.bedrockTIs.length; ti++) {
                var tiSourceName = $scope.lists.bedrockTIs[ti].Name;
                //console.log(ti, tiSource.Name);
-               $scope.lists.bedrockTIsInfo.push($scope.getTiInfo(tiSourceName));
+               $scope.lists.bedrockTIsInfo.push(getTiInfo(tiSourceName));
             }
-            // $scope.getTiInfo($scope.lists.bedrockTIs[0].Name);
             console.log($scope.lists.bedrockTIsInfo);
          };
 
-         $scope.getTiInfo = function (processName) {
+         // function get
+         var getTiInfo = function (processName) {
             var tiInfo = {
                name: processName
             };
@@ -95,6 +96,7 @@ arc.directive("arcBedrockAll", function () {
          $scope.searchTisIn = function (processSource, text) {
             var processesFound = [];
             var processesNameFound = [];
+            // Regular expression: "\\s*ExecuteProcess\\s*\\("
             var stringToSearch = 'edrock';
             var indexStringFound = text.search(stringToSearch);
             if (indexStringFound == -1) {

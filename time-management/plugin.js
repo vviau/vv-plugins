@@ -659,27 +659,31 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.executeNextStep = function (step, hierarchy, continueToNextStep) {
             if (continueToNextStep) {
-               if (step == 'dimension') {
+               if(step === 'dimension') {
                   console.log('Dimension Created');
                   $scope.createDimensionDone = true;
                   // Next step
                   $scope.createHierarchies();
-               } else if (step == 'hierarchy') {
+               }
+               else if(step === 'hierarchy') {
                   console.log('Hierarchies created');
                   $scope.createHierarchy = true;
                   // Next step
                   $scope.insertElements(hierarchy);
-               } else if (step == 'insertElements') {
+               }
+               else if(step == 'insertElements') {
                   console.log('Elements Inserted to ' + hierarchy.name);
                   $scope.elementsInserted = true;
                   // Next step
                   $scope.componentsAddToDimension(hierarchy);
-               } else if (step == 'addComponents') {
+               }
+               else if (step == 'addComponents') {
                   console.log('Components Added');
                   $scope.componentsAdded = true;
                   // Next step -> attributes
                   $scope.createAttributes();
-               } else if (step == 'createAttributes' & !$scope.attributesCreated) {
+               } 
+               else if (step == 'createAttributes' & !$scope.attributesCreated) {
                   console.log('Attributes Created');
                   $scope.attributesCreated = true;
                   // Next step -> attributes
@@ -760,7 +764,7 @@ arc.directive("arcTimeManagement", function () {
                   } else {
                      //Consolidation
                      var consolidation = element.name;
-                     if (consolidationsInserted.indexOf(consolidation) == -1) {
+                     if (consolidationsInserted.indexOf(consolidation) === -1) {
                         // insert consolidation only if does not already exists
                         consolidationsInserted.push(consolidation);
                         //prolog += "DimensionElementInsert('" + $scope.selections.dimensionName + "','','" + consolidation + "','C');\n";
