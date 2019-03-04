@@ -2,20 +2,20 @@
    <div class="row">
       <div class="col-md-12">
          <h2><i class="fa fa-recycle" style="padding-right:5px" aria-hidden="true"></i> Find Bedrock dependencies
-         <div class="pull-right">
-            <div class="input-group">
-               <div class="input-group-prepend">
-                  <input type="text" ng-model="filterTis" placeholder="Search" class="form-control"
-                     style="display:inline; width:200px;">
-               </div>
-               <div class="input-group-append input-group-prepend">
-                  <button class="btn btn-primary" title="Refresh" ng-click="getBedrockList()">
-                     <i class="fa fa-fw fa-refresh"></i>
-                  </button>
+            <div class="pull-right">
+               <div class="input-group">
+                  <div class="input-group-prepend">
+                     <input type="text" ng-model="filterTis" placeholder="Search" class="form-control"
+                        style="display:inline; width:200px;">
+                  </div>
+                  <div class="input-group-append input-group-prepend">
+                     <button class="btn btn-primary" title="Refresh" ng-click="getBedrockList()">
+                        <i class="fa fa-fw fa-refresh"></i>
+                     </button>
+                  </div>
                </div>
             </div>
-         </div>
-      </h2>
+         </h2>
       </div>
    </div>
    <div class="row">
@@ -36,31 +36,46 @@
                <tbody>
                   <tr ng-repeat="process in lists.bedrockTIsInfo | filter:filterTis">
                      <td>
+                        <i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"
+                           ng-if="process.documentation.missingDescription" uib-popover="'Description:' missing"
+                           popover-append-to-body="true" popover-trigger="'mouseenter'"></i>
+                        <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"
+                           ng-if="process.documentation.useCaseIsLast" uib-popover="'Use case:' should not be after Note"
+                           popover-append-to-body="true" popover-trigger="'mouseenter'"></i>
+                        <i ng-if="process.documentation.full" class="fa fa-info-circle text-primary" aria-hidden="true"
+                           uib-popover="{{process.documentation.title}}" popover-append-to-body="true"
+                           popover-trigger="'mouseenter'"></i>
                         <a href="#/process/{{instance}}/{{process.name}}">{{process.name}}</a>
                      </td>
                      <td>
                         <span ng-if="process.tisInProlog.length>0">
-                           <span ng-repeat="ti in process.tisInProlog" >
-                                 <a href="#/process/{{instance}}/{{ti.name}}" class="badge badge-primary input-group-append" ng-class="{'badge-danger':!ti.exists}" style="font-size:0.9em;color:white">
-                                    <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a>
-                              </span>
+                           <span ng-repeat="ti in process.tisInProlog">
+                              <a href="#/process/{{instance}}/{{ti.name}}"
+                                 class="badge badge-primary input-group-append" ng-class="{'badge-danger':!ti.exists}"
+                                 style="font-size:0.9em;color:white">
+                                 <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                 {{ti.name}}</a>
+                           </span>
                         </span>
                         <span ng-if="process.tisInMetaData.length>0">
                            <span ng-repeat="ti in process.tisInMetaData">
-                              <span class="badge badge-info" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti.name}}"
-                                    style="color:white">  <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                              <span class="badge badge-info" style="font-size:0.9em"><a
+                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
+                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
                            </span>
                         </span>
                         <span ng-if="process.tisInData.length>0">
                            <span ng-repeat="ti in process.tisInData">
-                              <span class="badge badge-success" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti.name}}"
-                                    style="color:white">  <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                              <span class="badge badge-success" style="font-size:0.9em"><a
+                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
+                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
                            </span>
                         </span>
                         <span ng-if="process.tisInEpilog.length>0">
                            <span ng-repeat="ti in process.tisInEpilog">
-                              <span class="badge badge-secondary" style="font-size:0.9em"><a href="#/process/{{instance}}/{{ti.name}}"
-                                    style="color:white">  <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                              <span class="badge badge-secondary" style="font-size:0.9em"><a
+                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
+                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
                            </span>
                         </span>
                      </td>

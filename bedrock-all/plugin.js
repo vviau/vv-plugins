@@ -71,6 +71,7 @@ arc.directive("arcBedrockAll", function () {
                //console.log(processName);
                if (result.data.PrologProcedure) {
                   tiInfo.tisInProlog = $scope.searchTisIn(processName, result.data.PrologProcedure);
+                  tiInfo.documentation = $scope.returnTisDocumentation(result.data.PrologProcedure);
                } else {
                   tiInfo.tisInProlog = [];
                }
@@ -131,6 +132,61 @@ arc.directive("arcBedrockAll", function () {
                return processesFound;
 
             };
+         };
+
+         $scope.returnTisDocumentation = function (text) {
+            var documentation = {
+               full:"",
+               description:"",
+               useCase:"",
+               notes:"",
+               missingDescription:false,
+               useCaseIsLast:false
+            }
+            // Regular expression: "\\s*ExecuteProcess\\s*\\("
+            var regionStart = '#Region @DOC';
+            var indexStartRegion = text.search(regionStart);
+            if (indexStartRegion == -1) {
+               // Can't find start region
+            } else {
+               var subText = text.substring(indexStartRegion+12, text.length);
+               var regionEnd = '#EndRegion @DOC';
+               var indexEndRegion = subText.search(regionEnd);
+               if (indexStartRegion == -1) {
+                  // Can't find End of region
+               } else {
+                  documentation.full = subText.substring(1, indexEndRegion);
+                  // search for description only
+                  var indexDescription = documentation.full.search("Description:");
+                  var indexUseCase = documentation.full.search("Use case:");
+                  var indexNote = documentation.full.search("Note:");
+                  if (indexDescription == -1) {
+                     documentation.missingDescription = true
+                     if(indexUseCase > indexNote){
+                        documentation.title = subText.substring(3, indexNote-1);
+                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
+                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                        documentation.useCaseIsLast = true;
+                     } else {
+                        documentation.title = subText.substring(3, indexUseCase-1);
+                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
+                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                     }
+                  } else {
+                     if(indexUseCase > indexNote){
+                        documentation.title = subText.substring(indexDescription+16, indexNote-1);
+                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
+                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                        documentation.useCaseIsLast = true;
+                     } else {
+                        documentation.title = subText.substring(indexDescription+16, indexUseCase-1);
+                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
+                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                     }
+                  }
+               }
+            };
+            return documentation
          };
 
          //Trigger Functions
