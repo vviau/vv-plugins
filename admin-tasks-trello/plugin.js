@@ -1,18 +1,18 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("adminTasksHorizontal", "Admin Tasks Trello", "page", {
+    $rootScope.plugin("adminTasksTrello", "Admin Tasks Trello", "page", {
         menu: "tools",
         icon: "fa-trello",
-        description: "This plugin can be used to search any TM1 objects",
+        description: "This plugin can be used to create TM1 administrators tasks which look like Trello",
         author: "Cubewise",
-        url: "https://github.com/cubewise-code/arc-plugins",
+        url: "https://github.com/cubewise-code/arc-plugins-samples",
         version: "1.0.0"
     });
 
 }]);
 
-arc.directive("adminTasksHorizontal", function () {
+arc.directive("adminTasksTrello", function () {
     return {
         restrict: "EA",
         replace: true,
@@ -69,7 +69,7 @@ arc.directive("adminTasksHorizontal", function () {
 
             $scope.$on("close-tab", function (event, args) {
                 // Event to capture when a user has clicked close on the tab
-                if (args.page == "adminTasksHorizontal" && args.instance == $scope.instance && args.name == null) {
+                if (args.page == "adminTasksTrello" && args.instance == $scope.instance && args.name == null) {
                     // The page matches this one so close it
                     $rootScope.close(args.page, { instance: $scope.instance });
                 }

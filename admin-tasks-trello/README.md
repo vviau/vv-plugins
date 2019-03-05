@@ -5,7 +5,7 @@ This plugin can be used to create a list of tasks that you have to do regularly 
 * Running a process
 * Running a chore
 
-<img src="https://s3-ap-southeast-2.amazonaws.com/downloads.cubewise.com/web_assets/arc-pulgins/admin-tasks.gif" />
+<img src="https://s3.amazonaws.com/cubewise-downloads/web_assets/arc-plugins/admin-tasks-trello.gif" />
 
 ## Add this plugin to your environment
 1. Download the folder
@@ -13,27 +13,19 @@ This plugin can be used to create a list of tasks that you have to do regularly 
 3. After clearing the cache you should now see the plugin
 
 ## How does it work
-The list of tasks is defined in the plugins.js by ```$scope.tabs```. This array is a list of tabs, each tabs contains steps and steps contains actions:
+The list of tasks is defined in the **admin-tasks.json** file. This array is a list of tabs, each tabs contains steps and steps contains actions:
+In this example, the tab title is **Monthly** and the first step is called **1 - Update System Info Parameters**:
 ```js
-$scope.tabs = [
-            { title:'Monthly', stepPercentage:0, content:[
-                {
-                    title: 'Update System Info Parameters',
-                    open: true,
-                    actions: [{
-                        name: 'Open System Info cube',
-                        cube: 'System Info',
-                        view: 'Default'
-                    },{
-                        name: 'Check Region Subset',
-                        dimension: 'Region',
-                        hierarchy: 'Region',
-                        subset: 'All Countries'
-                    },{
-                        name: 'Run Time subsets update',
-                        process: ' Dim.Date.LoadFromODBC'
-                    }]
-                }
+{ "title":"Monthly", "stepPercentage":0, "content":[
+   {
+       "title": "1 - Update System Info Parameters",
+       "open": true,
+       "actions": [{
+           "category": "bg-info",
+           "name": "Open System Info cube",
+           "cube": "System Info",
+           "view": "Default"
+       }
 ```
 ## Add an action to open a cubeview
 ```js
