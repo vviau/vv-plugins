@@ -4,9 +4,9 @@ arc.run(['$rootScope', function ($rootScope) {
    $rootScope.plugin("arcConsole", "TI Console", "page", {
       menu: "tools",
       icon: "fa-terminal",
-      description: "This plugin can be used as a starting point for building new page plugins",
+      description: "This plugin can be used to execute TI functions without having to create process",
       author: "Cubewise",
-      url: "https://github.com/cubewise-code/arc-plugins",
+      url: "https://github.com/cubewise-code/arc-plugins-samples",
       version: "1.0.0"
    });
 
