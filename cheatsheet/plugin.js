@@ -3,9 +3,9 @@ arc.run(['$rootScope', function ($rootScope) {
    $rootScope.plugin("arcCheatSheet", "Cheatsheet", "page", {
       menu: "tools",
       icon: "fa-archive",
-      description: "This plugin can be used as a starting point for building new page plugins",
+      description: "This plugin gathers everything you should now about how to build plugins",
       author: "Cubewise",
-      url: "https://github.com/cubewise-code/arc-plugins",
+      url: "https://github.com/cubewise-code/arc-plugins-samples",
       version: "1.0.0"
    });
 
