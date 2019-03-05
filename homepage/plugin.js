@@ -4,9 +4,9 @@ arc.run(['$rootScope', function ($rootScope) {
     $rootScope.plugin("overviewButton", "Home", "page", {
         menu: "tools",
         icon: "fa-home",
-        description: "Instance Overview",
+        description: "Instance Overview which can be used as a Homepage",
         author: "Cubewise",
-        url: "https://github.com/cubewise-code/arc-plugins",
+        url: "https://github.com/cubewise-code/arc-plugins-samples",
         version: "1.0.0"
     });
 

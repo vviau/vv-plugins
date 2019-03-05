@@ -1,7 +1,7 @@
-# SaveData plugin
-This plugin can be used to execute save data for one or multiple cubes, the time to execute the SaveData will pop-up in a green window.
+# Arc services plugin
+This plugin gives you an overview of the Arc services that you can use in your plugins such as executing a process or a chore:
 
-<img src="https://s3.amazonaws.com/cubewise-downloads/web_assets/arc-plugins/saveData.png" />
+<img src="https://s3.amazonaws.com/cubewise-downloads/web_assets/arc-plugins/arc-services.png" />
 
 ## Add this plugin to your application
 1. Download the folder.

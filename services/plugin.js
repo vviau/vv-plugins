@@ -4,9 +4,9 @@ arc.run(['$rootScope', function ($rootScope) {
    $rootScope.plugin("arcServices", "Arc Services", "page", {
       menu: "tools",
       icon: "fa-arrows-h",
-      description: "This plugin can be used to search any TM1 objects",
+      description: "This plugin gives you the list of all available Arc services",
       author: "Cubewise",
-      url: "https://github.com/cubewise-code/arc-plugins",
+      url: "https://github.com/cubewise-code/arc-plugins-samples",
       version: "1.0.0"
    });
 

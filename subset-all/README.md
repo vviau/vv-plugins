@@ -1,7 +1,7 @@
-# SaveData plugin
-This plugin can be used to execute save data for one or multiple cubes, the time to execute the SaveData will pop-up in a green window.
+# Arc services plugin
+This plugin gives you the list of all public subsets in your TM1 instance:
 
-<img src="https://s3.amazonaws.com/cubewise-downloads/web_assets/arc-plugins/saveData.png" />
+<img src="https://s3.amazonaws.com/cubewise-downloads/web_assets/arc-plugins/all-subsets.png" />
 
 ## Add this plugin to your application
 1. Download the folder.

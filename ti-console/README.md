@@ -1,4 +1,4 @@
-# Template plugin
+# TI Console plugin
 This plugin can be used as a starting point to build your own plugins
 
 <img src="https://s3-ap-southeast-2.amazonaws.com/downloads.cubewise.com/web_assets/arc-pulgins/Template+screenshot.png" />
