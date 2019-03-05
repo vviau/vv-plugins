@@ -1,18 +1,18 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-   $rootScope.plugin("arcTemplate2", "Ghost TI", "page", {
+   $rootScope.plugin("ghostTI", "Ghost TI", "page", {
       menu: "tools",
       icon: "fa-snapchat-ghost",
-      description: "This plugin can be used to search any TM1 objects",
+      description: "This plugin can be used to execute TI's code without creating a TI",
       author: "Cubewise",
-      url: "https://github.com/cubewise-code/arc-plugins",
+      url: "https://github.com/cubewise-code/arc-plugins-samples",
       version: "1.0.0"
    });
 
 }]);
 
-arc.directive("arcTemplate2", function () {
+arc.directive("ghostTI", function () {
    return {
       restrict: "EA",
       replace: true,
@@ -81,7 +81,7 @@ arc.directive("arcTemplate2", function () {
          //Close the tab
          $scope.$on("close-tab", function (event, args) {
             // Event to capture when a user has clicked close on the tab
-            if (args.page == "arcTemplate2" && args.instance == $scope.instance && args.name == null) {
+            if (args.page == "ghostTI" && args.instance == $scope.instance && args.name == null) {
                // The page matches this one so close it
                $rootScope.close(args.page, { instance: $scope.instance });
             }
