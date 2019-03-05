@@ -38,7 +38,7 @@ This plugin is one HTML table ```<table>```, one task is defined per row (```<tr
     </tr>
 ```
 ## Define a new step
-To define a new step you just need to add a new row ```tr``` to the table and update the different column information
+To define a new step, you just need to add a new row ```<tr></tr>``` to the table and update the different columns information
 
 ## Action to open a cubeview
 To open a cube view from a plugin you just need to create a link using ```href```, the URL will look like this:
@@ -67,7 +67,7 @@ To run a process you just need to call a function defined in the **plugin.js** f
         $tm1.processExecute($scope.instance, name);
     };
 ```
-Example below create a button which run ```ng-click="executeProcess('Cube.GeneralLedger.LoadFromFile')"```
+Example to create a clickable button to execute the process Cube.GeneralLedger.LoadFromFile  ```ng-click="executeProcess('Cube.GeneralLedger.LoadFromFile')"```
 ```html
     <button class="btn btn-warning" title="Cube.GeneralLedger.LoadFromFile" ng-click="executeProcess('Cube.GeneralLedger.LoadFromFile')">
         <i class="fa fa-fw fa-bolt"></i>
@@ -75,7 +75,7 @@ Example below create a button which run ```ng-click="executeProcess('Cube.Genera
 ```
 
 ## Action to run a chore
-To run a chore you just need to call a function defined in the **plugin.js** file which uses the **choreExecute** function of the **$tm1** service ```$tm1.choreExecute```:
+To run a chore, you just need to call a function defined in the **plugin.js** file which uses the **choreExecute** function of the **$tm1** service ```$tm1.choreExecute```:
 ```js
     $scope.executechore = function (name) {
         $tm1.choreExecute($scope.instance, name);

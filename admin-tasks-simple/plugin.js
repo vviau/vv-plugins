@@ -1,18 +1,18 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-    $rootScope.plugin("bauMonthly", "Admin Tasks Simple", "page", {
+    $rootScope.plugin("adminTasksSimple", "Admin Tasks Simple", "page", {
         menu: "tools",
         icon: "fa-briefcase",
-        description: "This plugin can be used to search any TM1 objects",
+        description: "This plugin can be used to create a simple list of TM1 Admin tasks",
         author: "Cubewise",
-        url: "https://github.com/cubewise-code/arc-plugins",
+        url: "https://github.com/cubewise-code/arc-plugins-samples",
         version: "1.0.0"
     });
 
 }]);
 
-arc.directive("bauMonthly", function () {
+arc.directive("adminTasksSimple", function () {
     return {
         restrict: "EA",
         replace: true,
@@ -39,7 +39,7 @@ arc.directive("bauMonthly", function () {
 
             $scope.$on("close-tab", function (event, args) {
                 // Event to capture when a user has clicked close on the tab
-                if (args.page == "bauMonthly" && args.instance == $scope.instance && args.name == null) {
+                if (args.page == "adminTasksSimple" && args.instance == $scope.instance && args.name == null) {
                     // The page matches this one so close it
                     $rootScope.close(args.page, { instance: $scope.instance });
                 }
