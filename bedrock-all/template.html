@@ -24,7 +24,20 @@
             <table class="table table-hover table-sm">
                <thead>
                   <tr>
-                     <th> ProcessName </th>
+                     <th> ProcessName 
+                           <span class="btn btn-primary pull-right p-0"
+                           style="font-size:0.9em;cursor: pointer" ng-click="showAttributes=!showAttributes">
+                              <i ng-if="showAttributes" class="fa fa-fw fa-eye-slash"></i>
+                              <i ng-if="!showAttributes" class="fa fa-fw fa-eye"></i>
+                           </span>
+                     </th>
+                     <th ng-if="showAttributes"> Parameters
+                        <span ng-if="filterTis" class="badge pull-right"
+                        style="font-size:0.9em;cursor: pointer" ng-style="generateHSLColour(filterTis)" ng-click="clearFilter()">
+                           {{filterTis}}
+                           <i class="fa fa-fw fa-close"></i>
+                        </span>
+                     </th>
                      <th> Sub Processes
                         <span class="badge badge-primary" style="font-size:0.9em">Prolog</span>
                         <span class="badge badge-info" style="font-size:0.9em">Metadata</span>
@@ -40,12 +53,20 @@
                            ng-if="process.documentation.missingDescription" uib-popover="'Description:' missing"
                            popover-append-to-body="true" popover-trigger="'mouseenter'"></i>
                         <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"
-                           ng-if="process.documentation.useCaseIsLast" uib-popover="'Use case:' should not be after Note"
-                           popover-append-to-body="true" popover-trigger="'mouseenter'"></i>
+                           ng-if="process.documentation.useCaseIsLast"
+                           uib-popover="'Use case:' should not be after Note" popover-append-to-body="true"
+                           popover-trigger="'mouseenter'"></i>
                         <i ng-if="process.documentation.full" class="fa fa-info-circle text-primary" aria-hidden="true"
                            uib-popover="{{process.documentation.title}}" popover-append-to-body="true"
                            popover-trigger="'mouseenter'"></i>
                         <a href="#/process/{{instance}}/{{process.name}}">{{process.name}}</a>
+                     </td>
+                     <td ng-if="showAttributes">
+                        <span ng-repeat="param in process.parameters" ng-click="addParameterToFilter(param.Name)"
+                           class="badge badge-success mr-1" style="font-size:0.9em;cursor: pointer;"
+                           ng-style="generateHSLColour(param.Name)"
+                           uib-popover="Prompt: '{{param.Prompt}}'; Value: '{{param.Value}}'; Type: {{param.Type}}"
+                           popover-append-to-body="true" popover-trigger="'mouseenter'">{{param.Name}}</span>
                      </td>
                      <td>
                         <span ng-if="process.tisInProlog.length>0">
@@ -60,22 +81,25 @@
                         <span ng-if="process.tisInMetaData.length>0">
                            <span ng-repeat="ti in process.tisInMetaData">
                               <span class="badge badge-info" style="font-size:0.9em"><a
-                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
-                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                                    href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
+                                       ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    {{ti.name}}</a></span>
                            </span>
                         </span>
                         <span ng-if="process.tisInData.length>0">
                            <span ng-repeat="ti in process.tisInData">
                               <span class="badge badge-success" style="font-size:0.9em"><a
-                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
-                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                                    href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
+                                       ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    {{ti.name}}</a></span>
                            </span>
                         </span>
                         <span ng-if="process.tisInEpilog.length>0">
                            <span ng-repeat="ti in process.tisInEpilog">
                               <span class="badge badge-secondary" style="font-size:0.9em"><a
-                                    href="#/process/{{instance}}/{{ti.name}}" style="color:white"> <i ng-if="!ti.exists"
-                                       class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ti.name}}</a></span>
+                                    href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
+                                       ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    {{ti.name}}</a></span>
                            </span>
                         </span>
                      </td>

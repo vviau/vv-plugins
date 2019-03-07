@@ -40,6 +40,8 @@ arc.directive("arcBedrockAll", function () {
          };
          $scope.values = {};
 
+         $scope.showAttributes = true;
+
          //Functions
          $scope.getBedrockList = function () {
             $http.get(encodeURIComponent($scope.instance) + "/Processes?$select=Name&$filter=contains(Name,'edrock')").then(function (result) {
@@ -59,7 +61,7 @@ arc.directive("arcBedrockAll", function () {
                //console.log(ti, tiSource.Name);
                $scope.lists.bedrockTIsInfo.push(getTiInfo(tiSourceName));
             }
-            console.log($scope.lists.bedrockTIsInfo);
+            //console.log($scope.lists.bedrockTIsInfo);
          };
 
          // function get
@@ -68,7 +70,10 @@ arc.directive("arcBedrockAll", function () {
                name: processName
             };
             $http.get(encodeURIComponent($scope.instance) + "/Processes('" + processName + "')").then(function (result) {
-               //console.log(processName);
+               //console.log(result.data);
+               if (result.data.Parameters) {
+                  tiInfo.parameters = result.data.Parameters;
+               }
                if (result.data.PrologProcedure) {
                   tiInfo.tisInProlog = $scope.searchTisIn(processName, result.data.PrologProcedure);
                   tiInfo.documentation = $scope.returnTisDocumentation(result.data.PrologProcedure);
@@ -192,6 +197,33 @@ arc.directive("arcBedrockAll", function () {
          //Trigger Functions
          $scope.getBedrockList();
 
+         $scope.addParameterToFilter = function(param){
+            $scope.filterTis = param;
+         };
+
+         $scope.clearFilter = function(){
+            $scope.filterTis = "";
+         };
+
+         //Manage color:
+         $scope.generateHSLColour = function (string) {
+            //HSL refers to hue, saturation, lightness
+            var styleObject = {
+               "background-color": "",
+               "color": "white"
+            };
+            //for ngStyle format
+            var hash = 0;
+            var saturation = "50";
+            var lightness = "50";
+            for (var i = 0; i < string.length; i++) {
+               hash = string.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            var h = hash % 360;
+            styleObject["background-color"] = 'hsl(' + h + ', ' + saturation + '%, ' + lightness + '%)';
+            return styleObject;
+         };
+
          //Trigger an event after the login screen
          $scope.$on("login-reload", function (event, args) {
 
@@ -214,4 +246,6 @@ arc.directive("arcBedrockAll", function () {
 
       }]
    };
+
+            
 });
