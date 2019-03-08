@@ -72,7 +72,7 @@
                         <span ng-if="process.tisInProlog.length>0">
                            <span ng-repeat="ti in process.tisInProlog">
                               <a href="#/process/{{instance}}/{{ti.name}}"
-                                 class="badge badge-primary input-group-append" ng-class="{'badge-danger':!ti.exists}"
+                                 class="badge badge-primary" ng-class="{'badge-danger':!ti.exists}"
                                  style="font-size:0.9em;color:white">
                                  <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                  {{ti.name}}</a>
@@ -80,26 +80,28 @@
                         </span>
                         <span ng-if="process.tisInMetaData.length>0">
                            <span ng-repeat="ti in process.tisInMetaData">
-                              <span class="badge badge-info" style="font-size:0.9em"><a
-                                    href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
+                              <a
+                                 class="badge badge-info" ng-class="{'badge-danger':!ti.exists}"
+                                  href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
                                        ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    {{ti.name}}</a></span>
+                                    {{ti.name}}</a>
                            </span>
                         </span>
                         <span ng-if="process.tisInData.length>0">
                            <span ng-repeat="ti in process.tisInData">
-                              <span class="badge badge-success" style="font-size:0.9em"><a
+                              <a class="badge badge-success" ng-class="{'badge-danger':!ti.exists}"
                                     href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
                                        ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    {{ti.name}}</a></span>
+                                    {{ti.name}}</a>
                            </span>
                         </span>
                         <span ng-if="process.tisInEpilog.length>0">
                            <span ng-repeat="ti in process.tisInEpilog">
-                              <span class="badge badge-secondary" style="font-size:0.9em"><a
-                                    href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
+                              <a class="badge badge-secondary" ng-class="{'badge-danger':!ti.exists}"
+                                    href="#/process/{{instance}}/{{ti.name}}" 
+                                    style="font-size:0.9em;color:white"> <i
                                        ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    {{ti.name}}</a></span>
+                                    {{ti.name}}</a>
                            </span>
                         </span>
                      </td>

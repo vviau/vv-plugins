@@ -52,6 +52,7 @@ arc.directive("arcBedrockAll", function () {
                }
                // _each TODO
                $scope.checkRelationship();
+               console.log($scope.lists.bedrockTIinTM1);
             });
          };
 
@@ -102,37 +103,108 @@ arc.directive("arcBedrockAll", function () {
          $scope.searchTisIn = function (processSource, text) {
             var processesFound = [];
             var processesNameFound = [];
+            var previousText = "";
+            var nextText = "";
+            var processNameOrVariableName = "";
+            var indexDelimiter = -1;
+            var indexVariableName = -1;
+            var variableName = "";
+            var subText = "";
+            var indexFirstVariableQuote = -1;
+            var indexNextCommaDelimiter = 0;
+            var indexNextBracketDelimiter = 0;
             // Regular expression: "\\s*ExecuteProcess\\s*\\("
-            var stringToSearch = 'edrock';
-            var indexStringFound = text.search(stringToSearch);
-            if (indexStringFound == -1) {
+            var searchExecuteProcess = 'ExecuteProcess';
+            var indexExecuteProcessFound = text.search(searchExecuteProcess);
+            var tiExists = false;
+            if (indexExecuteProcessFound == -1) {
                return processesFound;
             } else {
-               while (indexStringFound > -1) {
-                  var nextText = text.substring(indexStringFound, text.length);
-                  var indexNextSingleQuote = nextText.search("'");
-                  var process = text.substring(indexStringFound - 1, indexStringFound + indexNextSingleQuote);
-                  if (process.substring(0, 1) == 'b') {
-                     process = "}" + process;
+               while (indexExecuteProcessFound > -1) {
+                  variableName = "";
+                  previousText = text;
+                  // If ExecuteProcess found -> Search for next ","
+                  nextText = text.substring(indexExecuteProcessFound + 15, text.length);
+                  indexNextCommaDelimiter = nextText.search(",");
+                  indexNextBracketDelimiter = nextText.search("\\\)");
+                  // If next comma after bracket => bracket is the delimiter
+                  if (indexNextCommaDelimiter > indexNextBracketDelimiter){
+                     indexDelimiter = indexNextBracketDelimiter;
+                  } else {
+                     indexDelimiter = indexNextCommaDelimiter;
                   }
-                  if (process.search("bedrocktm1.org") == -1
-                     & process.search("v4") == -1
-                     & process.search(".") > -1
-                     & process.search("#") == -1
-                     & process.search(":") == -1
-                     & process.search(">") == -1) {
-                     if (process !== processSource & !_.includes(processesNameFound, process)) {
-                        processesNameFound.push(process);
-                        // Check if process exists
-                        processInfo = {
-                           name: process,
-                           exists: _.includes($scope.lists.bedrockTIinTM1, process)
-                        };
-                        processesFound.push(processInfo);
+                  processNameOrVariableName = nextText.substring(1, indexDelimiter);
+                  if ( processSource == "}bedrock.server.dir.backup"){
+                     console.log("process or variable:"+processNameOrVariableName);
+                  }
+                  // Check if it is a processname -> search for "'"
+                  if (processNameOrVariableName.search("'") > -1) {
+                     //If processname -> remove ''
+                     process = processNameOrVariableName.replace("'", "");
+                     process = process.replace("'", "");
+                     // remove " " as well
+                     process = process.replace(" ", "");
+                  } else {
+                     // If variable name -> search for variable value in previousText
+                     variableName = processNameOrVariableName.replace(" ", "");
+                     variableName = variableName.replace(",", "");
+                     if(variableName == "cThisProcName"){
+                        process = processSource;
+                     } else{
+                        if ( processSource == "}bedrock.server.dir.backup"){
+                           console.log("variable Name: "+variableName);
+                           }
+                           indexVariableName = previousText.search(variableName+" ");
+                           if ( processSource == "}bedrock.server.dir.backup"){
+                              console.log("indexVariableName: "+indexVariableName);
+                              }
+                           if (indexVariableName == -1) {
+                              indexVariableName = previousText.search(variableName+"=")
+                           }
+                           if (indexVariableName == -1) {
+                              // Can't find variableName
+                              console.log("Can't find " + variableName);
+                              process = "";
+                           } else {
+                              // VariableName found -> look for value
+                              subText = previousText.substring(indexVariableName, indexExecuteProcessFound);
+                              if ( processSource == "}bedrock.server.dir.backup"){
+                                 console.log("subText: "+subText);
+                                 }
+                              indexFirstVariableQuote = subText.search("'");
+                              if (indexFirstVariableQuote == -1){
+                                 console.log("Can't find quote in "+ subText);
+                                 process ="";
+                              } else {
+                                 subTextMinusQuote = subText.substring(indexFirstVariableQuote+1, subText.length)
+                                 if ( processSource == "}bedrock.server.dir.backup"){
+                                    console.log("subTextMinusQuote: "+subTextMinusQuote);
+                                    }
+                                 indexSecondVariableQuote = subTextMinusQuote.search("'");
+                                 process = subTextMinusQuote.substring(0, indexSecondVariableQuote);
+                              }
+                           }
                      }
                   }
-                  text = text.substring(indexStringFound + 20, text.length);
-                  indexStringFound = text.search(stringToSearch);
+                  if ( processSource == "}bedrock.server.dir.backup"){
+                     console.log("process: "+process);
+                     }
+                  if (process != "" & !_.includes(processesNameFound, process)) {
+                     processesNameFound.push(process);
+                     tiExists = _.includes($scope.lists.bedrockTIinTM1, process)
+                     if(!tiExists){
+                        tiExists = _.includes($scope.lists.bedrockTIinTM1, process.toLowerCase())
+                     }
+                     // Check if process exists
+                     processInfo = {
+                        name: process,
+                        exists: tiExists
+                     };
+                     processesFound.push(processInfo);
+                  }
+                  // search Next ExecuteProcess
+                  text = nextText;
+                  indexExecuteProcessFound = text.search(searchExecuteProcess);
                }
                return processesFound;
 
@@ -141,12 +213,12 @@ arc.directive("arcBedrockAll", function () {
 
          $scope.returnTisDocumentation = function (text) {
             var documentation = {
-               full:"",
-               description:"",
-               useCase:"",
-               notes:"",
-               missingDescription:false,
-               useCaseIsLast:false
+               full: "",
+               description: "",
+               useCase: "",
+               notes: "",
+               missingDescription: false,
+               useCaseIsLast: false
             }
             // Regular expression: "\\s*ExecuteProcess\\s*\\("
             var regionStart = '#Region @DOC';
@@ -154,7 +226,7 @@ arc.directive("arcBedrockAll", function () {
             if (indexStartRegion == -1) {
                // Can't find start region
             } else {
-               var subText = text.substring(indexStartRegion+12, text.length);
+               var subText = text.substring(indexStartRegion + 12, text.length);
                var regionEnd = '#EndRegion @DOC';
                var indexEndRegion = subText.search(regionEnd);
                if (indexStartRegion == -1) {
@@ -167,26 +239,26 @@ arc.directive("arcBedrockAll", function () {
                   var indexNote = documentation.full.search("Note:");
                   if (indexDescription == -1) {
                      documentation.missingDescription = true
-                     if(indexUseCase > indexNote){
-                        documentation.title = subText.substring(3, indexNote-1);
-                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
-                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                     if (indexUseCase > indexNote) {
+                        documentation.title = subText.substring(3, indexNote - 1);
+                        documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
+                        documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                         documentation.useCaseIsLast = true;
                      } else {
-                        documentation.title = subText.substring(3, indexUseCase-1);
-                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
-                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                        documentation.title = subText.substring(3, indexUseCase - 1);
+                        documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
+                        documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                      }
                   } else {
-                     if(indexUseCase > indexNote){
-                        documentation.title = subText.substring(indexDescription+16, indexNote-1);
-                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
-                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                     if (indexUseCase > indexNote) {
+                        documentation.title = subText.substring(indexDescription + 16, indexNote - 1);
+                        documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
+                        documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                         documentation.useCaseIsLast = true;
                      } else {
-                        documentation.title = subText.substring(indexDescription+16, indexUseCase-1);
-                        documentation.useCase = subText.substring(indexUseCase+9, indexNote);
-                        documentation.notes = subText.substring(indexNote+5, documentation.full.length);
+                        documentation.title = subText.substring(indexDescription + 16, indexUseCase - 1);
+                        documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
+                        documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                      }
                   }
                }
@@ -197,11 +269,11 @@ arc.directive("arcBedrockAll", function () {
          //Trigger Functions
          $scope.getBedrockList();
 
-         $scope.addParameterToFilter = function(param){
+         $scope.addParameterToFilter = function (param) {
             $scope.filterTis = param;
          };
 
-         $scope.clearFilter = function(){
+         $scope.clearFilter = function () {
             $scope.filterTis = "";
          };
 
@@ -247,5 +319,5 @@ arc.directive("arcBedrockAll", function () {
       }]
    };
 
-            
+
 });
