@@ -52,7 +52,6 @@ arc.directive("arcBedrockAll", function () {
                }
                // _each TODO
                $scope.checkRelationship();
-               console.log($scope.lists.bedrockTIinTM1);
             });
          };
 
@@ -134,9 +133,6 @@ arc.directive("arcBedrockAll", function () {
                      indexDelimiter = indexNextCommaDelimiter;
                   }
                   processNameOrVariableName = nextText.substring(1, indexDelimiter);
-                  if ( processSource == "}bedrock.server.dir.backup"){
-                     console.log("process or variable:"+processNameOrVariableName);
-                  }
                   // Check if it is a processname -> search for "'"
                   if (processNameOrVariableName.search("'") > -1) {
                      //If processname -> remove ''
@@ -151,44 +147,29 @@ arc.directive("arcBedrockAll", function () {
                      if(variableName == "cThisProcName"){
                         process = processSource;
                      } else{
-                        if ( processSource == "}bedrock.server.dir.backup"){
-                           console.log("variable Name: "+variableName);
-                           }
                            indexVariableName = previousText.search(variableName+" ");
-                           if ( processSource == "}bedrock.server.dir.backup"){
-                              console.log("indexVariableName: "+indexVariableName);
-                              }
                            if (indexVariableName == -1) {
                               indexVariableName = previousText.search(variableName+"=")
                            }
                            if (indexVariableName == -1) {
                               // Can't find variableName
-                              console.log("Can't find " + variableName);
+                              //console.log("Can't find " + variableName);
                               process = "";
                            } else {
                               // VariableName found -> look for value
                               subText = previousText.substring(indexVariableName, indexExecuteProcessFound);
-                              if ( processSource == "}bedrock.server.dir.backup"){
-                                 console.log("subText: "+subText);
-                                 }
                               indexFirstVariableQuote = subText.search("'");
                               if (indexFirstVariableQuote == -1){
-                                 console.log("Can't find quote in "+ subText);
+                                // console.log("Can't find quote in "+ subText);
                                  process ="";
                               } else {
                                  subTextMinusQuote = subText.substring(indexFirstVariableQuote+1, subText.length)
-                                 if ( processSource == "}bedrock.server.dir.backup"){
-                                    console.log("subTextMinusQuote: "+subTextMinusQuote);
-                                    }
                                  indexSecondVariableQuote = subTextMinusQuote.search("'");
                                  process = subTextMinusQuote.substring(0, indexSecondVariableQuote);
                               }
                            }
                      }
                   }
-                  if ( processSource == "}bedrock.server.dir.backup"){
-                     console.log("process: "+process);
-                     }
                   if (process != "" & !_.includes(processesNameFound, process)) {
                      processesNameFound.push(process);
                      tiExists = _.includes($scope.lists.bedrockTIinTM1, process)
