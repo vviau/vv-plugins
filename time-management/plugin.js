@@ -406,22 +406,25 @@ arc.directive("arcTimeManagement", function () {
             var leafFormat = $scope.lists.dateFormats[$scope.selections.dimensionType].format;
             var yearFormat = $scope.lists.dateFormats['Year'].format;
             var monthFormat = $scope.lists.dateFormats['Month'].format;
-            var format = attributeInfo.format;
-            var func = attributeInfo.func;
-            //console.log(leafFormat);
             var attributeValue = "";
-            if (!_.isEmpty(format)) {
-               attributeValue = day.format(format);
-            }
-            if (!_.isEmpty(func)) {
+            var attributeFormat = attributeInfo.format;
+            if (_.isEmpty(attributeFormat)) {
+               attributeFormat = leafFormat
+            } 
+            var attributeFunc = attributeInfo.func;
+            //console.log(leafFormat);
+            //var attributeDay = moment();
+            if (!_.isEmpty(attributeFunc)) {
                // Function search for + or - in func
-               var indexOperator = func.search("\\+");
+               var indexOperator = attributeFunc.search("\\+");
                if (indexOperator == -1){
-                  indexOperator = func.search("\\-");
+                  indexOperator = attributeFunc.search("\\-");
                }
-               var increment = func.substring(indexOperator,func.length)
-               var type = func.substring(0,indexOperator)
-               attributeValue = moment(day, "YYYY-MM-DD").add(increment, type).format(leafFormat);
+               var increment = attributeFunc.substring(indexOperator,attributeFunc.length)
+               var type = attributeFunc.substring(0,indexOperator)
+               attributeValue = moment(day, "YYYY-MM-DD").add(increment, type).format(attributeFormat);
+            }  else {
+               attributeValue = day.format(attributeFormat);
             }
             return attributeValue;
          };
