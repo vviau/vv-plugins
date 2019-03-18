@@ -404,16 +404,12 @@ arc.directive("arcTimeManagement", function () {
 
          $scope.generateAttributeValue = function (day, attributeInfo) {
             var leafFormat = $scope.lists.dateFormats[$scope.selections.dimensionType].format;
-            var yearFormat = $scope.lists.dateFormats['Year'].format;
-            var monthFormat = $scope.lists.dateFormats['Month'].format;
             var attributeValue = "";
             var attributeFormat = attributeInfo.format;
-            if (_.isEmpty(attributeFormat)) {
-               attributeFormat = leafFormat
-            } 
+            var attributeLevel = attributeInfo.level;
             var attributeFunc = attributeInfo.func;
-            //console.log(leafFormat);
-            //var attributeDay = moment();
+            var attributeDay = day;
+            // Calculate attribute day if function exists
             if (!_.isEmpty(attributeFunc)) {
                // Function search for + or - in func
                var indexOperator = attributeFunc.search("\\+");
@@ -422,9 +418,17 @@ arc.directive("arcTimeManagement", function () {
                }
                var increment = attributeFunc.substring(indexOperator,attributeFunc.length)
                var type = attributeFunc.substring(0,indexOperator)
-               attributeValue = moment(day, "YYYY-MM-DD").add(increment, type).format(attributeFormat);
-            }  else {
-               attributeValue = day.format(attributeFormat);
+               attributeDay = moment(day, "YYYY-MM-DD").add(increment, type);
+            }
+            if (!_.isEmpty(attributeLevel)) {
+               // If custom format (defined in the frontEnd)
+               attributeValue = $scope.generateElement(attributeDay, attributeLevel)
+            } else {
+               // If MomentJS format
+               if (_.isEmpty(attributeFormat)) {
+                  attributeFormat = leafFormat
+               } 
+               attributeValue = attributeDay.format(attributeFormat);
             }
             return attributeValue;
          };

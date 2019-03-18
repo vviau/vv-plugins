@@ -399,7 +399,8 @@
                         <tr>
                            <th> Group </th>
                            <th> # </th>
-                           <th> <span translate="ATTRIBUTES"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]"
+                           <th translate="TYPE"> </th>
+                           <th> <span translate="NAME"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]"
                                  class="badge ml-1" ng-click="tickAttributesByGroup($index)" style="cursor:pointer"
                                  ng-class="{'badge-secondary':group.name=='Year','badge-info':group.name=='Month','badge-primary':group.name=='Day','badge-success':group.name=='Week'}">
                                  <a href class="click">
@@ -409,7 +410,6 @@
                                  {{group.name}}
 
                               </span></th>
-                           <th translate="TYPE"> </th>
                            <th translate="DESCRIPTION"> </th>
                            <th translate="TM-EXAMPLE"> </th>
                         </tr>
@@ -417,7 +417,7 @@
                      <tbody>
                         <tr ng-repeat="attribute in lists.attributes[selections.dimensionType]">
                            <td>
-                              <span class="badge ml-1" ng-class="{'badge-secondary':attribute.group=='Year','badge-info':attribute.group=='Month','badge-primary':attribute.group=='Day','badge-success':attribute.group=='Week'}">
+                              <span class="badge mt-2 ml-1" style="font-size:1em" ng-class="{'badge-secondary':attribute.group=='Year','badge-info':attribute.group=='Month','badge-primary':attribute.group=='Day','badge-success':attribute.group=='Week'}">
                                  {{attribute.group}}</span>
 
                            </td>
@@ -427,10 +427,11 @@
                                  <i class="fa fa-toggle-off" ng-if="!attribute.included"></i>
                               </a>
                            </td>
-                           <td> <input type="text" class="form-control input-group-prepend" ng-model="attribute.name" />
-                           </td>
                            <td>
-                              {{attribute.type}}
+                              <span class="badge mt-2 ml-1" style="font-size:1em" ng-class="{'badge-dark':attribute.type=='S','badge-warning':attribute.type=='N'}" >
+                                    {{attribute.type}}</span>
+                           </td>
+                           <td> <input type="text" class="form-control input-group-prepend" ng-model="attribute.name" />
                            </td>
                            <td>
                               {{attribute.desc}}
