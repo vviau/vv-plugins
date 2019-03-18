@@ -36,7 +36,7 @@ arc.directive("arcTimeManagement", function () {
             allDimensionOptions: false,
             dimensionCreated: false,
             datePickerFormat: 'DD-MM-YYYY',
-            datePicketView: 'day',
+            datePickerView: 'day',
             defaultHierarchy: 'CalendarMonth',
             toDoLeafElements: 'deleteAllElements',
             dateRangeStart: moment().startOf('year'),
@@ -58,7 +58,7 @@ arc.directive("arcTimeManagement", function () {
             allDimensionOptions: $scope.defaults.allDimensionOptions,
             dimensionCreated: $scope.defaults.dimensionCreated,
             datePickerFormat: $scope.defaults.datePickerFormat,
-            datePicketView: $scope.defaults.datePicketView,
+            datePickerView: $scope.defaults.datePickerView,
             defaultHierarchy: $scope.defaults.defaultHierarchy,
             toDoLeafElements: $scope.defaults.toDoLeafElements,
             hierarchiesOrRollUps: $scope.defaults.hierarchiesOrRollUps,
@@ -99,12 +99,11 @@ arc.directive("arcTimeManagement", function () {
          // Check if dimension already exists
          $scope.checkIfDimensionExist = function () {
             $scope.existingDimensions = [];
+            //Get all dimensions
             $http.get(encodeURIComponent($scope.instance) + "/Dimensions?$select=Name").then(function (result) {
-
                for (var h = 0; h < result.data.value.length; h++) {
                   $scope.existingDimensions.push(result.data.value[h].Name);
                };
-
                if (_.includes($scope.existingDimensions, $scope.selections.dimensionName)) {
                   $scope.existingHierarchies = [];
                   $scope.existingHierarchiesName = [];
@@ -128,8 +127,6 @@ arc.directive("arcTimeManagement", function () {
                };
             });
          };
-
-         //$scope.checkIfDimensionExist();
 
          //================
          // Check if dimension already exists
@@ -219,13 +216,6 @@ arc.directive("arcTimeManagement", function () {
             }
          };
 
-         $scope.updateOneMonthValue = function (consolidation, month, newValue, action) {
-            // H flip next 5
-            // Q flip next 3 increase by 1
-            //$scope.updateOneMonthValue(consolidation, monthToUpdate, newValue);
-
-         };
-
          $scope.increaseConsolidationValue = function (consolidation, currentValue) {
             // H flip next 5
             // Q flip next 3 increase by 1
@@ -269,22 +259,22 @@ arc.directive("arcTimeManagement", function () {
 
          //==============
          // Date format for the datePicker
-         $scope.updateDatePicketFormat = function () {
+         $scope.updateDatePickerFormat = function () {
             if ($scope.selections.dimensionType == 'Day') {
                $scope.selections.datePickerFormat = 'DD-MM-YYYY';
-               $scope.selections.datePicketView = 'day';
+               $scope.selections.datePickerView = 'day';
                $scope.selections.defaultHierarchy = 'CalendarMonth';
             } else if ($scope.selections.dimensionType == 'Month') {
                $scope.selections.datePickerFormat = 'MM-YYYY';
-               $scope.selections.datePicketView = 'month';
+               $scope.selections.datePickerView = 'month';
                $scope.selections.defaultHierarchy = 'CalendarMonth';
             } else if ($scope.selections.dimensionType == 'Year') {
                $scope.selections.datePickerFormat = 'YYYY';
-               $scope.selections.datePicketView = 'year';
+               $scope.selections.datePickerView = 'year';
                $scope.selections.defaultHierarchy = 'Calendar';
             };
             $scope.resetHierarchy();
-            //console.log($scope.selections.datePickerFormat, $scope.selections.datePicketView);
+            //console.log($scope.selections.datePickerFormat, $scope.selections.datePickerView);
          };
 
          //==============
@@ -305,8 +295,6 @@ arc.directive("arcTimeManagement", function () {
                //console.log($scope.lists.dateFormats[$scope.selections.dimensionType].format);
             });
          };
-
-
 
          $scope.resetHierarchy = function () {
             $scope.hierarchies = [];
@@ -362,6 +350,8 @@ arc.directive("arcTimeManagement", function () {
             });
          };
 
+         //===================
+         // Generate Examples for all possible conso
          $scope.generateExample = function () {
             // Get date
             var dateMoment = $scope.selections.dateRangeStart;
@@ -405,43 +395,33 @@ arc.directive("arcTimeManagement", function () {
             var firstDay = $scope.selections.dateRangeStart;
             var attributesList = $scope.lists.attributes[$scope.selections.dimensionType];
             for (var i = 0; i < attributesList.length; i++) {
-               var format = attributesList[i].format;
-               var id = attributesList[i].id;
-               $scope.lists.attributes[$scope.selections.dimensionType][i].example = $scope.generateAttributeValue(firstDay, format, id);
+               //var format = attributesList[i].format;
+               //var id = attributesList[i].id;
+               var attributeInfo = attributesList[i];
+               $scope.lists.attributes[$scope.selections.dimensionType][i].example = $scope.generateAttributeValue(firstDay, attributeInfo);
             }
          };
 
-         $scope.generateAttributeValue = function (day, format, id) {
+         $scope.generateAttributeValue = function (day, attributeInfo) {
             var leafFormat = $scope.lists.dateFormats[$scope.selections.dimensionType].format;
             var yearFormat = $scope.lists.dateFormats['Year'].format;
             var monthFormat = $scope.lists.dateFormats['Month'].format;
+            var format = attributeInfo.format;
+            var func = attributeInfo.func;
             //console.log(leafFormat);
             var attributeValue = "";
             if (!_.isEmpty(format)) {
                attributeValue = day.format(format);
-            } else {
-               if (id == "DY03") {
-                  //Previous Year
-                  // y+1 y-1
-                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'year').format(yearFormat);
-               } else if (id == "DY04") {
-                  //Next Year
-                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'year').format(yearFormat);
-               } else if (id == "DM05") {
-                  //Previous Month
-                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'month').format(monthFormat);
-               } else if (id == "DM06") {
-                  //Next Month
-                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'month').format(monthFormat);
-               } else if (id == "DD03") {
-                  //previous day
-                  attributeValue = moment(day, "YYYY-MM-DD").add(-1, 'days').format(leafFormat);
-               } else if (id == "DD04") {
-                  //next day
-                  attributeValue = moment(day, "YYYY-MM-DD").add(1, 'days').format(leafFormat);
-               } else {
-                  attributeValue = "";
+            }
+            if (!_.isEmpty(func)) {
+               // Function search for + or - in func
+               var indexOperator = func.search("\\+");
+               if (indexOperator == -1){
+                  indexOperator = func.search("\\-");
                }
+               var increment = func.substring(indexOperator,func.length)
+               var type = func.substring(0,indexOperator)
+               attributeValue = moment(day, "YYYY-MM-DD").add(increment, type).format(leafFormat);
             }
             return attributeValue;
          };
@@ -454,7 +434,7 @@ arc.directive("arcTimeManagement", function () {
                   if (attributesList[i].included) {
                      var attribute = {
                         'name': attributesList[i].name,
-                        'value': $scope.generateAttributeValue(day, attributesList[i].format, attributesList[i].id),
+                        'value': $scope.generateAttributeValue(day, attributesList[i]),
                         'type': attributesList[i].type
                      }
                      attributes.push(attribute);
@@ -464,6 +444,8 @@ arc.directive("arcTimeManagement", function () {
             return attributes;
          }
 
+         //===================
+         // Generate Dimension information to show in the Review tab
          $scope.generateDimensionInfo = function () {
             $scope.checkIfDimensionExist();
             $scope.dimensionInfo = [];
