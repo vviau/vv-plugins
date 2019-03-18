@@ -12,7 +12,7 @@
                   </div>
                   <div class="pull-right">
                      <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1);checkIfDimensionExist();generateAttributesExamples()"
-                        translate="TM-Step1Next"></button>
+                        ><span translate="TM-Step1Next"></span>{{selections.hierarchiesOrRollUps}}</button>
                      <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist();generateAttributesExamples()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
@@ -386,7 +386,8 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)" translate="TM-Step3Previous">:
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">
+                           <span translate="TM-Step3Previous"></span>{{selections.hierarchiesOrRollUps}}
                      </button>
                      <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                         translate="TM-ReviewAndCreate"></button>

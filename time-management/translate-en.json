@@ -1,14 +1,14 @@
 {
    "TM-Step1Title": "Step 1: Dimension Configuration",
    "TM-Step1SubTitle": "Pick the dimension type and the key information",
-   "TM-Step1Next": "Next: Add Hierarchies",
+   "TM-Step1Next": "Next: Add ",
    "TM-Step2Title": "Step 2: ",
    "TM-Step2SubTitle": "Select between all available hierarchies which one to used in your dimension.",
    "TM-Step2Previous": "Previous: Dimension",
    "TM-Step2Next": "Next: Add Attributes",
    "TM-Step3Title": "Step 3: Attributes",
    "TM-Step3SubTitle": "Select which attributes to include.",
-   "TM-Step3Previous": "Previous: Add Hierarchies",
+   "TM-Step3Previous": "Previous: Add ",
    "TM-Step4Title": "Step 4: Review and Create",
    "TM-Step4SubTitle": "You can go back to edit changes for each section.",
    "TM-Step4Previous": "Previous: Add Attributes",
@@ -27,5 +27,7 @@
    "TM-HIERARCHIES": "Hierarchies",
    "TM-EXISTINGHIERARCHIES": "Existing Hierarchies",
    "TM-EXISTINGELEMENTS": "Existing Elements",
-   "TM-NBOFELEMENETS": "Nb of Elements"
+   "TM-NBOFELEMENETS": "Nb of Elements",
+   "TM-UNWINDALLELEMENTS": "Unwind all Elements",
+   "TM-DELETEALLELEMENTS": "Delete all Elements"
 }
