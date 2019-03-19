@@ -124,16 +124,21 @@
          { "group":"Day","id":"DD08","included": true, "type": "S", "name": "Day of the week short", "desc": "Day of the week short (ddd)", "format": "ddd" }
       ],
       "Month": [
-         { "included": true, "type": "S", "name": "Year Short", "format": "YY" },
-         { "included": true, "type": "S", "name": "Year Long", "format": "YYYY" },
-         { "included": true, "type": "S", "name": "Month Short", "format": "MMM" },
-         { "included": true, "type": "S", "name": "Month Long", "format": "MMMM" },
-         { "included": true, "type": "N", "name": "Month Number", "desc": "Month Number" }
+         { "group":"Year","id":"MY01", "included": true, "type": "S", "name": "Year Short", "desc": "Year Short (YYYY)", "format": "YY" },
+         { "group":"Year","id":"MY02","included": true, "type": "S", "name": "Year Long", "desc": "Year Long (YYYY)","format": "YYYY" },
+         { "group":"Year","id":"MY03","included": true, "type": "S", "name": "Previous Year", "desc": "Previous Year", "func": "year-1", "level": "Year" },
+         { "group":"Year","id":"MY04","included": true, "type": "S", "name": "Next Year", "desc": "Next Year", "func": "year+1", "level": "Year" },
+         { "group":"Month","id":"MM01","included": true, "type": "S", "name": "Month Short", "desc": "Month Short (MMM)", "format": "MMM" },
+         { "group":"Month","id":"MM02","included": true, "type": "S", "name": "Month Long" , "desc": "Month Long (MMMM)", "format": "MMMM" },
+         { "group":"Month","id":"MM03","included": true, "type": "S", "name": "Month Number", "desc": "Month Number (MM)", "format": "MM" },
+         { "group":"Month","id":"MM04","included": true, "type": "N", "name": "Month Number Numeric", "desc": "Month Number (M)", "format": "M" },
+         { "group":"Month","id":"MM05","included": true, "type": "S", "name": "Previous Month", "desc": "Previous Month", "func": "month-1" , "level": "Month" },
+         { "group":"Month","id":"MM06","included": true, "type": "S", "name": "Next Month", "desc": "Next Month", "func": "month+1", "level": "Month"}
       ]
    },
    "attributesGroup": {
       "Day": [{"included":true, "name":"Year"},{"included":true, "name":"Month"},{"included":true, "name":"Day"},{"included":true, "name":"Week"}],
-      "Month": ["Year","Month"]
+      "Month": [{"included":true, "name":"Year"},{"included":true, "name":"Month"}]
    },
    "cumuls": {
       "Day": [

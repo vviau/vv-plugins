@@ -57,7 +57,7 @@
                            {{hierarchy.cardinality}}
                         </td>
                         <td> 
-                              <span
+                              <span ng-if="hierarchy.name!='Leaves'"
                               class="badge ml-1" ng-click="updateHierarchyAction($index)" style="cursor:pointer" ng-class="{'badge-secondary':hierarchy.action=='NOTHING','badge-danger':hierarchy.action=='DESTROY','badge-warning':hierarchy.action=='RECREATE','badge-primary':hierarchy.action=='DELETEALLELEMENTS','badge-info':hierarchy.action=='UNWINDALLELEMENTS'}">
                               {{hierarchy.action}}
                               </span>
