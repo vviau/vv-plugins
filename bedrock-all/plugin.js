@@ -219,25 +219,35 @@ arc.directive("arcBedrockAll", function () {
                   var indexUseCase = documentation.full.search("Use case:");
                   var indexNote = documentation.full.search("Note:");
                   if (indexDescription == -1) {
+                     //IF NO DESCRIPTION:
                      documentation.missingDescription = true
                      if (indexUseCase > indexNote) {
-                        documentation.title = subText.substring(3, indexNote - 1);
+                        documentation.description = subText.substring(3, indexNote - 1);
                         documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
                         documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                         documentation.useCaseIsLast = true;
                      } else {
-                        documentation.title = subText.substring(3, indexUseCase - 1);
+                        documentation.description = subText.substring(3, indexUseCase - 1);
                         documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
                         documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                      }
                   } else {
-                     if (indexUseCase > indexNote) {
-                        documentation.title = subText.substring(indexDescription + 16, indexNote - 1);
+                     //IF ONLY DESCRIPTION:
+                     if (indexUseCase == -1 & indexNote ==-1) {
+                        documentation.description = documentation.full.substring(indexDescription + 16, documentation.full.length);
+                     } else if (indexUseCase == -1) {
+                        documentation.description = subText.substring(indexDescription + 16, indexNote - 1);
+                        documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
+                     }  else if (indexNote == -1) {
+                        documentation.description = subText.substring(indexDescription + 16, indexUseCase - 1);
+                        documentation.useCase = subText.substring(indexUseCase + 5, documentation.full.length);
+                     }  else if (indexUseCase > indexNote) {
+                        documentation.description = subText.substring(indexDescription + 16, indexNote - 1);
                         documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
                         documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                         documentation.useCaseIsLast = true;
                      } else {
-                        documentation.title = subText.substring(indexDescription + 16, indexUseCase - 1);
+                        documentation.description = subText.substring(indexDescription + 16, indexUseCase - 1);
                         documentation.useCase = subText.substring(indexUseCase + 9, indexNote);
                         documentation.notes = subText.substring(indexNote + 5, documentation.full.length);
                      }
