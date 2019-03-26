@@ -462,6 +462,8 @@ arc.directive("arcTimeManagement", function () {
                //hierarchyInfo.uniqueElements =  $scope.generateUniqueElements(hierarchy);
                $scope.dimensionInfo.push(hierarchyInfo);
             });
+            $scope.generateAttributesExamples();
+            $scope.countAttributesNumber();
          };
 
          $scope.generateUniqueElements = function (hierarchy) {
@@ -883,6 +885,17 @@ arc.directive("arcTimeManagement", function () {
                   $scope.lists.attributes[$scope.selections.dimensionType][a].included = newStatus;
                }
             }
+            $scope.countAttributesNumber();
+         };
+
+         $scope.numberOfAttributes = 0;
+         $scope.countAttributesNumber = function(){
+            $scope.numberOfAttributes = 0;
+            _.each($scope.lists.attributes[$scope.selections.dimensionType], function (value, key) {
+               if (value.included) {
+                  $scope.numberOfAttributes ++;
+               }
+            });
          };
 
          $scope.updateHierarchyAction = function (index) {

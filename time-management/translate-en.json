@@ -29,5 +29,6 @@
    "TM-EXISTINGELEMENTS": "Existing Elements",
    "TM-NBOFELEMENETS": "Nb of Elements",
    "TM-UNWINDALLELEMENTS": "Unwind all Elements",
-   "TM-DELETEALLELEMENTS": "Delete all Elements"
+   "TM-DELETEALLELEMENTS": "Delete all Elements",
+   "TM-GROUP": "Group"
 }
