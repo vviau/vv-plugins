@@ -512,9 +512,9 @@ arc.directive("arcTimeManagement", function () {
          $scope.generateElement = function (day, level) {
             var formatYear = $scope.lists.dateFormats['Year'].format;
             var formatMonth = $scope.lists.dateFormats['Month'].format;
-            var monthMMM = day.format('MMM');
+            var monthMM = day.format('MM');
             var newDay = _.cloneDeep(day)
-            var quarterFYNumber = $scope.lists[monthMMM].QuarterFY;
+            var quarterFYNumber = $scope.lists[monthMM].QuarterFY;
             if (level == 'YearFY' || level == 'HalfYearFY' || level == 'QuarterFY') {
                //Change year if Q3 or Q4
                if (quarterFYNumber == "3" || quarterFYNumber == "4") {
@@ -536,9 +536,9 @@ arc.directive("arcTimeManagement", function () {
             } else if (level == 'Year') {
                return year;
             } else if (level == 'Quarter') {
-               return newDay.format($scope.lists.dateFormats['Quarter'].format) + $scope.lists[monthMMM]['Quarter'];
+               return newDay.format($scope.lists.dateFormats['Quarter'].format) + $scope.lists[monthMM]['Quarter'];
             } else if (level == 'HalfYear') {
-               return newDay.format($scope.lists.dateFormats['HalfYear'].format) + $scope.lists[monthMMM]['HalfYear'];
+               return newDay.format($scope.lists.dateFormats['HalfYear'].format) + $scope.lists[monthMM]['HalfYear'];
             } else if (level == 'Week') {
                return newDay.format($scope.lists.dateFormats['Week'].format) + newDay.week();
             } else if (level == 'FortNight') {
@@ -546,9 +546,9 @@ arc.directive("arcTimeManagement", function () {
             } else if (level == 'YearFY') {
                return newDay.format($scope.lists.dateFormats['YearFY'].format);
             } else if (level == 'HalfYearFY') {
-               return newDay.format($scope.lists.dateFormats['HalfYearFY'].format) + $scope.lists[monthMMM]['HalfYearFY'];
+               return newDay.format($scope.lists.dateFormats['HalfYearFY'].format) + $scope.lists[monthMM]['HalfYearFY'];
             } else if (level == 'QuarterFY') {
-               return newDay.format($scope.lists.dateFormats['QuarterFY'].format) + $scope.lists[monthMMM]['QuarterFY'];
+               return newDay.format($scope.lists.dateFormats['QuarterFY'].format) + $scope.lists[monthMM]['QuarterFY'];
             } else if (level == 'MonthFY') {
                return $scope.lists.separators['MonthFY'].value + year;
             }
