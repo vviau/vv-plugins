@@ -11,9 +11,11 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1);checkIfDimensionExist();generateAttributesExamples()"
-                        ><span translate="TM-Step1Next"></span>{{selections.hierarchiesOrRollUps}}</button>
-                     <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist();generateAttributesExamples()"
+                     <button type="button" class="btn btn-secondary"
+                        ng-click="setActiveTab(1);checkIfDimensionExist();generateAttributesExamples()"><span
+                           translate="TM-Step1Next"></span>{{selections.hierarchiesOrRollUps}}</button>
+                     <button type="button" class="btn btn-success"
+                        ng-click="setActiveTab(3);generateDimensionInfo();checkIfDimensionExist();generateAttributesExamples()"
                         translate="TM-ReviewAndCreate"></button>
                   </div>
                </div>
@@ -74,7 +76,8 @@
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="selections.dateRangeStart" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                          <datetimepicker ng-model="selections.dateRangeStart"
+                                             datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
                                              on-set-time="startTimeIsOpen=!startTimeIsOpen" />
                                        </span>
                                     </span>
@@ -96,7 +99,8 @@
                                           <span class="fa fa-calendar"></span>
                                        </button>
                                        <span class="dropdown-menu" uib-dropdown-menu>
-                                          <datetimepicker ng-model="selections.dateRangeEnd" datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
+                                          <datetimepicker ng-model="selections.dateRangeEnd"
+                                             datetimepicker-config="{modelType:'moment', startView:'day', minView:'day'}"
                                              on-set-time="endTimeIsOpen=!endTimeIsOpen" />
                                        </span>
                                     </span>
@@ -119,11 +123,13 @@
                            <span translate="TM-Step2Title"></span>
                            <div class="form-check-inline">
                               <div class="radio ml-1">
-                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionH" ng-value="'Hierarchies'">
+                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionH"
+                                    ng-value="'Hierarchies'">
                                  Hierarchies
                               </div>
                               <div class="radio ml-1">
-                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionR" ng-value="'RollUps'">
+                                 <input ng-model="selections.hierarchiesOrRollUps" type="radio" name="optionR"
+                                    ng-value="'RollUps'">
                                  RollUps
                               </div>
                            </div>
@@ -134,8 +140,10 @@
                         </h5>
                      </div>
                      <div class="pull-right">
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)" translate="TM-Step2Previous"></button>
-                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step2Next"></button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(0)"
+                           translate="TM-Step2Previous"></button>
+                        <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)"
+                           translate="TM-Step2Next"></button>
                         <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                            translate="TM-ReviewAndCreate"> <span></span></button>
                      </div>
@@ -147,7 +155,8 @@
                               <label>All {{selections.dimensionType}} {{selections.hierarchiesOrRollUps}}</label>
                            </div>
                            <div class="card-body">
-                              <div ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
+                              <div
+                                 ng-repeat="hierarchy in lists.hierarchyTypes[selections.dimensionType] track by $index"
                                  class="badge ml-1" ng-style="generateHSLColour(hierarchy.type)" style="cursor:pointer"
                                  ng-click="addHierarchy(hierarchy.type)" title="{{hierarchy.desc}}">
                                  <span style="font-size:1.2em">
@@ -160,14 +169,15 @@
                      <div class="col-md-6">
                         <div class="card">
                            <div class="card-header" style="padding: 5px 10px;">
-                              <label translate="ALIAS"></label><i class="fa fa-fw fa-plus-circle text-success" ng-click="addAlias(aliases.length)"
-                                 style="cursor:pointer"></i>
+                              <label translate="ALIAS"></label><i class="fa fa-fw fa-plus-circle text-success"
+                                 ng-click="addAlias(aliases.length)" style="cursor:pointer"></i>
                            </div>
                            <div class="card-body">
                               <div class="row">
                                  <div class="col-md-4 mt-1" ng-repeat="alias in aliases track by $index">
                                     <span class="input-group">
-                                       <input type="text" class="form-control input-group-prepend" ng-model="alias.name" />
+                                       <input type="text" class="form-control input-group-prepend"
+                                          ng-model="alias.name" />
                                        <span class="input-group-append">
                                           <button class="btn btn-danger" title="Delete" ng-click="removeAlias($index)">
                                              <i class="fa fa-fw fa-trash"></i>
@@ -181,30 +191,41 @@
                      </div>
                   </div>
                   <div class="row">
-                     <div class="col-md-6 mt-2" ng-class="{'col-md-12':aliases.length>1}" ng-repeat="hierarchy in hierarchies track by $index">
+                     <div class="col-md-6 mt-2" ng-class="{'col-md-12':aliases.length>1}"
+                        ng-repeat="hierarchy in hierarchies track by $index">
                         <div class="card">
                            <div class="card-header">
-                              <span class="input-group">
-                                 <span class="input-group-prepend input-group-text" translate="NAME">:
+                              <div class="row">
+                                 <span class="input-group col-md-5">
+                                    <span class="input-group-prepend input-group-text" translate="NAME">:
+                                    </span>
+                                    <input type="text" class="form-control input-group-append"
+                                       ng-model="hierarchy.name" />
                                  </span>
-                                 <input type="text" class="form-control input-group-append" ng-model="hierarchy.name" />
-                                 <span class="input-group-append input-group-text" translate="TM-PARENT">:
+                                 <span class="input-group col-md-5">
+                                    <span class="input-group-prepend input-group-text" translate="TM-PARENT">:
+                                    </span>
+                                    <input type="text" class="form-control input-group-append"
+                                       ng-model="hierarchy.levels[0].name" />
                                  </span>
-                                 <input type="text" class="form-control input-group-append" ng-model="hierarchy.levels[0].name" />
-                                 <span class="input-group-append">
-                                    <button class="btn btn-danger" title="Delete" ng-click="removeHierarchy($index)">
-                                       <i class="fa fa-fw fa-trash"></i>
-                                    </button>
+                                 <span class="input-group col-md-2">
+                                    <span class="input-group-prepend">
+                                       <button ng-if="hierarchy.display" class="btn btn-info" title="Hide"
+                                          ng-click="hierarchy.display=false">
+                                          <i class="fa fa-fw fa-eye-slash"></i>
+                                       </button>
+                                       <button ng-if="!hierarchy.display" class="btn btn-info" title="Show"
+                                          ng-click="hierarchy.display=true">
+                                          <i class="fa fa-fw fa-eye"></i>
+                                       </button>
+                                    </span>
+                                    <span class="input-group-append">
+                                       <button class="btn btn-danger" title="Delete" ng-click="removeHierarchy($index)">
+                                          <i class="fa fa-fw fa-trash"></i>
+                                       </button>
+                                    </span>
                                  </span>
-                                 <span class="input-group-append">
-                                    <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
-                                       <i class="fa fa-fw fa-eye-slash"></i>
-                                    </button>
-                                    <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
-                                       <i class="fa fa-fw fa-eye"></i>
-                                    </button>
-                                 </span>
-                              </span>
+                              </div>
                            </div>
                            <div class="card-body p-2" ng-if="hierarchy.display">
                               <table class="table table-hover table-sm">
@@ -221,7 +242,8 @@
                                  <tbody>
                                     <tr ng-repeat="element in hierarchy.levels" ng-if="$index != 0">
                                        <td>
-                                          <a href class="click" ng-click="element.included = !element.included" ng-if="element.level!=selections.dimensionType">
+                                          <a href class="click" ng-click="element.included = !element.included"
+                                             ng-if="element.level!=selections.dimensionType">
                                              <i class="fa fa-toggle-on text-success" ng-if="element.included"></i>
                                              <i class="fa fa-toggle-off" ng-if="!element.included"></i>
                                           </a>
@@ -234,9 +256,12 @@
                                           <span class="input-group" ng-if="element.included">
                                              <span class="col-md-6">
                                                 <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   style="border-radius:0;display:inline" type="text" ng-model="lists.dateFormats[element.level].format"
-                                                   placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
-                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimensionInfo()">
+                                                   style="border-radius:0;display:inline" type="text"
+                                                   ng-model="lists.dateFormats[element.level].format" placeholder=""
+                                                   ng-keydown="key($event,selection.cube)"
+                                                   uib-typeahead="type for type in lists.dateFormats[element.level].formats | filter:$viewValue | limitTo:20"
+                                                   typeahead-append-to-body="true"
+                                                   ng-change="generateExample();generateDimensionInfo()">
                                              </span>
                                              <span class="col-md-6">
                                                 {{examples[element.level]}}
@@ -247,9 +272,12 @@
                                           <span class="input-group" ng-if="element.included">
                                              <span class="col-md-6">
                                                 <input class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                   style="border-radius:0;display:inline" type="text" ng-model="alias.format[element.level].format"
-                                                   placeholder="" ng-keydown="key($event,selection.cube)" uib-typeahead="type for type in lists.dateFormats[element.level].format | filter:$viewValue | limitTo:20"
-                                                   typeahead-append-to-body="true" ng-change="generateExample();generateDimensionInfo();generateExampleAlias($index)">
+                                                   style="border-radius:0;display:inline" type="text"
+                                                   ng-model="alias.format[element.level].format" placeholder=""
+                                                   ng-keydown="key($event,selection.cube)"
+                                                   uib-typeahead="type for type in lists.dateFormats[element.level].format | filter:$viewValue | limitTo:20"
+                                                   typeahead-append-to-body="true"
+                                                   ng-change="generateExample();generateDimensionInfo();generateExampleAlias($index)">
                                              </span>
                                              <span class="col-md-6">
                                                 {{alias.examples[element.name]}}
@@ -260,13 +288,16 @@
                                  </tbody>
                               </table>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarMonth'">
-                                 <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
+                                 <div class="col-md-12"
+                                    ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
-                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
-                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
-                                          popover-append-to-body="true"></i>
-                                       Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
-                                          <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true"
+                                          uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
+                                       Manage Roll-ups (<a href class="click"
+                                          ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
+                                          <i class="fa fa-toggle-on text-success"
+                                             ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
                                        </a> Custom):
                                     </label>
@@ -281,7 +312,8 @@
                                              <td ng-repeat="month in lists.months">
                                                 <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYear==1,
                                                                   'badge-success':lists[month].HalfYear==2}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYear', month, selections.manageRollsUpsManually)">
+                                                      style="cursor:pointer"
+                                                      ng-click="updateMonthConso('HalfYear', month, selections.manageRollsUpsManually)">
                                                       H{{lists[month].HalfYear}}
                                                    </span></h5>
                                              </td>
@@ -292,7 +324,8 @@
                                                                      'badge-secondary':lists[month].Quarter==2,
                                                                      'badge-success':lists[month].Quarter==3,
                                                                      'badge-info':lists[month].Quarter==4}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('Quarter',month, selections.manageRollsUpsManually)">
+                                                      style="cursor:pointer"
+                                                      ng-click="updateMonthConso('Quarter',month, selections.manageRollsUpsManually)">
                                                       Q{{lists[month].Quarter}}
                                                    </span></h5>
                                              </td>
@@ -304,9 +337,9 @@
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarWeek'">
                                  <div class="col-md-12" ng-if="hierarchy.levels[2].included">
                                     <label>
-                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
-                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
-                                          popover-append-to-body="true"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true"
+                                          uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
                                        Manage Roll-ups:
                                     </label>
                                     <table class="table table-hover table-responsive">
@@ -318,7 +351,8 @@
                                        <tbody>
                                           <tr ng-if="hierarchy.levels[1].included">
                                              <td ng-repeat="day in lists.weekDays">
-                                                <h5><span class="badge badge-pill badge-primary" ng-class="{'badge-secondary':lists[day].PositionInWeek!=1}"
+                                                <h5><span class="badge badge-pill badge-primary"
+                                                      ng-class="{'badge-secondary':lists[day].PositionInWeek!=1}"
                                                       style="cursor:pointer" ng-click="updateDayPosition(day)">
                                                       D{{lists[day].PositionInWeek}}
                                                    </span></h5>
@@ -329,13 +363,16 @@
                                  </div>
                               </div>
                               <div class="row mt-1" ng-if="hierarchy.type == 'CalendarFY'">
-                                 <div class="col-md-12" ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
+                                 <div class="col-md-12"
+                                    ng-if="hierarchy.levels[2].included || hierarchy.levels[3].included">
                                     <label>
-                                       <i class="fa fa-info-circle" aria-hidden="true" uib-popover="Click to update consolidations"
-                                          popover-trigger="'mouseenter'" popover-class="popover-class-default"
-                                          popover-append-to-body="true"></i>
-                                       Manage Roll-ups (<a href class="click" ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
-                                          <i class="fa fa-toggle-on text-success" ng-if="selections.manageRollsUpsManually"></i>
+                                       <i class="fa fa-info-circle" aria-hidden="true"
+                                          uib-popover="Click to update consolidations" popover-trigger="'mouseenter'"
+                                          popover-class="popover-class-default" popover-append-to-body="true"></i>
+                                       Manage Roll-ups (<a href class="click"
+                                          ng-click="selections.manageRollsUpsManually = !selections.manageRollsUpsManually">
+                                          <i class="fa fa-toggle-on text-success"
+                                             ng-if="selections.manageRollsUpsManually"></i>
                                           <i class="fa fa-toggle-off" ng-if="!selections.manageRollsUpsManually"></i>
                                        </a> Custom):
                                     </label>
@@ -350,7 +387,8 @@
                                              <td ng-repeat="month in lists.months">
                                                 <h5><span class="badge badge-pill" ng-class="{'badge-primary':lists[month].HalfYearFY==1,
                                                                      'badge-success':lists[month].HalfYearFY==2}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('HalfYearFY', month, selections.manageRollsUpsManually)">
+                                                      style="cursor:pointer"
+                                                      ng-click="updateMonthConso('HalfYearFY', month, selections.manageRollsUpsManually)">
                                                       H{{lists[month].HalfYearFY}}
                                                    </span></h5>
                                              </td>
@@ -361,7 +399,8 @@
                                                                         'badge-secondary':lists[month].QuarterFY==2,
                                                                         'badge-success':lists[month].QuarterFY==3,
                                                                         'badge-info':lists[month].QuarterFY==4}"
-                                                      style="cursor:pointer" ng-click="updateMonthConso('QuarterFY',month, selections.manageRollsUpsManually)">
+                                                      style="cursor:pointer"
+                                                      ng-click="updateMonthConso('QuarterFY',month, selections.manageRollsUpsManually)">
                                                       Q{{lists[month].QuarterFY}}
                                                    </span></h5>
                                              </td>
@@ -387,7 +426,7 @@
                   </div>
                   <div class="pull-right">
                      <button type="button" class="btn btn-secondary" ng-click="setActiveTab(1)">
-                           <span translate="TM-Step3Previous"></span>{{selections.hierarchiesOrRollUps}}
+                        <span translate="TM-Step3Previous"></span>{{selections.hierarchiesOrRollUps}}
                      </button>
                      <button type="button" class="btn btn-success" ng-click="setActiveTab(3);generateDimensionInfo()"
                         translate="TM-ReviewAndCreate"></button>
@@ -400,8 +439,9 @@
                            <th> Group </th>
                            <th> # </th>
                            <th translate="TYPE"> </th>
-                           <th> <span translate="NAME"></span> <span ng-repeat="group in lists.attributesGroup[selections.dimensionType]"
-                                 class="badge ml-1" ng-click="tickAttributesByGroup($index)" style="cursor:pointer"
+                           <th> <span translate="NAME"></span> <span
+                                 ng-repeat="group in lists.attributesGroup[selections.dimensionType]" class="badge ml-1"
+                                 ng-click="tickAttributesByGroup($index)" style="cursor:pointer"
                                  ng-class="{'badge-secondary':group.name=='Year','badge-info':group.name=='Month','badge-primary':group.name=='Day','badge-success':group.name=='Week'}">
                                  <a href class="click">
                                     <i class="fa fa-toggle-on" ng-if="group.included"></i>
@@ -417,7 +457,8 @@
                      <tbody>
                         <tr ng-repeat="attribute in lists.attributes[selections.dimensionType]">
                            <td>
-                              <span class="badge mt-2 ml-1" style="font-size:1em" ng-class="{'badge-secondary':attribute.group=='Year','badge-info':attribute.group=='Month','badge-primary':attribute.group=='Day','badge-success':attribute.group=='Week'}">
+                              <span class="badge mt-2 ml-1" style="font-size:1em"
+                                 ng-class="{'badge-secondary':attribute.group=='Year','badge-info':attribute.group=='Month','badge-primary':attribute.group=='Day','badge-success':attribute.group=='Week'}">
                                  {{attribute.group}}</span>
 
                            </td>
@@ -428,8 +469,9 @@
                               </a>
                            </td>
                            <td>
-                              <span class="badge mt-2 ml-1" style="font-size:1em" ng-class="{'badge-dark':attribute.type=='S','badge-warning':attribute.type=='N'}" >
-                                    {{attribute.type}}</span>
+                              <span class="badge mt-2 ml-1" style="font-size:1em"
+                                 ng-class="{'badge-dark':attribute.type=='S','badge-warning':attribute.type=='N'}">
+                                 {{attribute.type}}</span>
                            </td>
                            <td> <input type="text" class="form-control input-group-prepend" ng-model="attribute.name" />
                            </td>
@@ -453,8 +495,10 @@
                      </h5>
                   </div>
                   <div class="pull-right">
-                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)" translate="TM-Step4Previous"></button>
-                     <button type="button" class="btn btn-success" ng-click="openCreateModal()" translate="CREATE"></button>
+                     <button type="button" class="btn btn-secondary" ng-click="setActiveTab(2)"
+                        translate="TM-Step4Previous"></button>
+                     <button type="button" class="btn btn-success" ng-click="openCreateModal()"
+                        translate="CREATE"></button>
                   </div>
                </div>
                <div class="row">
@@ -467,10 +511,12 @@
                                     amDateFormat:'DD-MM-YYYY'}} to {{selections.dateRangeEnd |
                                     amDateFormat:'DD-MM-YYYY'}}</label>
                                  <span class="pull-right">
-                                    <button ng-if="hierarchy.display" class="btn btn-info" title="Hide" ng-click="hierarchy.display=false">
+                                    <button ng-if="hierarchy.display" class="btn btn-info" title="Hide"
+                                       ng-click="hierarchy.display=false">
                                        <i class="fa fa-fw fa-eye-slash"></i>
                                     </button>
-                                    <button ng-if="!hierarchy.display" class="btn btn-info" title="Show" ng-click="hierarchy.display=true">
+                                    <button ng-if="!hierarchy.display" class="btn btn-info" title="Show"
+                                       ng-click="hierarchy.display=true">
                                        <i class="fa fa-fw fa-eye"></i>
                                     </button>
                                  </span>
@@ -480,7 +526,8 @@
                                     <thead>
                                        <tr>
                                           <th translate="TM-ELEMENTS"> </th>
-                                          <th ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included">
+                                          <th ng-repeat="attribute in lists.attributes[selections.dimensionType]"
+                                             ng-if="attribute.included">
                                              {{attribute.name}} </th>
                                        </tr>
                                     </thead>
@@ -498,7 +545,8 @@
                                                 {{element.name}}
                                              </div>
                                           </td>
-                                          <td ng-repeat="attribute in lists.attributes[selections.dimensionType]" ng-if="attribute.included">
+                                          <td ng-repeat="attribute in lists.attributes[selections.dimensionType]"
+                                             ng-if="attribute.included">
                                              {{elementInfo[elementInfo.length-1].attributes[$index].value}}
                                           </td>
                                        </tr>
