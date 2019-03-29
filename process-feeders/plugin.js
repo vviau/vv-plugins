@@ -32,7 +32,8 @@ arc.directive("arcCubeProcessFeeders", function () {
             optionsShow: 'SaveDataAll',
             selectAllCubes: false,
             title: 'SaveDataAll or CubeSaveData',
-            showBadgeTime: true
+            showBadgeTime: true,
+            showAllCubes: false
          };
          $scope.selections = {
             optionsShow: $scope.defaults.optionsShow,
@@ -40,7 +41,8 @@ arc.directive("arcCubeProcessFeeders", function () {
             cubeSelectedFilter: '',
             showAlert: true,
             title: $scope.defaults.title,
-            responseTimeMs: 0
+            responseTimeMs: 0,
+            showAllCubes: $scope.defaults.showAllCubes
          };
          $scope.lists = {
             cubes: [],
@@ -68,9 +70,13 @@ arc.directive("arcCubeProcessFeeders", function () {
             } else {
                query = queryWithoutControlObjects;
             }
+            $scope.lists.cubesWithRules = [];
             $http.get(encodeURIComponent($scope.instance) + query).then(function (result) {
                $scope.lists.cubes = result.data.value;
                _.each($scope.lists.cubes, function (cube) {
+                  if (cube.Rules){
+                     $scope.lists.cubesWithRules.push(cube);
+                  }
                   var queryDimensions = "/Cubes('" + cube.Name + "')/Dimensions";
                   $http.get(encodeURIComponent($scope.instance) + queryDimensions).then(function (dimensions) {
                      cube.dimensions = dimensions.data.value;
