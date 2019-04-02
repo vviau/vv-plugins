@@ -3,10 +3,10 @@
 
 arc.run(['$rootScope', function ($rootScope) {
 
-   $rootScope.plugin("arcCubeProcessFeeders", "Process Feeders", "page", {
+   $rootScope.plugin("arcBedrockExportCubes", "Export Cubes", "page", {
       menu: "tools",
-      icon: "fa-rocket",
-      description: "This plugin can be to process feeders",
+      icon: "fa-download",
+      description: "This plugin can be to export data out of a cube",
       author: "Cubewise",
       url: "https://github.com/cubewise-code/arc-plugins",
       version: "1.0.0"
@@ -14,14 +14,14 @@ arc.run(['$rootScope', function ($rootScope) {
 
 }]);
 
-arc.directive("arcCubeProcessFeeders", function () {
+arc.directive("arcBedrockExportCubes", function () {
    return {
       restrict: "EA",
       replace: true,
       scope: {
          instance: "=tm1Instance"
       },
-      templateUrl: "__/plugins/process-feeders/template.html",
+      templateUrl: "__/plugins/bedrock-export-cubes/template.html",
       link: function ($scope, element, attrs) {
 
       },
@@ -33,7 +33,6 @@ arc.directive("arcCubeProcessFeeders", function () {
             selectAllCubes: false,
             title: 'SaveDataAll or CubeSaveData',
             showBadgeTime: true,
-            showAllCubes: false
          };
          $scope.selections = {
             optionsShow: $scope.defaults.optionsShow,
@@ -41,8 +40,7 @@ arc.directive("arcCubeProcessFeeders", function () {
             cubeSelectedFilter: '',
             showAlert: true,
             title: $scope.defaults.title,
-            responseTimeMs: 0,
-            showAllCubes: $scope.defaults.showAllCubes
+            responseTimeMs: 0
          };
          $scope.lists = {
             cubes: [],
@@ -64,7 +62,7 @@ arc.directive("arcCubeProcessFeeders", function () {
          $scope.getCubes = function () {
             var query = "";
             var queryAll = "/Cubes?$select=Name,Rules";
-            var queryWithoutControlObjects = "/Cubes?$select=Name,LastDataUpdate,LastSchemaUpdate,Rules&$filter=indexof(Name,'}') eq -1";
+            var queryWithoutControlObjects = "/Cubes?$select=Name,LastDataUpdate,LastSchemaUpdate&$filter=indexof(Name,'}') eq -1";
             if ($rootScope.uiPrefs.controlObjects) {
                query = queryAll;
             } else {
@@ -200,7 +198,7 @@ arc.directive("arcCubeProcessFeeders", function () {
          //Close the tab
          $scope.$on("close-tab", function (event, args) {
             // Event to capture when a user has clicked close on the tab
-            if (args.page == "arcCubeProcessFeeders" && args.instance == $scope.instance && args.name == null) {
+            if (args.page == "arcBedrockExportCubes" && args.instance == $scope.instance && args.name == null) {
                // The page matches this one so close it
                $rootScope.close(args.page, { instance: $scope.instance });
             }
