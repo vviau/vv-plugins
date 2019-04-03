@@ -36,7 +36,9 @@ arc.directive("arcBedrockAll", function () {
          $scope.lists = {
             bedrockTIinTM1: [],
             bedrockTIs: [],
-            bedrockTIsInfo: []
+            allBedrockTIsInfo: [],
+            bedrockTIsInfoFiltered: [],
+            filterTisBy: []
          };
          $scope.values = {};
 
@@ -58,8 +60,9 @@ arc.directive("arcBedrockAll", function () {
          $scope.checkRelationship = function () {
             for (var ti = 0; ti < $scope.lists.bedrockTIs.length; ti++) {
                var tiSourceName = $scope.lists.bedrockTIs[ti].Name;
-               //console.log(ti, tiSource.Name);
-               $scope.lists.bedrockTIsInfo.push(getTiInfo(tiSourceName));
+               var bedrockTiObject = getTiInfo(tiSourceName);
+               $scope.lists.allBedrockTIsInfo.push(bedrockTiObject);
+               $scope.lists.bedrockTIsInfoFiltered.push(bedrockTiObject);
             }
             //console.log($scope.lists.bedrockTIsInfo);
          };
@@ -261,7 +264,37 @@ arc.directive("arcBedrockAll", function () {
          $scope.getBedrockList();
 
          $scope.addParameterToFilter = function (param) {
-            $scope.filterTis = param;
+            if(!_.includes($scope.lists.filterTisBy, param)){
+               $scope.lists.filterTisBy.push(param);
+            }
+            //$scope.filterTis = param;
+            $scope.filterAllBedrockTIs();
+         };
+
+         $scope.filterAllBedrockTIs = function (){
+            console.log($scope.lists.filterTisBy);
+            $scope.lists.bedrockTIsInfoFiltered = [];
+            // Loop through all TIs
+            _.each($scope.lists.allBedrockTIsInfo, function (processInfo, key) {
+               // Search through all filters
+               var numberFiltersFound = 0;
+               _.each($scope.lists.filterTisBy, function (paramFilter, key) {
+                  // check if param is in filter
+                  var parameterFound = _.find(processInfo.parameters, {Name:paramFilter});
+                  if(!_.isEmpty(parameterFound)){
+                     numberFiltersFound++;
+                  }
+               });
+               // If all paramaters have been found add the TI
+               if(numberFiltersFound == $scope.lists.filterTisBy.length){
+                  $scope.lists.bedrockTIsInfoFiltered.push(processInfo);
+               }
+            });
+         };
+
+         $scope.removeOneFilter = function (param) {
+            _.pull($scope.lists.filterTisBy, param);
+            $scope.filterAllBedrockTIs();
          };
 
          $scope.clearFilter = function () {
