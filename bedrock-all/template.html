@@ -2,6 +2,10 @@
    <div class="row">
       <div class="col-md-12">
          <h2><i class="fa fa-recycle" style="padding-right:5px" aria-hidden="true"></i> Find Bedrock dependencies
+            <span class="badge badge-primary" style="font-size:0.6em">Prolog</span>
+            <span class="badge badge-info" style="font-size:0.6em">Metadata</span>
+            <span class="badge badge-success" style="font-size:0.6em">Data</span>
+            <span class="badge badge-secondary" style="font-size:0.6em">Epilog</span>
             <div class="pull-right">
                <div class="input-group">
                   <div class="input-group-prepend">
@@ -32,17 +36,18 @@
                            </span>
                      </th>
                      <th ng-if="showAttributes"> Parameters
-                        <span ng-repeat="param in lists.filterTisBy" class="badge pull-right mr-1"
-                        style="font-size:0.9em;cursor: pointer" ng-style="generateHSLColour(param)" ng-click="removeOneFilter(param)">
+                        <span ng-repeat="param in lists.filterTisByParameters" class="badge mr-1"
+                        style="font-size:0.9em;cursor: pointer" ng-style="generateHSLColour(param)" ng-click="removeOneFilterParameter(param)">
                            {{param}}
                            <i class="fa fa-search-minus"></i>
                         </span>
                      </th>
                      <th> Sub Processes
-                        <span class="badge badge-primary" style="font-size:0.9em">Prolog</span>
-                        <span class="badge badge-info" style="font-size:0.9em">Metadata</span>
-                        <span class="badge badge-success" style="font-size:0.9em">Data</span>
-                        <span class="badge badge-secondary" style="font-size:0.9em">Epilog</span>
+                           <span ng-repeat="param in lists.filterTisByTis" class="badge mr-1"
+                           style="font-size:0.9em;cursor: pointer" ng-style="generateHSLColour(param)" ng-click="removeOneFilterTi(param)">
+                              {{param}}
+                              <i class="fa fa-search-minus"></i>
+                           </span>
                      </th>
                   </tr>
                </thead>
@@ -71,20 +76,26 @@
                      <td>
                         <span ng-if="process.tisInProlog.length>0">
                            <span ng-repeat="ti in process.tisInProlog">
-                              <a href="#/process/{{instance}}/{{ti.name}}"
-                                 class="badge badge-primary" ng-class="{'badge-danger':!ti.exists}"
-                                 style="font-size:0.9em;color:white">
+                              <span class="badge badge-primary" ng-class="{'badge-danger':!ti.exists}"
+                              style="font-size:0.9em;color:white">
+                              <a href="#/process/{{instance}}/{{ti.name}}" style="color:white">
                                  <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                 {{ti.name}}</a>
+                                 {{ti.name}}
+                              </a>
+                                 <i class="fa fa-search-plus" aria-hidden="true" ng-click="addTiToFilter(ti.name)" style="cursor:pointer"></i>  
+                              </span>  
                            </span>
                         </span>
                         <span ng-if="process.tisInMetaData.length>0">
                            <span ng-repeat="ti in process.tisInMetaData">
-                              <a
-                                 class="badge badge-info" ng-class="{'badge-danger':!ti.exists}"
-                                  href="#/process/{{instance}}/{{ti.name}}" style="font-size:0.9em;color:white"> <i
-                                       ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    {{ti.name}}</a>
+                                 <span class="badge badge-info" ng-class="{'badge-danger':!ti.exists}"
+                                 style="font-size:0.9em;color:white">
+                                 <a href="#/process/{{instance}}/{{ti.name}}" style="color:white">
+                                    <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    {{ti.name}}
+                                 </a>
+                                    <i class="fa fa-search-plus" aria-hidden="true" ng-click="addTiToFilter(ti.name)" style="cursor:pointer"></i>  
+                                 </span>
                            </span>
                         </span>
                         <span ng-if="process.tisInData.length>0">
@@ -97,11 +108,14 @@
                         </span>
                         <span ng-if="process.tisInEpilog.length>0">
                            <span ng-repeat="ti in process.tisInEpilog">
-                              <a class="badge badge-secondary" ng-class="{'badge-danger':!ti.exists}"
-                                    href="#/process/{{instance}}/{{ti.name}}" 
-                                    style="font-size:0.9em;color:white"> <i
-                                       ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    {{ti.name}}</a>
+                                 <span class="badge badge-secondary" ng-class="{'badge-danger':!ti.exists}"
+                                 style="font-size:0.9em;color:white">
+                                 <a href="#/process/{{instance}}/{{ti.name}}" style="color:white">
+                                    <i ng-if="!ti.exists" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    {{ti.name}}
+                                 </a>
+                                    <i class="fa fa-search-plus" aria-hidden="true" ng-click="addTiToFilter(ti.name)" style="cursor:pointer"></i>  
+                                 </span>
                            </span>
                         </span>
                      </td>
