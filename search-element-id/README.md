@@ -1,5 +1,5 @@
 # Arc search dimensions by element ID
-This plugin can be used to find all dimensions containing a sepcific element ID
+This plugin can be used to find all dimensions containing a specific element ID
 
 ## Add this plugin to your application
 1. Download the folder.
