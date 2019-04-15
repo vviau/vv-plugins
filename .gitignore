@@ -1,1 +1,16 @@
+/bedrock-cube-clone/*
+/bedrock-dimension-clone/*
+/chore-execute/*
+/delete-chore/*
+/delete-cube/*
+/delete-dimension/*
+/delete-process/*
+/general-ledger-load/*
+/mdx/*
+/process-execute/*
+/rest-api-query/*
+/subset-view/*
+/template-page/*
+/README.md
 /plugins.yml
+/LICENSE
