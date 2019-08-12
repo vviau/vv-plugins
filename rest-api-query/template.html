@@ -1,100 +1,118 @@
 <div class="mdx">
-    <style>
-        .popover-class-danger {
-            color: #a94442;
-            background-color: #f2dede;
-            border-color: #ebccd1;
-        }
+   <style>
+      .popover-class-danger {
+         color: #a94442;
+         background-color: #f2dede;
+         border-color: #ebccd1;
+      }
 
-        .popover-class-warning {
-            color: #8a6d3b;
-            background-color: #fcf8e3;
-            border-color: #faebcc;
-        }
-    </style>
-    <div class="row">
-        <div class="col-md-12">
-            <uib-tabset active="selections.activeTab">
-                <uib-tab ng-repeat="tab in tabs" select="tabSelected()">
-                    <uib-tab-heading>
-                        {{tab.name}}
-                        <a href class="click" ng-click="closeTab($index)">
-                            <i class="fa fa-fw fa-close"></i>
+      .popover-class-warning {
+         color: #8a6d3b;
+         background-color: #fcf8e3;
+         border-color: #faebcc;
+      }
+
+      .func-active {
+         background-color: #F7F7F7;
+      }
+   </style>
+   <div class="row">
+      <div class="col-md-12">
+         <uib-tabset active="selections.activeTab">
+            <uib-tab ng-repeat="tab in tabs" select="tabSelected()">
+               <uib-tab-heading>
+                  {{tab.name}}
+                  <a href class="click" ng-click="closeTab($index)">
+                     <i class="fa fa-fw fa-close"></i>
+                  </a>
+                  <button style="padding:1px" ng-if="$index==tabs.length-1" class="btn btn-secondary btn-sm"
+                     title="{{'ADDTAB' | translate}}" ng-click="addTab()">
+                     <i class="fa fa-fw fa-plus"></i>
+                  </button>
+               </uib-tab-heading>
+               <div class="card" style="margin-bottom: 5px;">
+                  <div class="card-header" style="padding: 5px 10px;" ng-click="toggleQuery(tab)">
+                     <span translate="QUERY"></span>
+                     <div class="pull-right">
+                        <a href ng-click="tab.hideQuery = !tab.hideQuery">
+                           <i class="fa fa-toggle-on" ng-if="!tab.hideQuery"></i>
+                           <i class="fa fa-toggle-off" ng-if="tab.hideQuery"></i>
                         </a>
-                        <button style="padding:1px" ng-if="$index==tabs.length-1" class="btn btn-secondary btn-sm" title="{{'ADDTAB' | translate}}"
-                            ng-click="addTab()">
-                            <i class="fa fa-fw fa-plus"></i>
-                        </button>
-                    </uib-tab-heading>
-                    <div class="card" style="margin-bottom: 5px;">
-                        <div class="card-header" style="padding: 5px 10px;" ng-click="toggleQuery(tab)">
-                            <span translate="QUERY"></span>
-                            <div class="pull-right">
-                                <a href ng-click="tab.hideQuery = !tab.hideQuery">
-                                    <i class="fa fa-toggle-on" ng-if="!tab.hideQuery"></i>
-                                    <i class="fa fa-toggle-off" ng-if="tab.hideQuery"></i>
-                                </a>
-                            </div>
+                     </div>
+                  </div>
+                  <div class="card-body" style="padding: 5px;" ng-if="!tab.hideQuery">
+                     <div class="input-group">
+                        <div class="input-group-prepend" uib-dropdown dropdown-append-to-body>
+                           <button class="btn btn-secondary" uib-dropdown-toggle>
+                              <span class="caret"></span>
+                           </button>
+                           <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                              <li role="menuitem" ng-repeat="method in lists.methods">
+                                 <div ng-click="tab.method = method" style="margin-left:10px;cursor:pointer">{{method}}</div>
+                              </li>
+                           </ul>
                         </div>
-                        <div class="card-body" style="padding: 5px;" ng-if="!tab.hideQuery">
-                            <div class="input-group">
-                                <div class="input-group-prepend" uib-dropdown dropdown-append-to-body>
-                                    <button class="btn btn-secondary" uib-dropdown-toggle>
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                        <li role="menuitem" ng-repeat="type in lists.types">
-                                            <div ng-click="tab.type = type" style="margin-left:10px;cursor:pointer">{{type}}</div>
-                                        </li>
-                                    </ul>
-                                </div>
 
-                                <div class="input-group-append">
-                                    <span class="input-group-text">{{tab.type}}</span>
-                                </div>
-
-                                <div class="input-group-append" uib-dropdown dropdown-append-to-body>
-                                    <button uib-dropdown-toggle class="btn" ng-class="{'btn-info':tab.type=='GET','btn-primary':tab.type=='POST','btn-warning':tab.type=='PATCH','btn-danger':tab.type=='DELETE'}">
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                                        <li role="menuitem" ng-repeat="item in lists[tab.type]">
-                                            <div ng-click="tab.restApiQuery = item.query" style="margin-left:10px;cursor:pointer">
-                                                <i class="fa {{item.icon}}"> </i> {{item.query}}</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Request</span>
-                                </div>
-                                <input type="text" ng-model="tab.restApiQuery" placeholder="REST API Query" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                    style="display:inline">
-
-                                <div class="input-group-append">
-                                    <button ng-disabled="!tab.restApiQuery" class="btn btn-warning" title="Execute" ng-click="executeQuery()" disabled="disabled">
-                                        <i class="fa fa-fw fa-bolt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card" style="margin-top:10px" ng-if="tab.type != 'GET'">
-                                <div class="card-header" style="padding: 5px 10px;">
-                                    <a href ng-click="tab.hideBody = !tab.hideBody">
-                                        <i class="fa fa-toggle-on" ng-if="!tab.hideBody"></i>
-                                        <i class="fa fa-toggle-off" ng-if="tab.hideBody"></i>
-                                    </a>
-                                    Body</div>
-                                <pre ng-if="!tab.hideBody" ui-ace="{ onLoad : editorLoaded }" ng-model="tab.body" style="height: 200px;"></pre>
-                            </div>
+                        <div class="input-group-append">
+                           <span class="input-group-text">{{tab.method}}</span>
                         </div>
-                    </div>
 
-                    <div class="card" style="margin-top:10px" ng-if="tab.queryStatus">
+                        <div class="input-group-append" uib-dropdown dropdown-append-to-body>
+                           <button uib-dropdown-toggle class="btn"
+                              ng-class="{'btn-info':tab.method=='GET','btn-primary':tab.method=='POST','btn-warning':tab.method=='PATCH','btn-danger':tab.method=='DELETE'}">
+                              <span class="caret"></span>
+                           </button>
+                           <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                              <li role="menuitem" ng-repeat="item in lists[tab.method]">
+                                 <div ng-click="tab.restApiQuery = item.restApiQuery"
+                                    style="margin-left:10px;cursor:pointer">
+                                    <i class="fa {{item.icon}}"> </i> {{item.restApiQuery}}</div>
+                              </li>
+                           </ul>
+                        </div>
+                        <div class="input-group-append">
+                           <span class="input-group-text">Request</span>
+                        </div>
+                        <input type="text" ng-model="tab.restApiQuery" placeholder="REST API Query"
+                           class="form-control ng-pristine ng-untouched ng-valid ng-empty" style="display:inline"
+                           ng-keydown="key($event, $index, tab)"
+                           uib-typeahead="function.restApiQuery for function in $roots.uiPrefs.restHistory | limitTo:20"
+                           typeahead-append-to-body="true">
 
+                        <div class="input-group-append">
+                           <button ng-disabled="!tab.restApiQuery" class="btn btn-warning" title="Execute"
+                              ng-click="executeQuery(tab.restApiQuery, tab.body)" disabled="disabled">
+                              <i class="fa fa-fw fa-bolt"></i>
+                           </button>
+
+                        </div>
+                     </div>
+
+                     <div class="card" style="margin-top:10px" ng-if="tab.method != 'GET'">
                         <div class="card-header" style="padding: 5px 10px;">
-                            <span style="margin-bottom:0px">
-                                {} Result - Run in {{tab.responseTimeMs | num:0}} ms</span>
-                        </div>
-                        <div class="card-body" ng-if="tab.message">
+                           <a href ng-click="tab.hideBody = !tab.hideBody">
+                              <i class="fa fa-toggle-on" ng-if="!tab.hideBody"></i>
+                              <i class="fa fa-toggle-off" ng-if="tab.hideBody"></i>
+                           </a>
+                           Body</div>
+                        <pre ng-if="!tab.hideBody" ui-ace="{ onLoad : editorLoaded }" ng-model="tab.body"
+                           style="height: 200px;"></pre>
+                     </div>
+                  </div>
+               </div>
+               <div>
+                  <uib-tabset>
+                     <uib-tab>
+                        <uib-tab-heading>
+                           Result
+                        </uib-tab-heading>
+                        <div class="card" ng-if="tab.queryStatus">
+
+                           <div class="card-header" style="padding: 5px 10px;">
+                              <span style="margin-bottom:0px">
+                                 {} Result - Run in {{tab.responseTimeMs | num:0}} ms</span>
+                           </div>
+                           <div class="card-body" ng-if="tab.message">
                               <div>
                                  <button class="btn btn-warning">
                                     <span class="fa fa-warning" aria-hidden="true"></span>
@@ -102,15 +120,51 @@
                                  </button>
                               </div>
                            </div>
-                        <div class="card-body" ng-if="!tab.message">
-                            <auto-height>
-                                <json-formatter json="tab.resultQuery" open="1"></json-formatter>
-                            </auto-height>
+                           <div class="card-body" ng-if="!tab.message">
+                              <auto-height>
+                                 <json-formatter json="tab.resultQuery" open="1"></json-formatter>
+                              </auto-height>
+                           </div>
                         </div>
-                    </div>
-                </uib-tab>
-            </uib-tabset>
-        </div>
-    </div>
+                     </uib-tab>
+                     <uib-tab ng-if="$root.uiPrefs.restHistory.length>0">
+                        <uib-tab-heading>
+                           History <span
+                              ng-if="$root.uiPrefs.restHistory.length>0">({{$root.uiPrefs.restHistory.length}})</span>
+                           <span ng-if="$root.uiPrefs.restHistory.length>0" title="{{'CLEAR' | translate}}"
+                              ng-click="clearRestHistory()" ng-disabled="!$root.uiPrefs.restHistory.length">
+                              <i class="fa fa-fw fa-trash text-danger"></i>
+                           </span>
+                        </uib-tab-heading>
+                           <div ng-repeat="item in $root.uiPrefs.restHistory"
+                              ng-class="{'func-active': indexTiFunctions === $index}">
+                              <div class="mt-1 mb-1" ng-click="updateCurrentQuery(tab, item)" style="cursor:pointer">
+                                 <span>
+                                    <i ng-if="item.queryStatus == 'success'"
+                                       class="fa fa-check-circle text-success"></i>
+                                    <i ng-if="item.queryStatus == 'failed'" class="fa fa-warning text-warning"></i>
+                                 </span>
+                                 <span class="badge"
+                                 ng-class="{'badge-info':item.method=='GET','badge-primary':item.method=='POST','badge-warning':item.method=='PATCH','badge-danger':item.method=='DELETE'}">
+                              {{item.method}}</span>
+                                 <span class="font-weight-bold">{{item.restApiQuery}}</span>
+                                 <span ng-if="item.queryStatus == 'success'" class="badge ml-1 badge-success"
+                                    style="font-size:0.9em">
+                                    {{item.responseTimeMs | num:0}} ms
+                                 </span>
+                                 <span ng-if="item.message.length>0" class="badge ml-1 badge-warning"
+                                    style="font-size:0.9em">
+                                    {{item.message}}
+                                 </span>
+                              </div>
+
+                           </div>
+                     </uib-tab>
+                  </uib-tabset>
+               </div>
+            </uib-tab>
+         </uib-tabset>
+      </div>
+   </div>
 
 </div>
