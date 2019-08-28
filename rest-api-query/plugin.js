@@ -24,15 +24,22 @@ arc.directive("tm1RestApiQuery", function () {
         },
         controller: ["$scope", "$rootScope", "$http", "$tm1", "$translate", "$timeout", "$helper", function ($scope, $rootScope, $http, $tm1, $translate, $timeout, $helper) {
 
-            // Create the tabs
-            $scope.tabs = [];
-
-            $scope.selections = {
+            $scope.options = {
                 activeTab: 0,
                 queryCounter: 0,
                 method: 'GET',
                 restApiQuery: 'Cubes',
-                queryStatus: ''
+                queryStatus: '',
+                name: $translate.instant("QUERY"),
+                method: "GET",
+                  body: '{"MDX":"SELECT \n'
+                  + '\tNON EMPTY {[Version].[Actual], [Version].[Budget]} ON COLUMNS, \n'
+                  + '\tNON EMPTY {TM1SUBSETALL([Account])} ON ROWS \n'
+                  + 'FROM [General Ledger] \n'
+                  + 'WHERE ([Department].[Corporate], [Year].[2012])"}',
+               hideBody: false,
+               message: null,
+               executing: false
             };
 
             $scope.clearRestHistory = function () {
@@ -79,102 +86,66 @@ arc.directive("tm1RestApiQuery", function () {
                 ]
             }
 
-            $scope.updateCurrentQuery = function(tab, item){
-               console.log(tab,item);
-               tab.restApiQuery = item.restApiQuery;
-               tab.method = item.method;
-               tab.body = item.body;
+            $scope.updateCurrentQuery = function(item){
+               $scope.options.restApiQuery = item.restApiQuery;
+               $scope.options.method = item.method;
+               $scope.options.body = item.body;
             }
 
-            $scope.addTab = function () {
-                // Add a tab
-                $scope.selections.queryCounter++;
-                $scope.tabs.push({
-                    name: $translate.instant("QUERY") + " " + $scope.selections.queryCounter,
-                    method: "GET",
-                    restApiQuery: "Cubes",
-                    body: '{"MDX":"SELECT \n'
-                    + '\tNON EMPTY {[Version].[Actual], [Version].[Budget]} ON COLUMNS, \n'
-                    + '\tNON EMPTY {TM1SUBSETALL([Account])} ON ROWS \n'
-                    + 'FROM [General Ledger] \n'
-                    + 'WHERE ([Department].[Corporate], [Year].[2012])"}',
-                    hideBody: false,
-                    message: null
-                });
-                $timeout(function () {
-                    $scope.selections.activeTab = $scope.tabs.length - 1;
-                });
-            };
-            // Add the initial tab
-            $scope.addTab();
-
-            $scope.closeTab = function (index) {
-                // Remove a tab
-                $scope.tabs.splice(index, 1);
-            };
-
-            $scope.tabSelected = function () {
-                // This is required to resize the MDX panel after clicking on a tab
-                //$scope.$broadcast("auto-height-resize");
-            };
-
             //Execute Query
-            $scope.executeQuery = function (query, body) {
-                var tab = $scope.tabs[$scope.selections.activeTab];
-                //var restAPIQuery = tab.restApiQuery;
-                var restAPIQuery = "/" + query;
+            $scope.executeQuery = function () {
+               $scope.options.executing = true;
+                var restApiQuery = "/" + $scope.options.restApiQuery;
                 var sendDate = (new Date()).getTime();
-                var mdxClean = body.replace(/(\n|\t)/gm,"");
-                var method = tab.method;
-                $tm1.async($scope.instance, method, restAPIQuery, mdxClean).then(function (result) {
-                   console.log(result)
+                var mdxClean = $scope.options.body.replace(/(\n|\t)/gm,"");
+                var method = $scope.options.method;
+                $tm1.async($scope.instance, method, restApiQuery, mdxClean).then(function (result) {
+                   $scope.currentTabIndex = 0;
                     if (result.status == 200 || result.status == 201 || result.status == 204) {
-                        tab.queryStatus = 'success';
-                        tab.resultQuery = result.data;
-                        tab.message = null;
+                        $scope.options.queryStatus = 'success';
+                        $scope.options.resultQuery = result.data;
+                        $scope.options.message = null;
                     } else {
-                        tab.queryStatus = 'failed';
-                        tab.resultQuery = result.data.error;
-                        tab.message = result.data.error.message;
+                        $scope.options.queryStatus = 'failed';
+                        $scope.options.resultQuery = result.data.error;
+                        $scope.options.message = result.data.error.message;
                     }
                     var receiveDate = (new Date()).getTime();
-                    tab.responseTimeMs = receiveDate - sendDate;
-                    var newQuery = { restApiQuery: query, 
+                    $scope.options.responseTimeMs = receiveDate - sendDate;
+                    var newQuery = { restApiQuery: $scope.options.restApiQuery, 
                                     method:method,
                                     body: mdxClean, 
                                     resultQuery: '', 
-                                    queryStatus: tab.queryStatus, 
-                                    message: tab.message,
-                                    responseTimeMs: tab.responseTimeMs}
-                  console.log(newQuery);
+                                    queryStatus: $scope.options.queryStatus, 
+                                    message: $scope.options.message,
+                                    responseTimeMs: $scope.options.responseTimeMs}
                     $rootScope.uiPrefs.restHistory.splice(0, 0, newQuery);
-                    console.log($rootScope.uiPrefs.restHistory);
+                    $scope.options.executing = false;
                 });
             }
 
             $scope.indexTiFunctions = $rootScope.uiPrefs.restHistory.length - 1;
 
-            $scope.key = function ($event, funcIndex, tab) {
+            $scope.key = function ($event) {
                if($scope.indexTiFunctions == -1){
                   $scope.indexTiFunctions = 0;
                }
-               var query = tab.restApiQuery;
-               var body = tab.body;
+               var query = $scope.options.restApiQuery;
+               var body = $scope.options.body;
                var currentQuery = $rootScope.uiPrefs.restHistory[$scope.indexTiFunctions]
                //Arrow up
-               console.log($scope.indexTiFunctions, currentQuery)
                if ($event.keyCode == 38) {
-                  $scope.updateCurrentQuery(tab, currentQuery);
+                  $scope.updateCurrentQuery(currentQuery);
                   $scope.updateindexTiFunctions("-1");
                }
                //Arrow down
                else if ($event.keyCode == 40) {
-                  $scope.updateCurrentQuery(tab, currentQuery);
+                  $scope.updateCurrentQuery(currentQuery);
                   $scope.updateindexTiFunctions("+1");
                }
                //Enter
                else if ($event.keyCode == 13) {
-                  $scope.executeQuery(query, body);
+                  $scope.executeQuery();
                }
             }
 
